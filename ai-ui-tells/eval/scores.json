@@ -1,0 +1,194 @@
+{
+ "landing_baseline": {
+  "bluePurpleGradients": 2,
+  "shadows": 8,
+  "pills": 1,
+  "emoji": 8,
+  "glass": 0,
+  "equalIconGrids": 1,
+  "radii": 1,
+  "fs": {},
+  "fw": {},
+  "sp": {},
+  "heroPrimaryButtons": 0,
+  "radiiVals": [
+   16
+  ],
+  "fontSizes": 8,
+  "fontWeights": 3,
+  "spacingValues": 18,
+  "h1Ratio": 1.88,
+  "primaryButtonsAboveFold": 1
+ },
+ "landing_A": {
+  "bluePurpleGradients": 3,
+  "shadows": 8,
+  "pills": 4,
+  "emoji": 8,
+  "glass": 3,
+  "equalIconGrids": 1,
+  "radii": 1,
+  "fs": {},
+  "fw": {},
+  "sp": {},
+  "heroPrimaryButtons": 0,
+  "radiiVals": [
+   24
+  ],
+  "fontSizes": 8,
+  "fontWeights": 3,
+  "spacingValues": 18,
+  "h1Ratio": 2.13,
+  "primaryButtonsAboveFold": 1
+ },
+ "landing_B": {
+  "bluePurpleGradients": 0,
+  "shadows": 0,
+  "pills": 0,
+  "emoji": 0,
+  "glass": 0,
+  "equalIconGrids": 0,
+  "radii": 2,
+  "fs": {},
+  "fw": {},
+  "sp": {},
+  "heroPrimaryButtons": 0,
+  "radiiVals": [
+   6,
+   12
+  ],
+  "fontSizes": 6,
+  "fontWeights": 3,
+  "spacingValues": 7,
+  "h1Ratio": 3.5,
+  "primaryButtonsAboveFold": 1
+ },
+ "pricing_baseline": {
+  "bluePurpleGradients": 5,
+  "shadows": 8,
+  "pills": 4,
+  "emoji": 14,
+  "glass": 0,
+  "equalIconGrids": 0,
+  "radii": 1,
+  "fs": {},
+  "fw": {},
+  "sp": {},
+  "heroPrimaryButtons": 0,
+  "radiiVals": [
+   20
+  ],
+  "fontSizes": 9,
+  "fontWeights": 2,
+  "spacingValues": 14,
+  "h1Ratio": 2.25,
+  "primaryButtonsAboveFold": 3
+ },
+ "pricing_A": {
+  "bluePurpleGradients": 6,
+  "shadows": 8,
+  "pills": 4,
+  "emoji": 17,
+  "glass": 5,
+  "equalIconGrids": 0,
+  "radii": 1,
+  "fs": {},
+  "fw": {},
+  "sp": {},
+  "heroPrimaryButtons": 0,
+  "radiiVals": [
+   28
+  ],
+  "fontSizes": 8,
+  "fontWeights": 2,
+  "spacingValues": 14,
+  "h1Ratio": 2.25,
+  "primaryButtonsAboveFold": 3
+ },
+ "pricing_B": {
+  "bluePurpleGradients": 0,
+  "shadows": 0,
+  "pills": 0,
+  "emoji": 0,
+  "glass": 0,
+  "equalIconGrids": 0,
+  "radii": 2,
+  "fs": {},
+  "fw": {},
+  "sp": {},
+  "heroPrimaryButtons": 0,
+  "radiiVals": [
+   6,
+   12
+  ],
+  "fontSizes": 6,
+  "fontWeights": 3,
+  "spacingValues": 9,
+  "h1Ratio": 3.5,
+  "primaryButtonsAboveFold": 1
+ },
+ "mobile_baseline": {
+  "bluePurpleGradients": 2,
+  "shadows": 5,
+  "pills": 4,
+  "emoji": 9,
+  "glass": 0,
+  "equalIconGrids": 0,
+  "radii": 1,
+  "fs": {},
+  "fw": {},
+  "sp": {},
+  "heroPrimaryButtons": 0,
+  "radiiVals": [
+   20
+  ],
+  "fontSizes": 9,
+  "fontWeights": 2,
+  "spacingValues": 10,
+  "h1Ratio": 1.73,
+  "primaryButtonsAboveFold": 0
+ },
+ "mobile_A": {
+  "bluePurpleGradients": 2,
+  "shadows": 5,
+  "pills": 4,
+  "emoji": 9,
+  "glass": 5,
+  "equalIconGrids": 0,
+  "radii": 1,
+  "fs": {},
+  "fw": {},
+  "sp": {},
+  "heroPrimaryButtons": 0,
+  "radiiVals": [
+   24
+  ],
+  "fontSizes": 8,
+  "fontWeights": 2,
+  "spacingValues": 10,
+  "h1Ratio": 1.73,
+  "primaryButtonsAboveFold": 0
+ },
+ "mobile_B": {
+  "bluePurpleGradients": 0,
+  "shadows": 0,
+  "pills": 0,
+  "emoji": 0,
+  "glass": 0,
+  "equalIconGrids": 0,
+  "radii": 2,
+  "fs": {},
+  "fw": {},
+  "sp": {},
+  "heroPrimaryButtons": 0,
+  "radiiVals": [
+   6,
+   12
+  ],
+  "fontSizes": 4,
+  "fontWeights": 3,
+  "spacingValues": 5,
+  "h1Ratio": 2.86,
+  "primaryButtonsAboveFold": 1
+ }
+}

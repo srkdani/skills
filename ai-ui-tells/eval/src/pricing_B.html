@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+:root{--brand:#0F766E;--tint:#E6F2F1;--bg:#FAFAF9;--line:#E7E5E4;--muted:#57534E;--ink:#1C1917;--r1:6px;--r2:12px}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding:80px 32px}
+.eye{font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--brand)}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:48px}
+h1{font-size:56px;line-height:1.05;font-weight:700;margin:12px 0;letter-spacing:-.02em;max-width:16ch}.head p{color:var(--muted);margin:0;max-width:44ch}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r1);overflow:hidden;font-size:14px}.seg span{padding:8px 16px}.seg .on{background:var(--ink);color:#fff}
+.plans{display:grid;grid-template-columns:4fr 5fr 4fr;border:1px solid var(--line);border-radius:var(--r2);background:#fff;overflow:hidden}
+.plan{padding:32px;border-right:1px solid var(--line)}.plan:last-child{border-right:0}
+.pro{background:var(--tint);padding:48px 32px}
+.plan h3{font-size:20px;margin:0}.note{font-size:14px;color:var(--muted);margin:4px 0 24px}
+.price{font-size:40px;font-weight:700;letter-spacing:-.02em}.pro .price{font-size:56px}.price small{font-size:16px;font-weight:400;color:var(--muted)}
+.plan ul{list-style:none;padding:0;margin:24px 0}.plan li{padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.plan li.no{color:#A8A29E;text-decoration:line-through}
+.btn{display:block;text-align:center;padding:12px;border-radius:var(--r1);font-weight:600;border:1px solid var(--ink)}
+.pro .btn{background:var(--brand);border-color:var(--brand);color:#fff}
+.rec{font-size:14px;font-weight:600;color:var(--brand)}
+.faq{display:grid;grid-template-columns:4fr 8fr;gap:48px;margin-top:80px}.faq h2{font-size:28px;margin:0}
+.q{padding:16px 0;border-top:1px solid var(--line)}.q b{font-weight:600}.q p{color:var(--muted);margin:4px 0 0}
+</style></head><body><div class="wrap">
+<div class="head"><div><div class="eye">Pricing</div><h1>Pay for the invoices you send.</h1><p>Every plan includes a 14-day free trial. Annual billing saves 20%.</p></div><div class="seg"><span class="on">Monthly</span><span>Yearly</span></div></div>
+<div class="plans">
+<div class="plan"><h3>Starter</h3><div class="note">For a side project</div><div class="price">$9<small> /mo</small></div><ul><li>10 invoices a month</li><li>Email reminders</li><li>1 user</li><li class="no">Recurring invoices</li></ul><a class="btn">Start trial</a></div>
+<div class="plan pro"><div class="rec">Recommended for freelancers</div><h3>Pro</h3><div class="note">Unlimited invoices and your own reminder schedule</div><div class="price">$24<small> /mo</small></div><ul><li>Unlimited invoices</li><li>Custom reminder schedules</li><li>3 users</li><li>Recurring invoices</li></ul><a class="btn">Start trial</a></div>
+<div class="plan"><h3>Business</h3><div class="note">For studios and agencies</div><div class="price">$59<small> /mo</small></div><ul><li>Everything in Pro</li><li>10 users</li><li>Multi-entity</li><li>Priority support</li></ul><a class="btn">Talk to us</a></div></div>
+<div class="faq"><h2>Questions</h2><div><div class="q"><b>Can I change plans later?</b><p>Yes, upgrade or downgrade at any time. Changes apply from the next billing date.</p></div><div class="q"><b>Is there a free trial?</b><p>Every plan includes a 14-day free trial.</p></div></div></div>
+</div></body></html>
