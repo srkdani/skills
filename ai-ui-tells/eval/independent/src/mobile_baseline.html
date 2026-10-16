@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>Keel</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #e6e0d4;
+    color: #1c1916;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  body {
+    width: 390px;
+    min-height: 100vh;
+  }
+  .screen {
+    width: 390px;
+    min-height: 844px;
+    background: #f4f0e7;
+    padding: 22px 18px 24px;
+  }
+  header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .brand {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .mark {
+    width: 10px;
+    height: 36px;
+    border-radius: 5px;
+    background: #1f4d3a;
+  }
+  .product {
+    margin: 0;
+    font-size: 26px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .studio {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #5f584e;
+  }
+  .pill {
+    flex: 0 0 auto;
+    margin-top: 2px;
+    border: 1px solid #d8d0c2;
+    background: #fffdf8;
+    color: #3d4a40;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .notice {
+    margin: 0 0 18px;
+    background: #efe6d4;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #3a342c;
+  }
+  h2 {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6e675c;
+  }
+  .lede {
+    margin: 0 0 10px;
+    font-size: 15px;
+    line-height: 1.35;
+    color: #2a261f;
+  }
+  .panel {
+    background: #fffdf8;
+    border: 1px solid #e3dacb;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .stat, .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 14px;
+    border-top: 1px solid #efe7da;
+  }
+  .stat:first-child, .row:first-child { border-top: 0; }
+  .stat-copy, .row-copy { min-width: 0; }
+  .label, .row-title {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.3;
+    color: #1c1916;
+  }
+  .hint {
+    margin: 3px 0 0;
+    font-size: 12px;
+    line-height: 1.35;
+    color: #6e675c;
+  }
+  .figure {
+    margin: 0;
+    text-align: right;
+    flex: 0 0 auto;
+  }
+  .amount {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: #1c1916;
+  }
+  .amount.small { font-size: 16px; }
+  .tag {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #7a7368;
+  }
+  .group-label {
+    margin: 0;
+    padding: 11px 14px 4px;
+    border-top: 1px solid #efe7da;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6e675c;
+  }
+  .toggle {
+    width: 44px;
+    height: 26px;
+    border-radius: 13px;
+    background: #1f4d3a;
+    position: relative;
+    flex: 0 0 auto;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fffdf8;
+  }
+  .toggle.off { background: #d5cdc0; }
+  .toggle.off::after { right: auto; left: 2px; }
+  .foot {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #6e675c;
+  }
+  .home {
+    width: 134px;
+    height: 5px;
+    border-radius: 3px;
+    background: #1c1916;
+    margin: 22px auto 0;
+  }
+</style>
+</head>
+<body>
+  <div class="screen">
+    <header>
+      <div class="brand">
+        <span class="mark" aria-hidden="true"></span>
+        <div>
+          <p class="product">Keel</p>
+          <p class="studio">North Room</p>
+        </div>
+      </div>
+      <span class="pill">Sample product</span>
+    </header>
+
+    <p class="notice">Keel is a sample product. Prices and figures are sample data. Keel is a sample invoicing tool for independent design studios. It turns finished jobs into invoices.</p>
+
+    <section aria-label="Dashboard">
+      <h2>Dashboard</h2>
+      <p class="lede">Short summary for North Room. Every figure below is sample data.</p>
+      <div class="panel">
+        <div class="stat">
+          <div class="stat-copy">
+            <p class="label">Outstanding</p>
+            <p class="hint">Sample figure</p>
+          </div>
+          <p class="figure"><span class="amount">$4,280</span><span class="tag">Sample</span></p>
+        </div>
+        <div class="stat">
+          <div class="stat-copy">
+            <p class="label">Paid this month</p>
+            <p class="hint">Sample figure</p>
+          </div>
+          <p class="figure"><span class="amount">$9,150</span><span class="tag">Sample</span></p>
+        </div>
+        <div class="stat">
+          <div class="stat-copy">
+            <p class="label">Overdue invoices</p>
+            <p class="hint">Sample figure</p>
+          </div>
+          <p class="figure"><span class="amount">3</span><span class="tag">Sample</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Settings">
+      <h2>Settings</h2>
+      <div class="panel">
+        <div class="row">
+          <div class="row-copy">
+            <p class="row-title">Studio</p>
+            <p class="hint">Sample studio name</p>
+          </div>
+          <p class="figure"><span class="amount small">North Room</span></p>
+        </div>
+        <p class="group-label">Sample plans</p>
+        <div class="row">
+          <div class="row-copy">
+            <p class="row-title">Starter</p>
+            <p class="hint">Sample price</p>
+          </div>
+          <p class="figure"><span class="amount small">$18 per month</span><span class="tag">Sample</span></p>
+        </div>
+        <div class="row">
+          <div class="row-copy">
+            <p class="row-title">Studio</p>
+            <p class="hint">Sample price</p>
+          </div>
+          <p class="figure"><span class="amount small">$42 per month</span><span class="tag">Sample</span></p>
+        </div>
+        <div class="row">
+          <div class="row-copy">
+            <p class="row-title">Practice</p>
+            <p class="hint">Sample price</p>
+          </div>
+          <p class="figure"><span class="amount small">$79 per month</span><span class="tag">Sample</span></p>
+        </div>
+        <div class="row">
+          <div class="row-copy">
+            <p class="row-title">Finished jobs</p>
+            <p class="hint">Turn finished jobs into invoices</p>
+          </div>
+          <span class="toggle" aria-label="On"></span>
+        </div>
+        <div class="row">
+          <div class="row-copy">
+            <p class="row-title">Live billing</p>
+            <p class="hint">Off. This screen uses sample data only.</p>
+          </div>
+          <span class="toggle off" aria-label="Off"></span>
+        </div>
+      </div>
+      <p class="foot">Keel is a sample product. Prices and figures are sample data.</p>
+    </section>
+    <div class="home" aria-hidden="true"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keel sample pricing</title>
+<style>
+  :root {
+    --paper: #f3efe6;
+    --paper-2: #e7e1d4;
+    --ink: #1b1914;
+    --muted: #5e574c;
+    --line: #d4cbbd;
+    --forest: #1c4332;
+    --forest-deep: #143328;
+    --cream: #f6f3ec;
+    --stamp: #8d3a2c;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { background: #e6e0d4; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  a { color: inherit; }
+
+  .page {
+    width: 1160px;
+    margin: 0 auto;
+    padding: 28px 0 72px;
+  }
+
+  .mast {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .wordmark {
+    font-family: var(--serif);
+    font-size: 28px;
+    letter-spacing: 0.14em;
+    line-height: 1;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .mast nav {
+    display: flex;
+    gap: 22px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .mast nav a { text-decoration: none; }
+
+  .mast nav a:hover { text-decoration: underline; }
+
+  .stamp {
+    margin: 0;
+    color: var(--stamp);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr;
+    gap: 48px;
+    padding: 42px 0 36px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .kicker {
+    margin: 0 0 14px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 68px;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 0.92;
+  }
+
+  .hero-copy {
+    margin: 22px 0 0;
+    max-width: 460px;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  .notice {
+    background: var(--forest);
+    color: var(--cream);
+    padding: 28px 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 280px;
+  }
+
+  .notice h2 {
+    margin: 0 0 12px;
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .notice p { margin: 0 0 12px; font-size: 15px; line-height: 1.45; }
+
+  .notice p:last-child { margin-bottom: 0; }
+
+  .studio-name {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid rgba(246, 243, 236, 0.35);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  section { padding-top: 42px; }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 22px;
+  }
+
+  .section-head h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .section-head p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 360px;
+    text-align: right;
+  }
+
+  .plans {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  .plan {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    padding: 22px 22px 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 460px;
+  }
+
+  .plan.focus {
+    background: var(--forest-deep);
+    color: var(--cream);
+    border-color: var(--forest-deep);
+  }
+
+  .plan-label {
+    margin: 0 0 28px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .plan.focus .plan-label { color: #c9ddd2; }
+
+  .plan h3 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 500;
+  }
+
+  .price-tag {
+    margin: 18px 0 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .price {
+    font-family: var(--serif);
+    font-size: 56px;
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+  }
+
+  .per {
+    padding-bottom: 6px;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .plan.focus .per { color: #c9ddd2; }
+
+  .sample-price {
+    margin: 10px 0 0;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--stamp);
+  }
+
+  .plan.focus .sample-price { color: #f0c2b8; }
+
+  .plan .blurb {
+    margin: 16px 0 18px;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .plan ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .plan.focus ul { border-top-color: rgba(246, 243, 236, 0.28); }
+
+  .plan li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+
+  .plan.focus li { border-bottom-color: rgba(246, 243, 236, 0.28); }
+
+  .plan a.choice {
+    margin-top: auto;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 12px 14px;
+    border: 1px solid var(--ink);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .plan a.choice:hover { background: var(--ink); color: var(--cream); }
+
+  .plan.focus a.choice {
+    border-color: var(--cream);
+    color: var(--forest-deep);
+    background: var(--cream);
+  }
+
+  .plan.focus a.choice:hover { background: transparent; color: var(--cream); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--cream);
+    border: 1px solid var(--line);
+  }
+
+  th, td {
+    text-align: left;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+    vertical-align: middle;
+  }
+
+  th {
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 650;
+    background: var(--paper-2);
+  }
+
+  td:not(:first-child), th:not(:first-child) { text-align: center; width: 18%; }
+
+  tr:last-child td { border-bottom: 0; }
+
+  .yes { color: var(--forest); font-weight: 650; }
+
+  .no { color: #9a9286; }
+
+  .faq { display: grid; gap: 0; border-top: 1px solid var(--ink); }
+
+  details {
+    border-bottom: 1px solid var(--line);
+    padding: 0;
+  }
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 18px 0;
+    font-family: var(--serif);
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  summary::after {
+    content: "+";
+    font-family: var(--sans);
+    font-size: 22px;
+    color: var(--muted);
+  }
+
+  details[open] summary::after { content: "-"; }
+
+  details p {
+    margin: 0 0 18px;
+    max-width: 720px;
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  footer strong { color: var(--ink); font-weight: 650; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="mast">
+      <div>
+        <p class="stamp">Sample product</p>
+        <p class="wordmark">KEEL</p>
+      </div>
+      <nav>
+        <a href="#plans">Plans</a>
+        <a href="#compare">Compare</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p class="kicker">Sample invoicing for independent design studios</p>
+        <h1>Finished jobs, ready invoices.</h1>
+        <p class="hero-copy">Keel is a sample product. It turns finished jobs into invoices. Prices and figures on this page are sample data.</p>
+      </div>
+      <aside class="notice">
+        <div>
+          <h2>A sample rate card.</h2>
+          <p>Keel is not a real company. The plans below are sample plans for a sample invoicing tool.</p>
+          <p>Every price shown here is sample data.</p>
+        </div>
+        <p class="studio-name">Sample studio: North Room</p>
+      </aside>
+    </section>
+
+    <section id="plans">
+      <div class="section-head">
+        <h2>Sample plans</h2>
+        <p>Three sample monthly prices. Nothing on this page is a live offer.</p>
+      </div>
+      <div class="plans">
+        <article class="plan">
+          <p class="plan-label">Start</p>
+          <h3>Starter</h3>
+          <p class="price-tag"><span class="price">$18</span><span class="per">per month</span></p>
+          <p class="sample-price">Sample price</p>
+          <p class="blurb">For sending an invoice when a job is finished.</p>
+          <ul>
+            <li>Invoice from a finished job</li>
+            <li>PDF invoice</li>
+            <li>Paid and unpaid status</li>
+          </ul>
+          <a class="choice" href="#compare">See what is included</a>
+        </article>
+
+        <article class="plan focus">
+          <p class="plan-label">Working studio</p>
+          <h3>Studio</h3>
+          <p class="price-tag"><span class="price">$42</span><span class="per">per month</span></p>
+          <p class="sample-price">Sample price</p>
+          <p class="blurb">For a studio that keeps clients, retainers, and overdue work in view.</p>
+          <ul>
+            <li>Everything in Starter</li>
+            <li>Client records</li>
+            <li>Retainer invoices</li>
+            <li>Overdue status</li>
+          </ul>
+          <a class="choice" href="#compare">See what is included</a>
+        </article>
+
+        <article class="plan">
+          <p class="plan-label">Full practice</p>
+          <h3>Practice</h3>
+          <p class="price-tag"><span class="price">$79</span><span class="per">per month</span></p>
+          <p class="sample-price">Sample price</p>
+          <p class="blurb">For a studio that shares the books and repeats a house style.</p>
+          <ul>
+            <li>Everything in Studio</li>
+            <li>Shared workspace</li>
+            <li>Invoice templates</li>
+            <li>Export of invoice records</li>
+          </ul>
+          <a class="choice" href="#compare">See what is included</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="compare">
+      <div class="section-head">
+        <h2>Compare sample plans</h2>
+        <p>The same sample features, set side by side.</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Included</th>
+            <th>Starter</th>
+            <th>Studio</th>
+            <th>Practice</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Invoice from a finished job</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+          </tr>
+          <tr>
+            <td>PDF invoice</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Paid and unpaid status</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Client records</td>
+            <td class="no">No</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Retainer invoices</td>
+            <td class="no">No</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Overdue status</td>
+            <td class="no">No</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Shared workspace</td>
+            <td class="no">No</td>
+            <td class="no">No</td>
+            <td class="yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Invoice templates</td>
+            <td class="no">No</td>
+            <td class="no">No</td>
+            <td class="yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Export of invoice records</td>
+            <td class="no">No</td>
+            <td class="no">No</td>
+            <td class="yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Sample price per month</td>
+            <td>$18</td>
+            <td>$42</td>
+            <td>$79</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="faq">
+      <div class="section-head">
+        <h2>Questions</h2>
+        <p>Short answers about this sample page.</p>
+      </div>
+      <div class="faq">
+        <details open>
+          <summary>What is Keel?</summary>
+          <p>Keel is a sample product, not a real company. It is a sample invoicing tool for independent design studios. It turns finished jobs into invoices.</p>
+        </details>
+        <details>
+          <summary>Are the prices real?</summary>
+          <p>No. Prices and figures are sample data. The sample prices are Starter at $18 per month, Studio at $42 per month, and Practice at $79 per month.</p>
+        </details>
+        <details>
+          <summary>How do the sample plans differ?</summary>
+          <p>Starter covers an invoice from a finished job, a PDF, and paid or unpaid status. Studio adds client records, retainer invoices, and overdue status. Practice adds a shared workspace, invoice templates, and export of invoice records.</p>
+        </details>
+        <details>
+          <summary>What is North Room?</summary>
+          <p>North Room is the sample studio name used on this page. It is not a customer list, and it is not a quote.</p>
+        </details>
+      </div>
+    </section>
+
+    <footer>
+      <p><strong>Keel</strong> is a sample product. Prices and figures are sample data.</p>
+      <p>Sample studio: North Room</p>
+    </footer>
+  </div>
+</body>
+</html>

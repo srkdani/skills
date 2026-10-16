@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keel, a sample invoicing tool for design studios</title>
+<style>
+  :root {
+    --brand: #1F6A4A;
+    --brand-hover: #174E36;
+    --brand-deep: #143D2C;
+    --brand-soft: #7DCAA8;
+    --brand-tint: #E3E6DE;
+    --paper: #F4F1EB;
+    --surface: #FBFAF7;
+    --line: #E4DFD6;
+    --muted: #5E5953;
+    --body: #3F3B36;
+    --ink: #1C1917;
+    --on-dark-muted: #C4BFB4;
+    --r-control: 6px;
+    --r-panel: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--body);
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  p { margin: 0; }
+  a { color: inherit; }
+  a:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 4px;
+  }
+  .banner {
+    margin: 0;
+    padding: 12px 24px;
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .wrap {
+    width: 1120px;
+    margin: 0 auto;
+  }
+  header {
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 16px 0;
+  }
+  .word {
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .nav-links a {
+    color: var(--muted);
+    font-size: 16px;
+    text-decoration: none;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-note {
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+    align-items: start;
+    padding: 48px 0 0;
+  }
+  .hero > * { min-width: 0; }
+  .eyebrow {
+    margin: 0 0 16px;
+    color: var(--brand);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .lede {
+    margin: 24px 0 0;
+    max-width: 62ch;
+    color: var(--body);
+    font-size: 20px;
+    line-height: 1.5;
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--brand);
+    color: var(--paper);
+    border-radius: var(--r-control);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+  .btn:hover { background: var(--brand-hover); }
+  .text-link {
+    color: var(--brand);
+    font-size: 16px;
+    font-weight: 600;
+    text-underline-offset: 4px;
+  }
+  .text-link:hover { color: var(--brand-hover); }
+  .panel {
+    padding: 24px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: var(--r-panel);
+  }
+  .studio {
+    margin: 0;
+    color: var(--paper);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .studio-note {
+    margin: 8px 0 0;
+    color: var(--on-dark-muted);
+    font-size: 14px;
+  }
+  .stats { margin-top: 24px; }
+  .stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--muted);
+  }
+  .stat span {
+    color: var(--on-dark-muted);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+  .stat strong {
+    color: var(--paper);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat strong.hot { color: var(--brand-soft); }
+  .block { padding-top: 80px; }
+  .section-head { margin-bottom: 32px; }
+  h2 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .section-head p {
+    margin-top: 16px;
+    max-width: 62ch;
+    color: var(--muted);
+  }
+  .feature-lead {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 32px;
+    align-items: start;
+    padding: 32px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+  }
+  .feature-lead > * { min-width: 0; }
+  .feature-lead h3 {
+    margin: 0 0 16px;
+    color: var(--ink);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .feature-lead p { max-width: 62ch; }
+  .eyebrow.flat { margin: 0; }
+  .slip-title {
+    margin: 8px 0 0;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+  .quiet { margin-top: 8px; }
+  .bars { margin-top: 16px; }
+  .bar {
+    height: 8px;
+    background: var(--line);
+  }
+  .bar + .bar { margin-top: 8px; }
+  .w1 { width: 92%; }
+  .w2 { width: 70%; }
+  .w3 { width: 46%; }
+  .feature-list { margin-top: 32px; }
+  .feature-list article {
+    display: grid;
+    grid-template-columns: 22em minmax(0, 1fr);
+    gap: 32px;
+    align-items: baseline;
+    padding: 24px 0;
+    border-top: 1px solid var(--line);
+  }
+  .feature-list article:last-child { border-bottom: 1px solid var(--line); }
+  .feature-list h3 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+  .plans {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+  }
+  .plan {
+    padding-top: 24px;
+    border-top: 1px solid var(--ink);
+  }
+  .plan h3 {
+    margin: 0 0 16px;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+  .price {
+    margin: 0 0 16px;
+    color: var(--ink);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .price span {
+    display: block;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.4;
+  }
+  .plan p:last-child { max-width: 36ch; }
+  .close {
+    margin-top: 80px;
+    padding: 80px 0;
+    background: var(--brand-deep);
+    color: var(--paper);
+  }
+  .close h2 { color: var(--paper); }
+  .close p {
+    margin-top: 16px;
+    max-width: 62ch;
+    color: var(--paper);
+    font-size: 20px;
+  }
+  .close .actions { margin-top: 32px; }
+  .close .btn {
+    background: var(--paper);
+    color: var(--brand-deep);
+  }
+  .close .btn:hover { background: var(--surface); }
+  .close a:focus-visible { outline-color: var(--paper); }
+  .close .foot {
+    margin-top: 32px;
+    max-width: none;
+    color: var(--on-dark-muted);
+    font-size: 14px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+  <p class="banner">Keel is a sample product. Prices and figures on this page are sample data.</p>
+  <header>
+    <div class="wrap nav">
+      <a class="word" href="#top">Keel</a>
+      <nav class="nav-links" aria-label="Page">
+        <a href="#features">Features</a>
+        <a href="#plans">Sample plans</a>
+        <span class="nav-note">Sample product</span>
+      </nav>
+    </div>
+  </header>
+  <main id="top">
+    <div class="wrap hero">
+      <div>
+        <p class="eyebrow">Invoicing for independent design studios</p>
+        <h1>Turn finished jobs<br>into invoices.</h1>
+        <p class="lede">Keel is a sample invoicing tool for independent design studios. It turns a finished job into an invoice draft, and the sample stops once that draft is prepared.</p>
+        <div class="actions">
+          <a class="btn" href="#plans">See sample plans</a>
+          <a class="text-link" href="#features">Read the features</a>
+        </div>
+      </div>
+      <aside class="panel" aria-label="Sample studio dashboard">
+        <p class="studio">North Room</p>
+        <p class="studio-note">Sample studio</p>
+        <div class="stats">
+          <div class="stat">
+            <span>Outstanding, sample</span>
+            <strong class="hot">$4,280</strong>
+          </div>
+          <div class="stat">
+            <span>Paid this month, sample</span>
+            <strong>$9,150</strong>
+          </div>
+          <div class="stat">
+            <span>Overdue invoices, sample</span>
+            <strong>3</strong>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section id="features" class="block">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>From a finished job<br>to a clear invoice.</h2>
+          <p>Features of this sample product. Nothing here is a customer story, a testimonial, or a live metric.</p>
+        </div>
+        <article class="feature-lead">
+          <div>
+            <h3>Finished work, then the invoice</h3>
+            <p>Mark the job finished, and Keel turns that job into an invoice draft. The sample stops at that handoff: work done, invoice prepared.</p>
+          </div>
+          <div class="evidence">
+            <p class="eyebrow flat">Sample invoice</p>
+            <p class="slip-title">Finished job, draft ready</p>
+            <p class="quiet">The sample product prepares an invoice from the finished job. No live customer data is shown.</p>
+            <div class="bars" aria-hidden="true">
+              <div class="bar w1"></div>
+              <div class="bar w2"></div>
+              <div class="bar w3"></div>
+            </div>
+          </div>
+        </article>
+        <div class="feature-list">
+          <article>
+            <h3>Shaped for design studios</h3>
+            <p>Independent design studios are the audience, and North Room is the sample studio.</p>
+          </article>
+          <article>
+            <h3>Status in one view</h3>
+            <p>Sample data for North Room: outstanding, paid this month, and overdue invoices.</p>
+          </article>
+          <article>
+            <h3>Plain sample plans</h3>
+            <p>Starter, Studio, and Practice are sample plans, with sample prices listed below.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="plans" class="block">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Sample plans</h2>
+          <p>These prices are sample data. Keel is a sample product, not a real company.</p>
+        </div>
+        <div class="plans">
+          <article class="plan">
+            <h3>Starter</h3>
+            <p class="price">$18 <span>per month, sample</span></p>
+            <p>A sample plan for turning a finished job into an invoice.</p>
+          </article>
+          <article class="plan">
+            <h3>Studio</h3>
+            <p class="price">$42 <span>per month, sample</span></p>
+            <p>A sample plan for a studio such as North Room, the sample studio.</p>
+          </article>
+          <article class="plan">
+            <h3>Practice</h3>
+            <p class="price">$79 <span>per month, sample</span></p>
+            <p>A sample plan for a busier independent practice, still sample data.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <section class="close" aria-label="Closing">
+    <div class="wrap">
+      <h2>A sample of the invoice,<br>after the job is done.</h2>
+      <p>Keel is a sample product, not a real company. It turns finished jobs into invoices for independent design studios. Prices and figures on this page are sample data.</p>
+      <div class="actions">
+        <a class="btn" href="#plans">Review sample plans</a>
+      </div>
+      <p class="foot">Keel. Sample invoicing tool for independent design studios.</p>
+    </div>
+  </section>
+</body>
+</html>

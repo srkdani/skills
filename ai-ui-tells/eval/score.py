@@ -1,5 +1,10 @@
 import json,sys,re,os
 D=os.path.dirname(os.path.abspath(__file__))
+root=D
+if len(sys.argv)>1:
+    root=sys.argv[1]
+    if not os.path.isabs(root):
+        root=os.path.join(D,root)
 from playwright.sync_api import sync_playwright
 JS=r"""()=>{
 const hue=(r,g,b)=>{r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;if(d<.15)return -1;let h=mx==r?((g-b)/d)%6:mx==g?(b-r)/d+2:(r-g)/d+4;h*=60;return h<0?h+360:h};
@@ -29,9 +34,9 @@ with sync_playwright() as p:
   for t,vw in [('landing',1280),('pricing',1280),('mobile',390)]:
     for v in ['baseline','A','B']:
       pg=b.new_page(viewport={'width':vw,'height':844 if vw==390 else 800},device_scale_factor=1)
-      pg.goto(f'file://{D}/src/{t}_{v}.html');pg.wait_for_timeout(200)
+      pg.goto(f'file://{root}/src/{t}_{v}.html');pg.wait_for_timeout(200)
       out[f'{t}_{v}']=pg.evaluate(JS)
-      pg.screenshot(path=f'{D}/{t}_{v}.png',full_page=True);pg.close()
+      pg.screenshot(path=f'{root}/{t}_{v}.png',full_page=True);pg.close()
   b.close()
-json.dump(out,open(f'{D}/scores.json','w'),indent=1)
+json.dump(out,open(f'{root}/scores.json','w'),indent=1)
 for k,r in out.items():print(k,{x:y for x,y in r.items() if x!='radiiVals'})
