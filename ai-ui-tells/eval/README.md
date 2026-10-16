@@ -48,42 +48,42 @@ Side by side images: `landing_side_by_side.png`, `pricing_side_by_side.png`, `mo
 
 ## Independent A/B
 
-The table above was written by one author. This pass repeats the three tasks in separate contexts, so version A never receives the skill.
+The table above was written by one author. This pass uses a fresh sample product, Harbor Kit, a sample gear checklist for small film crews. Every price, name, quote, logo, and figure on these pages is labeled sample.
 
-Sample product: Keel, a sample invoicing tool for independent design studios. Every name, price, and figure on these pages is sample data: Starter $18 per month, Studio $42 per month, Practice $79 per month, sample studio North Room, sample outstanding $4,280, sample paid this month $9,150, and 3 sample overdue invoices.
+Each task started from a one-shot in a separate context that did not have the skill. The prompt was short: "build a landing page for Harbor Kit, a sample product", and the same shape for a pricing page and a mobile app dashboard. Version A is that file after one further instruction, "make it better", still with no skill. Version B is a different context that read `SKILL.md`, drew a direction, and was told "make it look less AI / make it better". B was run twice per task with different draw salts so the skill could not collapse onto one look.
 
-Each task started from its own baseline. The baseline prompt was: "Build a <task> for Keel, a sample product, as a single HTML file."
+What the one-shot actually did: system-ui or Segoe UI, a teal or blue gradient, uppercase tracked labels, equal cards, soft shadows, and (on landing and pricing) an emoji. "Make it better" increased the noise. Landing shadows went from 0 to 9 and eyebrows from 6 to 12. Pricing shadows went from 4 to 17 and eyebrows from 17 to 24. Mobile glass went from 0 to 2. It did not always use a purple glow. That is the recorded before, not a hand-built one.
 
-- Version A was a separate context. It received that baseline and only the instruction "make it better". It was not given `SKILL.md`.
-- Version B was another context. It read `SKILL.md`, received the same baseline, and was then told "make it look less AI / make it better".
-
-Sources are in `independent/src/`. `python score.py` still scores the original `src/` pages. `python score.py independent` runs the same counter on `independent/src/` and writes `independent/scores.json` plus full-page screenshots. Viewports are unchanged: landing and pricing at 1280 px, mobile at 390 px.
+`python score.py` still scores the original `src/` pages. `python score.py independent 1280` scores this set at 1280 px wide and writes `independent/scores.json`. The counter now also reports eyebrows, the real H1 over body size, H1 letter-spacing (em), H1 line-height, contrast pairs under WCAG AA, and banned words.
 
 ### Automatic counts (independent A vs B)
 
-| Task | Version | Blue/purple gradients | Resting shadows | Pill badges | Emoji | Glass surfaces | Distinct radii (px) | Font sizes | Spacing values | Title / body ratio | Filled buttons above fold |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| landing | A | 0 | 5 | 3 | 0 | 1 | 5 (8, 14, 16, 20, 24) | 16 | 24 | 3.56 | 2 |
-| landing | B | 0 | 0 | 0 | 0 | 0 | 2 (6, 12) | 6 | 7 | 3.5 | 1 |
-| pricing | A | 0 | 1 | 0 | 0 | 0 | 0 | 16 | 22 | 4.25 | 0 |
-| pricing | B | 0 | 0 | 0 | 0 | 0 | 2 (6, 12) | 6 | 7 | 3.5 | 0 |
-| mobile | A | 0 | 4 | 1 | 0 | 0 | 2 (12, 16) | 10 | 12 | 2 | 0 |
-| mobile | B | 0 | 0 | 0 | 0 | 0 | 2 (6, 12) | 5 | 6 | 2 | 0 |
+B is the first draw. B2 is the second draw.
 
-The equal-size icon grid count from `score.py` is 0 for A and B on all three tasks. Font weights are 2 on landing A and 3 on landing B, 5 on pricing A and 3 on pricing B, and 3 on both mobile versions.
+| Task | Version | Direction | Gradients | Shadows | Pills | Emoji | Eyebrows | Radii | Font sizes | Spacing | H1/body | H1 tracking | H1 line-height | Contrast fails | Filled buttons | Display face |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| landing | A | none | 0 | 9 | 2 | 2 | 12 | 2 (8, 12) | 18 | 21 | 2.82 | -0.02 | 1.15 | 8 | 2 | system-ui |
+| landing | B | Pool clipboard | 0 | 0 | 0 | 0 | 0 | 2 (4, 6) | 4 | 8 | 4.25 | -0.02 | 1.05 | 0 | 1 | Syne |
+| landing | B2 | Split-flap board | 0 | 0 | 0 | 0 | 0 | 1 (2) | 6 | 6 | 5 | 0.02 | 1 | 0 | 1 | Anton |
+| pricing | A | none | 0 | 17 | 7 | 1 | 24 | 3 (4, 8, 14) | 23 | 27 | 3 | -0.035 | 1.12 | 7 | 2 | system-ui |
+| pricing | B | Locker enamel | 0 | 0 | 0 | 0 | 0 | 2 (2, 6) | 5 | 8 | 4 | -0.02 | 1.05 | 0 | 1 | Syne, number in Anton |
+| pricing | B2 | Night call sheet | 0 | 0 | 0 | 0 | 0 | 2 (2, 6) | 4 | 6 | 4.5 | -0.02 | 1.05 | 0 | 1 | Newsreader |
+| mobile | A | none | 0 | 4 | 1 | 0 | 15 | 10 | 14 | 22 | 1.31 | -0.017 | 1.2 | 7 | 4 | system-ui |
+| mobile | B | Darkroom safelight | 0 | 0 | 0 | 0 | 0 | 1 (2) | 4 | 4 | 4 | -0.02 | 1.05 | 0 | 1 | Fraunces |
+| mobile | B2 | Ticket window | 0 | 0 | 0 | 0 | 0 | 1 (8) | 4 | 6 | 1.75 | -0.02 | 1.05 | 0 | 1 | Fraunces |
 
-"Make it better" increased tells on two tasks. Landing shadows went from 0 on the baseline to 5, pills from 2 to 3, and glass from 0 to 1. Mobile shadows went from 0 to 4. Pricing shadows went from 0 to 1, and font sizes went from 12 to 16.
+Mobile baseline (the one-shot, before "make it better") had 1 blue gradient. Glass on mobile A is 2. Equal icon grids: landing A 1, mobile A 1, and 0 on every B. Banned words: 0 on A and B. Anton on the split-flap uses the stencil tracking exception (0.02em) and line-height 1.0.
 
-B is lower than A on every tell that is non-zero for A. Type and spacing scales are tighter on B for every task (landing 16 sizes and 24 spaces vs 6 and 7, pricing 16 and 22 vs 6 and 7, mobile 10 and 12 vs 5 and 6). Two counts are lower on A and still inside the checklist targets: pricing radii are 0 on A and 2 on B, and landing font weights are 2 on A and 3 on B.
+The six B pages use six directions. Shrunk to about 300 px wide, A is a teal or white template and B is a colored band with one huge element (a clipboard, a flap, the number 108, a red circle, a safelight, a ticket). B and B2 on the same task do not match each other.
 
-The filled-button counter only matches an element whose class contains `btn`. Landing uses that class, so the counts above are the on-screen buttons. Pricing B uses the class `button` and mobile B uses `action`, so the automatic count is 0 even though each screenshot shows one filled action: "See sample plans" on pricing B, and "Review 3 overdue" on mobile B. Pricing A has three text links that all say "Compare sample plans" and no single filled action. Mobile A has no button.
+First viewport, A on the left and B on the right: `independent/landing_side_by_side.png`, `independent/pricing_side_by_side.png`, `independent/mobile_side_by_side.png`.
 
-Labeled pairs, A on the left and B on the right: `independent/landing_side_by_side.png`, `independent/pricing_side_by_side.png`, `independent/mobile_side_by_side.png`.
+The two skill runs: `independent/landing_two_runs.png`, `independent/pricing_two_runs.png`, `independent/mobile_two_runs.png`.
 
 ## Install test
 
-A fresh directory got a copy of this folder at `.agents/skills/ai-ui-tells/`. The agent was asked only to build a landing page and make it look less AI, and to list the files it read.
+A fresh directory received this folder at `.agents/skills/ai-ui-tells/`. The agent was asked only to build a landing page and make it look less AI, and to list the files it read.
 
-It read `SKILL.md` first. It then read `eval/README.md`, `eval/score.py`, `eval/src/landing_B.html`, and `eval/src/landing_baseline.html`. The page it wrote shares no non-empty lines with `landing_B.html`. It did reuse the sample product name Tally from this eval writeup.
+The first file it read was `SKILL.md`, then `directions.md` and `draw.py`. It did not read the eval HTML. It drew Locker enamel and tied it to a sample morning fish auction (North Wharf), with the bold place a stamped door number, 214. The page is not in this repo.
 
-`score.py` on that page at 1280 px: blue/purple gradients 0, resting shadows 0, pill badges 0, emoji 0, glass surfaces 0, equal icon grids 0, distinct radii 2 (6, 12), font sizes 6, font weights 3, spacing values 8, title/body ratio 3.5, filled buttons above the fold 1. Those match the checklist targets. The document title contains one em dash, so the page was left out of the repo.
+`score.py` at 1280 px on that page: blue-violet gradients 0, resting shadows 0, pills 0, emoji 0, eyebrows 0, contrast failures 0, distinct radii 2 (2, 6), font sizes 5, spacing values 5, H1/body 4, H1 letter-spacing -0.02em, H1 line-height 1.05, filled buttons above the fold 1, banned words 0. Display stack: Syne, with Anton on the number. No em dash in the file.

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harbor Kit, sample gear checklist for small film crews</title>
+  <style>
+    @font-face {
+      font-family: "Anton";
+      src: url("../../../fonts/Anton-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Syne";
+      src: url("../../../fonts/Syne-Variable.ttf") format("truetype");
+      font-weight: 400 800;
+      font-style: normal;
+      font-display: block;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; padding: 0; }
+
+    html, body {
+      background: #14120E;
+      color: #F4EFE4;
+    }
+
+    body {
+      font-family: "Syne";
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: 0;
+      font-variation-settings: "wght" 400;
+      font-synthesis: none;
+    }
+
+    ul, ol { list-style: none; }
+
+    a:focus-visible {
+      outline: 4px solid #F4EFE4;
+      outline-offset: 4px;
+    }
+
+    .fold {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      column-gap: 48px;
+      align-items: stretch;
+      padding: 48px;
+      background: #14120E;
+    }
+
+    .copy {
+      min-height: calc(100vh - 96px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .flap {
+      position: relative;
+      overflow: hidden;
+      border-radius: 2px;
+      background: #3A3428;
+      color: #F4EFE4;
+      font-family: "Anton";
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .brand span, .lead span, .word, .item {
+      display: block;
+      border-top: 1px solid #14120E;
+    }
+
+    .brand { font-size: 28px; line-height: 1.15; }
+    .lead { font-size: 36px; line-height: 1.1; }
+
+    .brand span, .lead span, .item {
+      margin-top: 8px;
+      padding: 8px 24px 16px;
+    }
+
+    .giant {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-top: 16px;
+      padding: 32px;
+      background: #F2C200;
+      color: #14120E;
+      font-size: 80px;
+      line-height: 1.0;
+    }
+
+    .word { padding-top: 24px; }
+
+    .row { font-size: 20px; line-height: 1.2; }
+
+    .meta {
+      font-family: "Syne";
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 1.5;
+      letter-spacing: 0;
+      text-transform: none;
+      font-variation-settings: "wght" 400;
+      color: #F4EFE4;
+    }
+
+    .dek {
+      max-width: 62ch;
+      font-family: "Syne";
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: 0;
+      color: #F4EFE4;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn, .btn:visited {
+      display: inline-block;
+      background: #E24B2B;
+      color: #14120E;
+      font-family: "Syne";
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: 0;
+      text-decoration: none;
+      text-transform: none;
+      padding: 16px 24px;
+      border-radius: 0;
+      border: 0;
+    }
+
+    .more, .more:visited {
+      color: #F4EFE4;
+      font-family: "Syne";
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: 0;
+      text-underline-offset: 4px;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+      margin: 0;
+      align-self: center;
+    }
+
+    .item { min-width: 0; }
+
+    .split, .price {
+      padding: 96px 48px 48px;
+      background: #14120E;
+    }
+
+    h2 {
+      font-family: "Anton";
+      font-weight: 400;
+      font-size: 28px;
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .split li + li {
+      border-top: 1px solid #3A3428;
+      margin-top: 32px;
+      padding-top: 32px;
+    }
+
+    h3 {
+      font-family: "Anton";
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .split p, .price p {
+      max-width: 62ch;
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    .price .amount {
+      font-family: "Anton";
+      font-weight: 400;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      margin-bottom: 16px;
+    }
+
+    footer {
+      padding: 48px;
+      border-top: 1px solid #3A3428;
+      background: #14120E;
+    }
+
+    footer p { max-width: 62ch; }
+
+    @keyframes arrive {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .copy .flap:nth-child(1) { animation: arrive 0.4s ease both; }
+    .copy .flap:nth-child(2) { animation: arrive 0.4s ease 0.08s both; }
+    .copy .flap:nth-child(3) { animation: arrive 0.4s ease 0.16s both; }
+    .list { animation: arrive 0.45s ease 0.34s both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .flap, .list { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <section class="fold">
+    <div class="copy">
+      <p class="flap brand"><span>Harbor Kit, sample</span></p>
+      <p class="flap lead"><span>Still on the truck</span></p>
+      <h1 class="flap giant"><span class="word">ND set</span></h1>
+      <p class="dek">Harbor Kit is a sample gear checklist for a small film crew. This sample ND set stays on the board until it leaves the truck.</p>
+      <div class="actions">
+        <a class="btn" href="#price">Take the day one list</a>
+        <a class="more" href="#split">How a crew splits it</a>
+      </div>
+    </div>
+    <ul class="list">
+      <li class="flap row"><span class="item">Camera + battery, sample</span></li>
+      <li class="flap row"><span class="item">Shotgun + wind, sample</span></li>
+      <li class="flap row"><span class="item">Lav, two channels, sample</span></li>
+      <li class="flap row"><span class="item">CF cards + reader, sample</span></li>
+      <li class="flap row"><span class="item">Gaffer + black wrap, sample</span></li>
+    </ul>
+  </section>
+
+  <section class="split" id="split">
+    <h2>How a crew splits it</h2>
+    <ol>
+      <li>
+        <h3>DP, sound, and PA</h3>
+        <p>Each person keeps the items they carry. The PA does not hold the DP list.</p>
+      </li>
+      <li>
+        <h3>Print page or phone</h3>
+        <p>Checkout at wrap is one printed page, or the same list on a phone.</p>
+      </li>
+      <li>
+        <h3>Starter lists</h3>
+        <p>Documentary, interview, and short narrative lists, edited before day one.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="price" id="price">
+    <h2>Sample price</h2>
+    <p class="amount">$29</p>
+    <p>Paid once. Starter lists are included. This figure is a sample.</p>
+  </section>
+
+  <footer>
+    <p class="meta">Harbor Kit is a sample product for demonstration.</p>
+  </footer>
+</body>
+</html>

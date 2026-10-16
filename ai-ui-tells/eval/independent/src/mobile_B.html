@@ -2,347 +2,208 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=390, initial-scale=1">
-<title>Keel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harbor Kit</title>
 <style>
-  :root {
-    --brand: #1F4D3A;
-    --brand-dark: #16382A;
-    --brand-tint: #E2EFE8;
-    --bg: #F3EFE6;
-    --subtle: #E7E0D4;
-    --surface: #FBFAF6;
-    --border: #D9D0C2;
-    --muted: #5E574E;
-    --text: #3A342C;
-    --ink: #1C1916;
-    --r-control: 6px;
-    --r-panel: 12px;
-    --s-1: 4px;
-    --s-2: 8px;
-    --s-3: 12px;
-    --s-4: 16px;
-    --s-5: 24px;
-    --s-6: 32px;
-    --t-1: 12px;
-    --t-2: 14px;
-    --t-3: 16px;
-    --t-4: 20px;
-    --t-5: 28px;
+  @font-face {
+    font-family: Fraunces;
+    src: url("../../../fonts/Fraunces-Variable.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: block;
+  }
+  @font-face {
+    font-family: Syne;
+    src: url("../../../fonts/Syne-Variable.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: block;
   }
 
   * { box-sizing: border-box; }
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }
-
+  html { background: #7A1420; }
   body {
-    width: 390px;
+    margin: 0;
     min-height: 100vh;
-    font-size: var(--t-2);
+    background: #7A1420;
+    color: #F6E7DC;
+    font-family: Syne, sans-serif;
     font-weight: 400;
-    line-height: 1.4;
+    font-size: 16px;
+    line-height: 1.55;
+    letter-spacing: 0;
+    padding: 48px 0;
   }
-
-  p, h1 { margin: 0; }
-
-  .screen {
+  .column {
     width: 390px;
-    min-height: 100vh;
-    padding: var(--s-4) var(--s-4) var(--s-6);
+    margin: 0 auto;
   }
-
-  header {
+  h1 {
+    margin: 0 0 8px;
+    font-family: Fraunces, serif;
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-variation-settings: "wght" 700, "SOFT" 50, "opsz" 144;
+  }
+  h2 {
+    margin: 0 0 8px;
+    font-family: Fraunces, serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: 0;
+    font-variation-settings: "wght" 700, "SOFT" 50, "opsz" 22;
+  }
+  p, li { margin: 0; text-wrap: pretty; }
+  .keep { white-space: nowrap; }
+  .tray {
+    margin-top: 24px;
+    padding: 16px;
+    background: #1A1214;
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--s-3);
-    margin-bottom: var(--s-5);
+    flex-direction: column;
+    gap: 16px;
   }
-
-  .brand {
+  .hero {
     display: flex;
     align-items: center;
-    gap: var(--s-3);
+    gap: 16px;
   }
-
-  .mark {
-    width: 4px;
-    height: 32px;
-    background: var(--brand);
+  .side {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
-
-  .product {
-    font-size: var(--t-4);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    color: var(--ink);
+  .side h2 { margin: 0; }
+  .meta {
+    font-size: 13px;
+    line-height: 1.5;
+    letter-spacing: 0;
+    font-weight: 400;
   }
-
-  .studio {
-    margin-top: var(--s-1);
-    color: var(--muted);
+  .sheet {
+    width: 156px;
+    flex: 0 0 156px;
+    margin: 0;
+    padding: 8px;
+    background: #F6E7DC;
+    border-radius: 2px;
   }
-
-  .eyebrow,
-  .section-label,
-  .kicker,
-  .group-label {
-    font-size: var(--t-1);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
-
-  .eyebrow {
-    padding-top: var(--s-1);
-    color: var(--brand);
-  }
-
-  .section-label {
-    margin-bottom: var(--s-2);
-    color: var(--muted);
-  }
-
-  .lede {
-    max-width: 65ch;
-    margin-bottom: var(--s-3);
-  }
-
-  section + section {
-    margin-top: var(--s-5);
-  }
-
-  .panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r-panel);
-    overflow: hidden;
-  }
-
-  .focal {
-    background: var(--brand-tint);
-    padding: var(--s-4);
-  }
-
-  h1 {
-    font-size: var(--t-5);
+  .well {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #1A1214;
+    color: #F6E7DC;
+    border: 1px solid #4A1018;
+    border-radius: 2px;
+    font-size: 16px;
     font-weight: 700;
     line-height: 1;
-    letter-spacing: -0.03em;
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
   }
-
-  h1 .kicker {
-    display: block;
-    margin-bottom: var(--s-1);
-    color: var(--muted);
-  }
-
-  .hint {
-    margin-top: var(--s-1);
-    font-size: var(--t-1);
-    line-height: 1.35;
-    color: var(--muted);
-  }
-
-  .focal .hint {
-    margin-top: var(--s-2);
-  }
-
-  .action {
-    display: block;
-    width: 100%;
-    margin-top: var(--s-4);
-    padding: var(--s-3) var(--s-4);
-    border-radius: var(--r-control);
-    background: var(--brand);
-    color: var(--surface);
-    font-family: inherit;
-    font-size: var(--t-3);
-    font-weight: 600;
-    line-height: 1.2;
-    text-align: center;
-    text-decoration: none;
-  }
-
-  .action:hover {
-    background: var(--brand-dark);
-  }
-
-  .action:focus-visible {
-    outline: 2px solid var(--brand-dark);
-    outline-offset: 2px;
-  }
-
-  .row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--s-3);
-    padding: var(--s-3) var(--s-4);
-    border-top: 1px solid var(--border);
-  }
-
-  .panel > .row:first-child { border-top: 0; }
-
-  .row:target { background: var(--subtle); }
-
-  .copy { min-width: 0; }
-
-  .label {
-    font-size: var(--t-2);
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--ink);
-  }
-
-  .value {
-    flex: 0 0 auto;
-    font-size: var(--t-3);
-    font-weight: 600;
-    line-height: 1.2;
-    text-align: right;
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .group-label {
-    padding: var(--s-3) var(--s-4) var(--s-1);
-    border-top: 1px solid var(--border);
-    background: var(--subtle);
-    color: var(--muted);
-  }
-
-  .toggle {
-    position: relative;
-    flex: 0 0 auto;
-    width: 44px;
-    height: 24px;
-    border-radius: 9999px;
-    background: var(--brand);
-  }
-
-  .toggle::after {
-    content: "";
+  .ring {
     position: absolute;
-    top: var(--s-1);
-    right: var(--s-1);
-    width: 16px;
-    height: 16px;
-    border-radius: 9999px;
-    background: var(--surface);
+    left: -4px;
+    top: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    pointer-events: none;
   }
-
-  .toggle.off { background: var(--border); }
-
-  .toggle.off::after {
-    right: auto;
-    left: var(--s-1);
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
-
-  .foot {
-    max-width: 65ch;
-    margin-top: var(--s-4);
-    color: var(--muted);
+  button {
+    appearance: none;
+    width: 100%;
+    margin: 0;
+    padding: 16px;
+    border: 0;
+    border-radius: 2px;
+    background: #F2E14B;
+    color: #1A1214;
+    font-family: Syne, sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: center;
+    cursor: pointer;
+  }
+  .more {
+    color: #F6E7DC;
+    font-size: 16px;
+    line-height: 1.5;
+    text-underline-offset: 4px;
+  }
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid #F6E7DC;
+    outline-offset: 4px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .headline { animation: rise 400ms ease both; }
+    .tray { animation: rise 400ms ease 120ms both; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
-  <div class="screen">
-    <header>
-      <div class="brand">
-        <span class="mark" aria-hidden="true"></span>
-        <div>
-          <p class="product">Keel</p>
-          <p class="studio">North Room</p>
-        </div>
-      </div>
-      <p class="eyebrow">Sample product</p>
+  <main class="column">
+    <header class="headline">
+      <h1>Three still out</h1>
+      <p class="lede">Harbor Kit gear checklist. Sample count, 3 still out. Sample shoot, Dockside short, day 2, <span class="keep">Sat Oct 18</span>. <span class="keep">Sample call, 6:30 AM</span> at <span class="keep">Pier 7 unit B</span>.</p>
     </header>
-
-    <section aria-label="Dashboard">
-      <p class="section-label">Dashboard</p>
-      <p class="lede">Short summary for North Room. Every figure below is sample data.</p>
-      <div class="panel">
-        <div class="focal">
-          <h1><span class="kicker">Outstanding</span>$4,280</h1>
-          <p class="hint">Sample figure</p>
-          <a class="action" href="#overdue">Review 3 overdue</a>
+    <section class="tray" aria-label="Sample kit">
+      <div class="hero">
+        <div class="side">
+          <h2>Matte box<br>at the desk</h2>
+          <p class="meta">Sample frames. 6 is circled.</p>
         </div>
-        <div class="row">
-          <div class="copy">
-            <p class="label">Paid this month</p>
-            <p class="hint">Sample figure</p>
+        <figure class="sheet">
+          <div class="grid">
+            <div class="well">1</div>
+            <div class="well">2</div>
+            <div class="well">3</div>
+            <div class="well">4</div>
+            <div class="well">5</div>
+            <div class="well">6
+              <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
+                <circle cx="50" cy="50" r="44" fill="none" stroke="#7A1420" stroke-width="7"></circle>
+              </svg>
+            </div>
           </div>
-          <p class="value">$9,150</p>
-        </div>
-        <div class="row" id="overdue">
-          <div class="copy">
-            <p class="label">Overdue invoices</p>
-            <p class="hint">Sample figure</p>
-          </div>
-          <p class="value">3</p>
-        </div>
+        </figure>
       </div>
+      <ul class="rows">
+        <li>Frame 6, matte box and ND set, due <span class="keep">5 PM</span>. Sample.</li>
+        <li>Frame 4, four cards, <span class="keep">256 GB</span>. Sample count.</li>
+        <li>Frame 5, LED panel. Sample name <span class="keep">Morgan Kim</span>.</li>
+      </ul>
+      <p class="meta">Packed: frame 1 body, sample name Jordan. Frame 2, <span class="keep">24-70mm</span> zoom, sample. Frame 3 lav, sample name <span class="keep">Sam Lee</span>. Fluid head is in the van.</p>
+      <p>Sample price $847 rental total.</p>
+      <button type="button">Check the circled frame</button>
+      <a class="more" id="add" href="#add">Add a piece</a>
     </section>
-
-    <section aria-label="Settings">
-      <p class="section-label">Settings</p>
-      <div class="panel">
-        <div class="row">
-          <div class="copy">
-            <p class="label">Studio</p>
-            <p class="hint">Sample studio name</p>
-          </div>
-          <p class="value">North Room</p>
-        </div>
-        <p class="group-label">Sample plans</p>
-        <div class="row">
-          <div class="copy">
-            <p class="label">Starter</p>
-            <p class="hint">Sample price</p>
-          </div>
-          <p class="value">$18 per month</p>
-        </div>
-        <div class="row">
-          <div class="copy">
-            <p class="label">Studio</p>
-            <p class="hint">Sample price</p>
-          </div>
-          <p class="value">$42 per month</p>
-        </div>
-        <div class="row">
-          <div class="copy">
-            <p class="label">Practice</p>
-            <p class="hint">Sample price</p>
-          </div>
-          <p class="value">$79 per month</p>
-        </div>
-        <div class="row">
-          <div class="copy">
-            <p class="label">Finished jobs</p>
-            <p class="hint">Turn finished jobs into invoices</p>
-          </div>
-          <span class="toggle" role="switch" aria-checked="true" aria-label="On"></span>
-        </div>
-        <div class="row">
-          <div class="copy">
-            <p class="label">Live billing</p>
-            <p class="hint">Off. This screen uses sample data only.</p>
-          </div>
-          <span class="toggle off" role="switch" aria-checked="false" aria-label="Off"></span>
-        </div>
-      </div>
-      <p class="foot">Keel is a sample product. Prices and figures are sample data. Keel is a sample invoicing tool for independent design studios. It turns finished jobs into invoices.</p>
-    </section>
-  </div>
+  </main>
 </body>
 </html>

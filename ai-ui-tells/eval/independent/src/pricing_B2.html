@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harbor Kit pricing</title>
+  <style>
+    @font-face {
+      font-family: "Newsreader";
+      src: url("../../../fonts/Newsreader-Variable.ttf") format("truetype");
+      font-weight: 200 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      background: #10233F;
+      color: #E6EDF5;
+    }
+
+    body {
+      font-family: "Newsreader", serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: 0;
+      font-variation-settings: "wght" 400, "opsz" 16;
+      font-synthesis: none;
+    }
+
+    a { color: #E6EDF5; }
+
+    .night {
+      min-height: 100vh;
+      min-height: 900px;
+      background: #10233F;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 64px 64px;
+    }
+
+    header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .word {
+      color: #E6EDF5;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 650;
+      line-height: 1.5;
+      letter-spacing: 0;
+      font-variation-settings: "wght" 650, "opsz" 16;
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+    }
+
+    nav a {
+      text-decoration: none;
+      font-size: 16px;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    nav a[aria-current="page"] {
+      font-weight: 650;
+      font-variation-settings: "wght" 650, "opsz" 16;
+    }
+
+    .hero {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      color: #E6EDF5;
+      font-size: 72px;
+      font-weight: 650;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      font-variation-settings: "wght" 650, "opsz" 72;
+    }
+
+    .deck {
+      margin: 0 0 40px;
+      max-width: 34em;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 6px;
+      background: #C4362C;
+      color: #F3EFE4;
+      padding: 16px 24px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 650;
+      line-height: 1.5;
+      letter-spacing: 0;
+      font-variation-settings: "wght" 650, "opsz" 16;
+      cursor: pointer;
+    }
+
+    .actions a {
+      font-size: 16px;
+      line-height: 1.5;
+      letter-spacing: 0;
+      text-underline-offset: 4px;
+    }
+
+    .sheet {
+      background: #F3EFE4;
+      color: #1C140F;
+      border-radius: 2px;
+      padding: 24px;
+    }
+
+    .sheet-title {
+      margin: 0 0 8px;
+      font-size: 32px;
+      font-weight: 650;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      font-variation-settings: "wght" 650, "opsz" 32;
+    }
+
+    .sheet-kicker {
+      margin: 0 0 16px;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    .row {
+      padding: 8px 16px;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    .row-wrap {
+      position: relative;
+      width: fit-content;
+      max-width: 100%;
+      margin: 8px 0;
+    }
+
+    .row-wrap .row {
+      padding: 16px;
+    }
+
+    .pencil {
+      position: absolute;
+      left: -16px;
+      top: -8px;
+      width: calc(100% + 16px + 16px);
+      height: calc(100% + 8px + 8px);
+      display: block;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .sheet-note {
+      margin: 16px 0 0;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    .rest {
+      background: #10233F;
+      padding: 96px 64px 96px;
+    }
+
+    h2 {
+      margin: 0 0 24px;
+      max-width: 16em;
+      color: #E6EDF5;
+      font-size: 32px;
+      font-weight: 650;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      font-variation-settings: "wght" 650, "opsz" 32;
+    }
+
+    .lead, .rank li, footer p {
+      max-width: 36em;
+      margin: 0;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    .rank {
+      list-style: none;
+      margin: 24px 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    footer { margin-top: 64px; }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #E6EDF5;
+      outline-offset: 4px;
+    }
+
+    .copy { animation: rise 0.5s ease both; }
+    .sheet { animation: rise 0.5s ease 0.15s both; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .copy, .sheet { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="night">
+    <header>
+      <a class="word" href="#top">Harbor Kit</a>
+      <nav aria-label="Sample page">
+        <a href="#lines">Checklists</a>
+        <a href="#top" aria-current="page">Pricing</a>
+        <a href="#lines">Sign in</a>
+      </nav>
+    </header>
+
+    <section class="hero" id="top" aria-labelledby="page-title">
+      <div class="copy">
+        <h1 id="page-title">Circle the kit<br>you pack at call</h1>
+        <p class="deck">Harbor Kit is a sample gear checklist for a small film crew. Sample prices are lines on the night call sheet, and the circled line is the kit you pack.</p>
+        <div class="actions">
+          <button type="button">Circle the sample line</button>
+          <a href="#lines">Read the sample lines</a>
+        </div>
+      </div>
+
+      <section class="sheet" aria-label="Sample night call sheet">
+        <p class="sheet-title">Night call sheet</p>
+        <p class="sheet-kicker">05:00 call for a sample crew</p>
+        <div class="row">Dock, sample name, $0 sample</div>
+        <div class="row-wrap">
+          <svg class="pencil" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <ellipse cx="100" cy="30" rx="92" ry="22" fill="none" stroke="#C4362C" stroke-width="5" vector-effect="non-scaling-stroke"></ellipse>
+          </svg>
+          <div class="row">Harbor, sample name, $29 sample</div>
+        </div>
+        <div class="row">Fleet, sample name, $89 sample</div>
+        <p class="sheet-note">Sample prices are per month.</p>
+      </section>
+    </section>
+  </div>
+
+  <section class="rest" id="lines" aria-labelledby="pack-title">
+    <h2 id="pack-title">What the circled line packs</h2>
+    <p class="lead">Harbor is the sample name on the circled line. The sample price is $29 a month.</p>
+    <ul class="rank">
+      <li>The sample unit shares one checklist.</li>
+      <li>A sample crew of 8 people can open it.</li>
+      <li>Sample roles sit on the list for the 1st AC, the gaffer, and sound.</li>
+      <li>The crew checks the case before load-in.</li>
+      <li>The list stays available when the set has no signal.</li>
+    </ul>
+    <footer>
+      <p>Harbor Kit sample product. Every price, name, and figure on this page is sample.</p>
+    </footer>
+  </section>
+</body>
+</html>

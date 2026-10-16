@@ -8,7 +8,7 @@ Each skill packages one expert's judgment as concrete, checkable rules, so an ag
 
 | Skill | Use it when |
 |---|---|
-| [ai-ui-tells](ai-ui-tells/SKILL.md) | Building, reviewing or polishing any UI, especially when asked to make it "better", "professional" or "less AI". Detects 9 common tells of generated UI and replaces each with a specific value. Includes a self-audit checklist with counts and an [eval](ai-ui-tells/eval/README.md). |
+| [ai-ui-tells](ai-ui-tells/SKILL.md) | Building, reviewing, or polishing any UI, especially when asked to make it "better" or "less AI", or when it "looks generic" or "looks AI-made". Commits to a named art direction, then replaces generated-UI defaults, including the looks people adopt to escape those defaults. Includes a self-audit and an [eval](ai-ui-tells/eval/README.md). |
 
 ## Install
 

@@ -1,117 +1,107 @@
 ---
 name: ai-ui-tells
-description: Use when building, reviewing, or polishing any web or app UI (landing page, pricing page, dashboard, settings screen, component) and especially when the request is vague, such as "make it better", "make it look professional", "make it look less AI", or "make it look less generic". Detects the visual tells that make an interface look machine-generated and replaces each one with a specific, measurable design decision.
+description: Use this skill whenever you build, review, restyle, or polish a web or app interface (landing page, pricing page, dashboard, settings screen, or component), including when the user only says it looks generic, looks AI-made, looks like a template, should feel less AI, or asks to make it better or more professional. It makes you commit to a named art direction before any markup, replace generated-interface defaults (including the looks people pick to escape those defaults), and check a rendered screenshot. Not for backend, data, or copy tasks that have no interface.
 ---
 
 # AI UI tells
 
-A vague request like "make it better" tends to produce more of the same: another gradient, another shadow, another row of icon cards. This skill gives you a senior product designer's review pass instead. Each tell below has a rule you can check in the code, the reason an experienced designer notices it, and a replacement with concrete values.
+Removing the usual tells lands on the next default: cream paper, a serif, a clay button. This skill makes you commit to one named world, then build only that. If the user already named a style, follow it exactly, even if it is listed below. Pages under `eval/` are past measurements, not templates. Do not copy them.
 
-This is not a ban list. Every pattern here is fine when it is a deliberate choice that serves the content. The problem is the default: the pattern appears because nothing else was decided. When you keep one, you should be able to say why in one sentence.
+## Pass 1. Plan before markup
 
-## How to use this skill
+From this folder, run:
 
-1. Before writing UI, set the system decisions in "Set the system first" below. Most tells disappear when these exist.
-2. Build the screen.
-3. Run the detection rules against your own output (read the CSS, classes, and markup, or computed styles if you can render).
-4. Apply the replacements for any tell that fires.
-5. Finish with the self-audit checklist at the end and report the counts.
+```sh
+python3 draw.py "Product name" landing
+```
 
-If the project already has a design system or brand guide, it wins. Use this skill to find where the output drifted away from it into defaults.
+The second argument is the surface: `landing`, `pricing`, or `app`. Pass a third argument (a salt) when you are repeating a brief, so you do not draw the same block twice. Use the printed direction. Do not swap its palette or face for one you prefer.
 
-## Set the system first
+Write the plan, then stop and read it:
 
-Write these down (as CSS variables or design tokens) before building:
+1. Three things only this subject has (materials, tools, words people in that job say).
+2. The direction name, plus one sentence that ties it to those three things.
+3. Four to six named hex values. Start from the direction. Shift a hex only to pass contrast, and say so.
+4. Type roles: display, body, meta. For each: family, file, size, weight, unitless line-height, letter-spacing.
+5. An ASCII wireframe of the first viewport. Mark the one bold place.
+6. What you will cut (filler sections, extra accents).
 
-- **One brand color.** A single hue with 2 to 3 tonal steps (base, hover/darker, tint for backgrounds). Everything else is neutral.
-- **A neutral ramp.** 5 to 7 grays from the same family (slightly warm or slightly cool, not mixed). Page background, subtle surface, border, muted text, body text, heading text.
-- **Type scale.** At most 6 font sizes on a screen. Example for marketing pages: 14, 16, 20, 28, 40, 56 px. Example for app screens: 12, 14, 16, 20, 28 px.
-- **Spacing scale.** A 4 or 8 px base, at most 8 distinct values in use. Example: 4, 8, 12, 16, 24, 32, 48, 80 px.
-- **Radii.** At most 2 values plus 0 (and full-round only for avatars or toggles). Example: 6 px for inputs and buttons, 12 px for containers.
-- **Elevation.** Default is none. Separate surfaces with a 1 px border or a tonal background step. Reserve a shadow for things that truly float above the page (menus, popovers, modals, a sticky bar).
+## Pass 2. Genericness check
 
-## The tells
+Ask: would a similar prompt (another SaaS landing page, another pricing page, another app dashboard) produce this same plan? If any part would, rewrite that part and say what changed. Escaping a listed default into another listed default is a failed check. Keep the drawn direction's band, face, and signature while you revise.
 
-### 1. Purple/blue hero gradient
+## Avoid these, and do this instead
 
-- **Detect:** a `linear-gradient` or `radial-gradient` on a large area (hero, page background, primary button, heading text) where the stops fall in the blue to violet range (roughly hue 220 to 290), for example indigo to purple, or blue to pink via violet. Also `bg-clip-text` gradient headings.
-- **Why it is flagged:** it has become the default look of generated landing pages, so it signals "no brand decision was made". It also lowers text contrast across part of the area and competes with the actual product imagery.
-- **Replace with:** a flat background from the neutral ramp (for example `#FAFAF9` or `#0B0B0C`) and the one brand color used only where it carries meaning: the primary action, one key highlight, links. If the brand needs atmosphere, use a real product screenshot, photograph, or a single tonal block in a 6 to 10 percent tint of the brand color. Solid text color for headings.
+First-order defaults (what a quick page uses when nobody decides):
 
-### 2. Three equal icon feature cards
+- Blue-violet gradient or glow (hue about 220 to 290) on a hero, button, or word. Do: one flat full-bleed band in the direction's dominant hex. No gradient on that band.
+- Gradient text. Do: a solid ink or paper color from the plan.
+- Centered hero, a pill that says the product is new, two buttons. Do: the direction's wireframe, one filled button, the second path as a text link.
+- Inter, Roboto, Open Sans, Lato, system-ui, or Segoe UI as the marketing display. Do: the display file named in the direction. Inter is fine for body text inside an app screen.
+- Same soft shadow and the same large radius on every card. Do: zero resting shadows. At most two radii plus 0 (full-round only for a toggle or avatar). Separate surfaces with the band or a 1 px line.
+- Three equal icon cards, then a bento, then more cards. Do: one product UI, about 40 percent of the hero. Under it, one ranked feature as rows, no icons.
+- Emoji as bullets or icons. Do: no marker, or the direction's one signature mark.
+- Eyebrow captions (small uppercase tracked labels) over every heading. Do: at most one eyebrow on the whole page. Elsewhere, start with the heading.
+- Fake logo walls, fake quotes, round stats (`10x`, `99.9%`, `4,200+`). Do: delete them. Show a labeled sample from the real product (a row, a price, an item count) or show nothing.
+- Banned words: seamless, powerful, stunning, next-level, elevate, unlock. Also "not just X, it's Y" and triplets such as "fast, simple, and secure". Do: a headline that breaks if you swap the product name for a competitor. Use the subject's nouns.
+- Light gray text, gray text on a colored band, and true black `#000`. Do: neutrals tinted toward the band (8 to 10 steps available). Text on a band is a light or dark solid that passes WCAG AA. Body contrast at least 4.5:1. Large text (24 px, or 19 px and bold) at least 3:1. Failures: 0.
+- Facts written as labels (`In stock: 12`). Do: `12 left in stock`.
+- Scattered hover bounces, pulses, animated gradients. Do: one page-load reveal, headline then the product UI, with a short stagger. Honor `prefers-reduced-motion`.
 
-- **Detect:** a grid of 3 (or 4, or 6) sibling cards with identical size, each with an icon in a tinted circle or square, a short bold title, and 1 to 2 lines of text. Typical markup: `grid-cols-3` with the same component repeated.
-- **Why it is flagged:** equal weight says every feature matters the same, which is never true. Readers cannot tell what the product is actually best at, and the icons rarely add information the title does not.
-- **Replace with:** rank the features. Give the most important one a larger cell (for example a 2:1 column split, or a full-width row with a real screenshot) and list the rest as compact rows of title plus one line, no icon boxes. A 7/5 or 8/4 column split, or one large item followed by a 2-column list, works well. Show product evidence (UI crop, number, quote) instead of decorative icons.
+Second-order defaults (what appears after the list above is banned). Landing on one of these counts as a miss:
 
-### 3. Shadow on everything
+- Cream page near `#F4F1EA`, a serif display, terracotta or clay near `#C46B3A` or `#D97757`. Do: go back to the drawn band. Cream is allowed only on a small UI object the direction names (a ticket, a sheet), never as the page.
+- Near-black (`#000`, `#0A0A0A`, `#111`) plus one acid green (`#B6FF3B`, `#CCFF00`, `#39FF14`) or a single vermilion dot. Do: the direction's named material. A dark band is a room color, not a black canvas.
+- Broadsheet: hairlines on every edge, radius 0 as the personality, newspaper columns. Do: the direction's two radii. A perforation or a flap gap is a signature, not a page system.
+- Space Grotesk, Instrument Serif, or Geist, and mono captions over every heading. Do: the direction's face. A mechanical face (Anton, Allerta Stencil) is allowed only when that direction names it.
 
-- **Detect:** count elements with a non-`none` `box-shadow`. If cards, buttons, inputs, sections, and badges all have one, or more than 2 resting (non-hover, non-overlay) elements per screen have one, it fires. Large soft shadows like `0 20px 50px rgba(...)` and colored shadows are strong signals.
-- **Why it is flagged:** shadow means "this floats above the page". When everything floats, nothing does, depth stops carrying information, and the page looks muddy.
-- **Replace with:** `border: 1px solid` the border gray (for example `#E7E5E4` on light, `#27272A` on dark), or a tonal step in background (page `#FAFAF9`, card `#FFFFFF`). Keep shadow only for overlays: menus, popovers, modals, toasts. Target: 0 resting shadows; at most 1 if a single element genuinely sits above the page.
+## Build
 
-### 4. Pill badges everywhere
+- Marketing H1 is at least 3 times the body size. With a 16 px body, the H1 is 56 to 80 px. App titles are at least 1.6 times the body. The one bold number may be larger.
+- Weights are far apart: display 700 to 900 (or a single-weight display face) and body 400. Do not set every heading to 600.
+- Letter-spacing: headings at 24 px or larger use `-0.02em` to `-0.01em`. Stencil and flap faces may use `0` to `0.04em` instead, and the plan must say so. Uppercase labels at 14 px or smaller use `+0.05em`. Body uses `0`.
+- Line-height is unitless and inverse to size: display `1.0` to `1.1`, headings `1.1` to `1.25`, body `1.5` to `1.6`.
+- Body measure is 45 to 75 characters. A heading has more space above it than below it.
+- The dominant color owns one full band (the whole first viewport on a marketing page). One accent sits on the primary action and on one highlight, nowhere else.
+- The product UI is built in HTML and CSS, with sample data labeled sample. No external images. No invented customers.
+- At most six sizes and eight spacing values. Focus states visible. The page does not overflow sideways.
 
-- **Detect:** small inline labels with full-round radius (`rounded-full`, `border-radius: 9999px`) and tinted backgrounds: "New", "LIVE", "Beta", "Most popular", "AI-powered", announcement chips above the hero. It fires at more than 1 per screen, or any badge that does not carry state.
-- **Why it is flagged:** badges are for status. Used as decoration they add noise and train the eye to ignore them, so the one that matters (an error, a plan state) gets missed.
-- **Replace with:** plain text in the muted gray or the brand color, for example a small uppercase eyebrow label (12 to 13 px, `letter-spacing: 0.04em`, weight 600) with no background. Keep a badge only for real state (Active, Overdue, Draft), and give it the same small radius as buttons, not full-round.
+Spend boldness in one place. Before you finish, remove one accessory (a second badge, a second accent, a divider you do not need).
 
-### 5. Emoji bullets and emoji icons
+## Render and fix
 
-- **Detect:** emoji characters (for example rocket, sparkles, lightning, check mark, fire) at the start of list items, headings, buttons, or used as feature icons.
-- **Why it is flagged:** emoji render differently on each platform, do not match the type, and read as filler. They are among the most recognized signs of generated copy and UI.
-- **Replace with:** no marker at all with good spacing, a simple 1.5 px stroke icon from one consistent set at the text color, or a short muted label. For checklists use a single SVG check in the brand color. Target: 0 emoji in UI chrome.
+Open the first viewport in a browser (1280 px wide for a marketing page; a phone screen for an app, centered on the band). Look at a screenshot, including a copy shrunk to about 300 px wide. List the top three problems a stranger would see in one second. Fix them. Repeat up to three rounds. Stop early only when the thumbnail reads as this direction: the band, the huge type, and the signature are obvious.
 
-### 6. One radius everywhere
+## Self-audit
 
-- **Detect:** collect every `border-radius` value. It fires when one large value (often 16 to 24 px) is applied to everything from buttons to page sections, or when there are more than 3 distinct non-zero values with no logic.
-- **Why it is flagged:** radius should scale with element size and role. A 24 px radius on a 36 px button turns it into a blob; the same radius on a large section looks bubbly. Uniform large radii are a template default.
-- **Replace with:** at most 2 radii plus 0. Small (4 to 8 px) for controls: buttons, inputs, badges, chips. Larger (10 to 14 px) for containers: cards, panels, images. Page sections and full-bleed bands get 0. Nested elements use a radius equal to or smaller than the parent minus its padding.
+Count on the rendered page. Do not claim a pass without numbers.
 
-### 7. Centered hero with two buttons
+| Check | Target |
+|---|---|
+| Blue-violet gradients on a band or on text | 0 |
+| Listed second-order looks (cream/serif/clay, black/acid, broadsheet, Space Grotesk, Instrument Serif) | 0 |
+| Resting shadows | 0 |
+| Decorative pills | 0 |
+| Emoji in the UI | 0 |
+| Eyebrows on the page | 0 or 1 |
+| Distinct non-zero radii | 2 or fewer |
+| Filled buttons in the hero | 1 |
+| H1 size / body size | 3 or more marketing, 1.6 or more app |
+| H1 letter-spacing | `-0.02em` to `-0.01em` (or the stencil exception) |
+| H1 line-height | `1.0` to `1.1` if the H1 is the display |
+| Contrast pairs below WCAG AA | 0 |
+| Banned words | 0 |
+| Font sizes | 6 or fewer |
+| Spacing values | 8 or fewer |
+| Bold place, name it in one sentence | yes |
+| Thumbnail reads as the direction at 300 px | yes |
 
-- **Detect:** a hero where everything is center-aligned (eyebrow badge, headline, subhead, then a primary button and a secondary "Learn more" or "Watch demo" button side by side), with nothing visual beside or below it except perhaps a floating mockup.
-- **Why it is flagged:** it is the most common generated layout, it puts two competing actions in the most valuable spot, and centered multi-line text is harder to read than left-aligned text.
-- **Replace with:** left-aligned headline and subhead (measure 45 to 65 characters for body copy), one primary action, and the secondary path as a text link. Put real product proof (screenshot, number, short customer quote) in the same viewport, beside the copy on desktop (for example a 5/7 split) or directly below. Centered is fine for very short single-statement pages; then still use one button.
+## Worked examples
 
-### 8. Glassmorphism
+Bakery cake orders, pricing page. Draw: Ticket window. Tie: a cake order is a ticket on a spike, not a software plan. Bold place: one perforated stub. Band `#5C1A2E`, ticket `#F7F1E6`, ink `#2A1218`, brass button `#D6B15E`. Three equal plan cards would fail the genericness check, so the tiers are lines on the stub.
 
-- **Detect:** `backdrop-filter: blur(...)` together with semi-transparent white or black backgrounds (`bg-white/10`, `rgba(255,255,255,0.1)`) and thin light borders, on cards or panels that do not sit over moving or image content.
-- **Why it is flagged:** frosted glass only reads when there is something interesting behind it. Over a flat gradient it is just low contrast. It also costs rendering performance and often fails WCAG contrast for text.
-- **Replace with:** an opaque surface from the neutral ramp with a 1 px border. Keep blur only on a sticky header or overlay that actually scrolls over content, with at least 85 percent opacity so text passes 4.5:1 contrast.
+Hospital linen closet, phone dashboard. Draw: Locker enamel. Tie: each closet is a numbered door. Bold place: `214` at 72 px in Anton. Band `#12357A`, panel `#E6E8EC`, button `#F25C1A`. A row of equal stat tiles would fail, so the number is the only loud thing and the list under it is quiet.
 
-### 9. Flat hierarchy
+## Further reading
 
-- **Detect:** compute the H1 font size divided by body font size. It fires below 2.0 on marketing pages and below 1.6 on app screens. It also fires when more than about 3 text styles share the same weight (for example everything 500 or 600), when every section heading is the same size as card titles, or when there is no single element that is clearly the first thing to look at.
-- **Why it is flagged:** if everything is equally loud, readers scan instead of read, and the main message or main action is lost. Hierarchy is the core of a designer's job, so its absence is very visible.
-- **Replace with:** H1 at least 2x body on marketing pages (for example 16 px body, 40 to 56 px H1) and at least 1.6x on app screens (14 px body, 24 to 28 px title). Use at most 2 to 3 weights (400 body, 500 or 600 labels, 600 or 700 headings). Use muted color (for example `#57534E`) for secondary text instead of smaller size alone. One focal element per screen: one H1, one primary filled button in the viewport, the key number or screenshot clearly larger than its neighbors.
-
-### Smaller tells to check in the same pass
-
-- **Generic copy:** "Unlock the power of", "Supercharge your workflow", "Seamless", "Elevate". Replace with what the product does, with a number if one is real. Never invent metrics, customers, or quotes; use clearly marked placeholders instead.
-- **Fake social proof strip:** a row of gray placeholder logos with no real names. Remove it or mark it as a placeholder.
-- **Same section rhythm:** every section is heading, subhead, 3-column grid, with identical vertical padding. Vary layout by content and keep padding on the spacing scale (for example 80 px between major sections, 32 to 48 px inside).
-- **Over-wide text:** paragraphs spanning the full container. Cap body copy at about 65ch.
-
-## Self-audit checklist
-
-Run this on the finished output and report the numbers. Targets are for a single screen or page.
-
-| Check | How to count | Target |
-|---|---|---|
-| Blue/purple gradients on large areas or text | count gradients with stops in hue 220 to 290 | 0 |
-| Equal-size icon card grids | count grids of 3+ identical cards with icon boxes | 0 |
-| Resting shadows | elements with box-shadow, excluding overlays and hover | 0 to 1 |
-| Decorative pill badges | full-round tinted labels that do not show state | 0 |
-| Emoji in UI | emoji characters in headings, buttons, lists, icons | 0 |
-| Distinct non-zero radii | unique border-radius values (ignoring full-round avatars/toggles) | 2 or fewer |
-| Hero primary buttons | filled buttons in the hero | 1 |
-| Glass surfaces | elements with backdrop-filter not over scrolling content | 0 |
-| H1 to body ratio | H1 px / body px | 2.0+ marketing, 1.6+ app |
-| Distinct font sizes | unique font-size values | 6 or fewer |
-| Distinct font weights | unique font-weight values | 3 or fewer |
-| Distinct spacing values | unique margin/padding/gap values | 8 or fewer |
-| Brand hues | distinct saturated hues (excluding semantic red/green/amber for status) | 1 |
-| Focal element | can you name the one thing the eye lands on first? | yes |
-
-If any target is missed, either fix it or state the deliberate reason in one sentence. Do not report the checklist as passed without counting.
+Hierarchy and spacing: Refactoring UI. Measure, line-height, and letter-spacing: Practical Typography. Type scale in a public system: USWDS typography. Contrast floor: WCAG 1.4.3.
