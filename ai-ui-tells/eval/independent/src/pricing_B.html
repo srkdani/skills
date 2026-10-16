@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harbor Kit pricing</title>
+  <style>
+    @font-face {
+      font-family: "Anton";
+      src: url("../../../fonts/Anton-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Syne";
+      src: url("../../../fonts/Syne-Variable.ttf") format("truetype");
+      font-weight: 400 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --band: #12357A;
+      --panel: #E6E8EC;
+      --paper: #F7F8FA;
+      --ink: #1A1C22;
+      --accent: #F25C1A;
+      --line: #C5CDD6;
+      --s4: 4px;
+      --s8: 8px;
+      --s16: 16px;
+      --s24: 24px;
+      --s40: 40px;
+      --s64: 64px;
+      --s80: 80px;
+      --s96: 96px;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--band); }
+    body {
+      margin: 0;
+      background: var(--band);
+      color: var(--paper);
+      font-family: "Syne", sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+    h1, h2, p { margin: 0; }
+    a { color: inherit; }
+    :focus-visible {
+      outline: 2px solid var(--paper);
+      outline-offset: var(--s4);
+    }
+
+    .band {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: var(--s40) var(--s64) var(--s64);
+      background: var(--band);
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--s24);
+    }
+    .brand {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-decoration: none;
+    }
+    nav { display: flex; gap: var(--s24); }
+    nav a {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.55;
+      text-decoration: none;
+    }
+    nav a[aria-current="page"] { font-weight: 700; }
+
+    .locker {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      grid-template-rows: 1fr;
+      gap: var(--s40);
+      align-items: stretch;
+      margin-top: var(--s40);
+    }
+    .intro { animation: rise 0.45s ease both; }
+    .bay {
+      font-family: "Anton", sans-serif;
+      font-size: 440px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--paper);
+    }
+    .bay-note { margin-top: var(--s8); }
+    h1 {
+      margin-top: var(--s40);
+      margin-bottom: var(--s16);
+      max-width: 12ch;
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      font-variation-settings: "wght" 700;
+    }
+    h1 em {
+      font-style: normal;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .lede { max-width: 62ch; }
+
+    .panel {
+      background: var(--panel);
+      color: var(--ink);
+      border-radius: 2px;
+      padding: var(--s40);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: rise 0.45s ease 0.14s both;
+    }
+    .panel :focus-visible { outline-color: var(--ink); }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      column-gap: var(--s16);
+      row-gap: var(--s4);
+      align-items: baseline;
+      padding: var(--s16) 0;
+      border-top: 1px solid var(--line);
+    }
+    .row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .name {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.55;
+      font-variation-settings: "wght" 700;
+    }
+    .name .meta { margin-left: var(--s8); font-weight: 400; }
+    .price {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      font-variation-settings: "wght" 700;
+      white-space: nowrap;
+    }
+    .price .meta {
+      margin-left: var(--s8);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+    .meta {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+    .desc { grid-column: 1 / -1; }
+
+    button {
+      display: block;
+      width: 100%;
+      margin-top: 0;
+      padding: var(--s16) var(--s24);
+      border: 0;
+      border-radius: 6px;
+      background: var(--accent);
+      color: var(--ink);
+      font-family: "Syne", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.55;
+      letter-spacing: 0;
+      font-variation-settings: "wght" 700;
+      cursor: pointer;
+    }
+    .more {
+      display: inline-block;
+      margin-top: var(--s16);
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+
+    .sheet, footer { background: var(--panel); color: var(--ink); }
+    .sheet :focus-visible, footer :focus-visible { outline-color: var(--ink); }
+    .sheet {
+      padding: var(--s96) var(--s64) var(--s80);
+    }
+    h2 {
+      margin-bottom: var(--s16);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      font-variation-settings: "wght" 700;
+    }
+    .rank {
+      max-width: 65ch;
+      padding: var(--s24) 0;
+      border-top: 1px solid var(--line);
+    }
+    .rank .name { margin-bottom: var(--s8); }
+    footer {
+      padding: var(--s40) var(--s64) var(--s64);
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .intro, .panel { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <section class="band" id="top">
+    <header class="top">
+      <a class="brand" href="#top">Harbor Kit</a>
+      <nav>
+        <a href="#list">Kits</a>
+        <a href="#bay">Bays</a>
+        <a href="#top" aria-current="page">Pricing</a>
+        <a href="#sign">Sign in</a>
+      </nav>
+    </header>
+
+    <div class="locker">
+      <div class="intro">
+        <p class="bay" id="bay">108</p>
+        <p class="bay-note meta">Sample bay number</p>
+        <h1>The <em>Harbor</em> list is on bay 108</h1>
+        <p class="lede">A small crew checks hard cases, batteries, and lenses on one sample checklist, then stamps it on the locker before load-in.</p>
+      </div>
+
+      <div class="panel">
+        <div class="row">
+          <p class="name">Dock <span class="meta">sample plan</span></p>
+          <p class="price">$0 <span class="meta">sample price</span></p>
+          <p class="desc">Three active lists for a solo shooter. Sample count.</p>
+        </div>
+        <div class="row">
+          <p class="name">Harbor <span class="meta">sample plan</span></p>
+          <p class="price">$29 <span class="meta">sample price</span></p>
+          <p class="desc">A shared pack list with eight seats. Sample count.</p>
+        </div>
+        <div class="row">
+          <p class="name">Fleet <span class="meta">sample plan</span></p>
+          <p class="price">$89 <span class="meta">sample price</span></p>
+          <p class="desc">Custom templates when a second unit shares the truck.</p>
+        </div>
+        <div class="actions">
+          <button type="button">Choose the Harbor list</button>
+          <a class="more" href="#dock-limits">Read the Dock limits</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" id="list">
+    <h2>What the sample list puts on the door</h2>
+    <div class="rank">
+      <p class="name">Cases first</p>
+      <p>The shared list names each hard case before load-in. Sample step.</p>
+    </div>
+    <div class="rank">
+      <p class="name">Batteries next</p>
+      <p>The list asks for a pack photo before call time. Sample step.</p>
+    </div>
+    <div class="rank" id="dock-limits">
+      <p class="name">Lenses last</p>
+      <p>The sample Dock plan stops at three active lists and a PDF export. The sample Fleet plan adds a custom template for the second unit. Sample count.</p>
+    </div>
+  </section>
+
+  <footer id="sign">
+    <p>Harbor Kit is a sample gear checklist for a small film crew. Every price, plan name, and the bay number on this page is a sample figure. Sign in is not offered on this sample.</p>
+  </footer>
+</body>
+</html>

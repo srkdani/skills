@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harbor Kit</title>
+<style>
+  @font-face {
+    font-family: "Fraunces";
+    src: url("../../../fonts/Fraunces-Variable.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../../../fonts/Newsreader-Variable.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: block;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    background: #5C1A2E;
+    color-scheme: only dark;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #5C1A2E;
+    color: #F7F1E6;
+    font-family: "Newsreader", serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.55;
+    letter-spacing: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 48px 16px;
+  }
+
+  .phone {
+    width: 390px;
+    max-width: 100%;
+    background: #5C1A2E;
+    border: 1px solid #E4D3C4;
+    border-radius: 0;
+    padding: 32px 16px 48px;
+  }
+
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-copy {
+    flex: 1;
+    min-width: 0;
+  }
+
+  h1 {
+    margin: 0;
+    color: #F7F1E6;
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
+  }
+
+  .stub {
+    width: 156px;
+    flex: none;
+    color: #2A1218;
+  }
+
+  .stub-top {
+    background: #F7F1E6;
+    border-radius: 8px 8px 0 0;
+    padding: 16px 8px 8px;
+  }
+
+  .stub-bot {
+    background: #F7F1E6;
+    border-radius: 0;
+    padding: 8px 8px 16px;
+  }
+
+  .perf {
+    height: 16px;
+    background-color: #F7F1E6;
+    background-image: radial-gradient(circle at center, #5C1A2E 4px, #F7F1E6 4px);
+    background-size: calc(100% / 8) 16px;
+    background-repeat: repeat-x;
+  }
+
+  .time {
+    margin: 0;
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
+  }
+
+  .show,
+  .price,
+  .item {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.55;
+    letter-spacing: 0;
+  }
+
+  .show { margin-top: 16px; }
+
+  .when {
+    margin: 8px 0 0;
+    color: #F7F1E6;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.55;
+    letter-spacing: 0;
+  }
+
+  .stub-bot .price + .price { margin-top: 4px; }
+
+  .fine {
+    margin: 4px 0 0;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: 0;
+    color: #2A1218;
+  }
+
+  .lede {
+    margin: 24px 0 0;
+    max-width: 38em;
+    color: #F7F1E6;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    margin-top: 24px;
+    padding: 16px;
+    border: 0;
+    border-radius: 0;
+    background: #D6B15E;
+    color: #2A1218;
+    font-family: "Newsreader", serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .textlink {
+    display: inline-block;
+    margin-top: 16px;
+    color: #F7F1E6;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.55;
+    letter-spacing: 0;
+  }
+
+  h2 {
+    margin: 32px 0 16px;
+    color: #F7F1E6;
+    font-family: "Newsreader", serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    padding: 16px 0;
+    border-top: 1px solid #A07679;
+  }
+
+  .due {
+    border-left: 4px solid #D6B15E;
+    padding-left: 16px;
+  }
+
+  :focus-visible {
+    outline: 2px solid #D6B15E;
+    outline-offset: 4px;
+  }
+
+  .btn:focus-visible {
+    outline-color: #F7F1E6;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-copy {
+      animation: rise 420ms ease both;
+    }
+    .stub {
+      animation: rise 420ms ease 140ms both;
+    }
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<main class="phone">
+  <div class="hero">
+    <div class="hero-copy">
+      <h1>Harbor Kit</h1>
+      <p class="when">Pier 7, Unit B, sample</p>
+      <p class="when">Day 2, Sat Oct 18, sample</p>
+    </div>
+    <article class="stub" aria-label="Sample call stub">
+      <div class="stub-top">
+        <p class="time">6:30</p>
+        <p class="show">Dockside Short</p>
+        <p class="fine">sample call</p>
+      </div>
+      <div class="perf" aria-hidden="true"></div>
+      <div class="stub-bot">
+        <p class="price">$847 rental, sample</p>
+        <p class="price">17 of 24 packed</p>
+        <p class="fine">sample count</p>
+      </div>
+    </article>
+  </div>
+  <p class="lede">Tear this stub before the van leaves Pier 7. The matte box and ND set are still at the rental desk.</p>
+  <button type="button" class="btn">Mark the matte box</button>
+  <a class="textlink" href="#still-out">Add a piece</a>
+  <section id="still-out" aria-labelledby="still-heading">
+    <h2 id="still-heading">Still out of the van</h2>
+    <ol>
+      <li class="due">
+        <p class="item">Matte box and ND set is still at the rental desk, due by 5 PM. sample</p>
+      </li>
+      <li>
+        <p class="item">Four 256 GB CFexpress cards still need a format on set. sample</p>
+      </li>
+      <li>
+        <p class="item">Wireless lav kit is still on the sound bench. sample</p>
+      </li>
+    </ol>
+  </section>
+</main>
+</body>
+</html>

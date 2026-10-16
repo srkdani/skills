@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing | Harbor Kit</title>
+  <style>
+    :root {
+      --ink: #0f1419;
+      --muted: #5c6670;
+      --line: #e2e8ef;
+      --sea: #1a4d6d;
+      --sea-light: #e8f2f8;
+      --accent: #c45c26;
+      --white: #ffffff;
+      --radius: 12px;
+      --shadow: 0 12px 40px rgba(15, 20, 25, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, var(--sea-light) 0%, var(--white) 320px);
+      line-height: 1.55;
+    }
+    a { color: var(--sea); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    header {
+      padding: 28px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .logo-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--sea);
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .logo-sample {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    nav { display: flex; gap: 24px; font-size: 0.95rem; }
+    nav a { color: var(--muted); }
+    nav a.active { color: var(--ink); font-weight: 600; }
+    .hero {
+      text-align: center;
+      padding: 48px 0 56px;
+    }
+    .hero .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--sea);
+      background: var(--white);
+      border: 1px solid var(--line);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      max-width: 560px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-top: 36px;
+      padding-top: 32px;
+      border-top: 1px solid var(--line);
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat strong {
+      display: block;
+      font-size: 1.75rem;
+      color: var(--sea);
+      letter-spacing: -0.02em;
+    }
+    .stat span { font-size: 0.85rem; color: var(--muted); }
+    .stat .sample-tag {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+    .toggle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .toggle {
+      width: 48px;
+      height: 26px;
+      background: var(--line);
+      border-radius: 999px;
+      position: relative;
+      cursor: default;
+    }
+    .toggle::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: var(--white);
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+    .plan {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+    .plan.featured {
+      border-color: var(--sea);
+      position: relative;
+    }
+    .plan.featured::before {
+      content: "Popular";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--sea);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .plan h2 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+    .plan .plan-name-sample {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    .price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+    .price-sample {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+    .plan .desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+      flex-grow: 0;
+    }
+    .plan ul {
+      list-style: none;
+      margin-bottom: 28px;
+      flex-grow: 1;
+    }
+    .plan li {
+      padding: 8px 0;
+      padding-left: 28px;
+      position: relative;
+      font-size: 0.92rem;
+    }
+    .plan li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 14px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sea-light);
+      border: 2px solid var(--sea);
+    }
+    .btn {
+      display: block;
+      text-align: center;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--sea);
+      color: var(--white);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--line);
+      color: var(--ink);
+    }
+    .compare {
+      margin-bottom: 64px;
+    }
+    .compare h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 24px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+    th { background: var(--sea-light); font-weight: 600; }
+    td.center { text-align: center; }
+    .quotes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 64px;
+    }
+    .quote-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .quote-card blockquote {
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+    }
+    .quote-card .author {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .quote-card .role {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .quote-sample, .logo-sample-inline {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .faq {
+      max-width: 640px;
+      margin: 0 auto 64px;
+    }
+    .faq h2 {
+      text-align: center;
+      margin-bottom: 28px;
+      font-size: 1.5rem;
+    }
+    .faq details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: var(--white);
+      padding: 4px 16px;
+    }
+    .faq summary {
+      cursor: pointer;
+      font-weight: 600;
+      padding: 14px 0;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq p {
+      padding-bottom: 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 32px 0 48px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer .footer-logo-sample {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">
+        <div class="logo-mark" aria-hidden="true">HK</div>
+        <div>
+          Harbor Kit
+          <span class="logo-sample">Sample logo</span>
+        </div>
+      </div>
+      <nav>
+        <a href="#">Checklists</a>
+        <a href="#">Templates</a>
+        <a href="#" class="active">Pricing</a>
+        <a href="#">Sign in</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <span class="badge">Gear lists for small crews</span>
+      <h1>Pricing that scales with your shoot</h1>
+      <p>Harbor Kit is a sample product: shared checklists so your team packs the right gear before every location day.</p>
+      <div class="stat-row">
+        <div class="stat">
+          <strong>2,400+</strong>
+          <span>Sample checklists shipped</span>
+          <span class="sample-tag">Sample statistic</span>
+        </div>
+        <div class="stat">
+          <strong>98%</strong>
+          <span>Sample on-time pack rate</span>
+          <span class="sample-tag">Sample statistic</span>
+        </div>
+        <div class="stat">
+          <strong>47</strong>
+          <span>Sample countries in use</span>
+          <span class="sample-tag">Sample statistic</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="toggle-wrap">
+      <span>Monthly</span>
+      <div class="toggle" role="presentation"></div>
+      <span>Annual (save 20% sample)</span>
+    </div>
+
+    <section class="plans" aria-label="Pricing plans">
+      <article class="plan">
+        <h2>Dock</h2>
+        <p class="plan-name-sample">Sample plan name</p>
+        <div class="price">$0</div>
+        <p class="price-sample">Sample price</p>
+        <p class="desc">Solo shooters and student sets trying Harbor Kit for the first time.</p>
+        <ul>
+          <li>3 active checklists</li>
+          <li>PDF export</li>
+          <li>Basic gear categories</li>
+          <li>Email support</li>
+        </ul>
+        <button type="button" class="btn btn-outline">Start free</button>
+      </article>
+
+      <article class="plan featured">
+        <h2>Harbor</h2>
+        <p class="plan-name-sample">Sample plan name</p>
+        <div class="price">$29</div>
+        <p class="price-sample">Sample price per month</p>
+        <p class="desc">Small crews who need shared lists, roles, and pack verification on set.</p>
+        <ul>
+          <li>Unlimited checklists</li>
+          <li>Team seats (up to 8)</li>
+          <li>Role-based assignments</li>
+          <li>Offline mobile sync</li>
+          <li>Priority support</li>
+        </ul>
+        <button type="button" class="btn btn-primary">Choose Harbor</button>
+      </article>
+
+      <article class="plan">
+        <h2>Fleet</h2>
+        <p class="plan-name-sample">Sample plan name</p>
+        <div class="price">$89</div>
+        <p class="price-sample">Sample price per month</p>
+        <p class="desc">Production companies running multiple units and standardized kit templates.</p>
+        <ul>
+          <li>Everything in Harbor</li>
+          <li>Unlimited seats</li>
+          <li>Custom brand templates</li>
+          <li>SSO and audit logs</li>
+          <li>Dedicated success contact</li>
+        </ul>
+        <button type="button" class="btn btn-outline">Contact sales</button>
+      </article>
+    </section>
+
+    <section class="compare">
+      <h2>Compare plans</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="center">Dock</th>
+            <th class="center">Harbor</th>
+            <th class="center">Fleet</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Shared team checklists</td>
+            <td class="center">Limited</td>
+            <td class="center">Yes</td>
+            <td class="center">Yes</td>
+          </tr>
+          <tr>
+            <td>Pack verification photos</td>
+            <td class="center">No</td>
+            <td class="center">Yes</td>
+            <td class="center">Yes</td>
+          </tr>
+          <tr>
+            <td>Template library</td>
+            <td class="center">Starter</td>
+            <td class="center">Full</td>
+            <td class="center">Full + custom</td>
+          </tr>
+          <tr>
+            <td>Sample enterprise SLA</td>
+            <td class="center">No</td>
+            <td class="center">No</td>
+            <td class="center">99.9% sample</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="quotes" aria-label="Testimonials">
+      <div class="quote-card">
+        <span class="quote-sample">Sample quote</span>
+        <blockquote>We stopped losing batteries because everyone sees the same Harbor Kit list before load-in.</blockquote>
+        <p class="author">Jordan Reyes <span class="quote-sample">Sample name</span></p>
+        <p class="role">Sample role: 1st AC, indie feature</p>
+      </div>
+      <div class="quote-card">
+        <span class="quote-sample">Sample quote</span>
+        <blockquote>Template reuse cut our prep meetings in half. Still a demo product, but the workflow clicks.</blockquote>
+        <p class="author">Sam Okonkwo <span class="quote-sample">Sample name</span></p>
+        <p class="role">Sample role: Production manager</p>
+      </div>
+      <div class="quote-card">
+        <span class="quote-sample">Sample quote</span>
+        <blockquote>Offline sync on location with bad signal is the reason our sample crew adopted it.</blockquote>
+        <p class="author">Morgan Lee <span class="quote-sample">Sample name</span></p>
+        <p class="role">Sample role: Gaffer, commercial unit</p>
+      </div>
+    </section>
+
+    <section class="faq">
+      <h2>Questions</h2>
+      <details>
+        <summary>Is Harbor Kit a real product?</summary>
+        <p>This page is a sample pricing demo. Harbor Kit illustrates how a gear checklist SaaS might present plans and features.</p>
+      </details>
+      <details>
+        <summary>Can we import existing spreadsheets?</summary>
+        <p>On paid sample tiers, CSV import maps columns to gear categories. Dock includes one import per month in this demo.</p>
+      </details>
+      <details>
+        <summary>Do you offer education pricing?</summary>
+        <p>Sample education discounts are available on Harbor and Fleet for accredited film programs. Contact us with a sample syllabus link.</p>
+      </details>
+    </section>
+
+    <footer>
+      <span class="footer-logo-sample">Sample brand mark</span>
+      <p>Harbor Kit sample product. Not affiliated with any real production service.</p>
+      <p style="margin-top:8px;">&copy; 2026 Harbor Kit demo. All figures and names marked sample.</p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Tally</title><style>
+:root{--brand:#0F766E;--brand-d:#115E59;--tint:#E6F2F1;--bg:#FAFAF9;--surf:#fff;--line:#E7E5E4;--muted:#57534E;--ink:#1C1917;--r1:6px;--r2:12px}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:16px;line-height:1.5}
+.wrap{max-width:1120px;margin:0 auto;padding:0 32px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+nav b{font-size:20px;font-weight:700}nav a{margin-left:24px;color:var(--muted);font-size:14px}
+.hero{display:grid;grid-template-columns:5fr 7fr;gap:48px;align-items:center;padding:80px 0}
+.eye{font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--brand)}
+h1{font-size:56px;line-height:1.05;font-weight:700;margin:12px 0 16px;letter-spacing:-.02em}
+.lead{font-size:20px;color:var(--muted);max-width:32ch;margin:0 0 32px}
+.btn{display:inline-block;padding:12px 24px;border-radius:var(--r1);background:var(--brand);color:#fff;font-weight:600}
+.link{margin-left:24px;color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:4px}
+.shot{background:var(--surf);border:1px solid var(--line);border-radius:var(--r2);padding:24px}
+.row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row span:last-child{color:var(--muted)}.paid{color:var(--brand);font-weight:600}
+.big{font-size:40px;font-weight:700}.sm{font-size:14px;color:var(--muted)}
+section{padding:80px 0;border-top:1px solid var(--line)}
+h2{font-size:40px;line-height:1.1;font-weight:700;margin:0 0 32px;max-width:20ch;letter-spacing:-.01em}
+.feat{display:grid;grid-template-columns:7fr 5fr;gap:48px}
+.main{background:var(--tint);border-radius:var(--r2);padding:32px}
+.main h3{font-size:28px;margin:0 0 12px}.main p{color:var(--muted);margin:0 0 24px;max-width:48ch}
+.list div{padding:16px 0;border-bottom:1px solid var(--line)}.list h4{font-size:16px;margin:0 0 4px}.list p{margin:0;color:var(--muted);font-size:14px}
+.cta{display:flex;justify-content:space-between;align-items:center;padding:48px 0 80px}
+.cta h2{margin:0}
+</style></head><body><div class="wrap">
+<nav><b>Tally</b><div><a>Features</a><a>Pricing</a><a>Customers</a><a>Log in</a></div></nav>
+<div class="hero"><div><div class="eye">Invoicing for freelancers</div><h1>Send an invoice, get paid, stop chasing.</h1><p class="lead">Tally sends the invoice, follows up on schedule, and marks it paid when the money lands.</p><a class="btn">Start free</a><a class="link">See how reminders work</a></div>
+<div class="shot"><div class="sm">Outstanding this month</div><div class="big">$12,480</div>
+<div class="row"><span>INV-0142 Northwind Studio</span><span class="paid">Paid</span></div>
+<div class="row"><span>INV-0143 Halden &amp; Co</span><span>Reminder 2 sent</span></div>
+<div class="row"><span>INV-0144 Juniper Labs</span><span>Due in 5 days</span></div>
+<div class="sm" style="margin-top:12px">Sample data</div></div></div>
+<section><h2>The follow-up is the part that gets you paid.</h2><div class="feat">
+<div class="main"><h3>Automatic reminders</h3><p>Pick a schedule once: before the due date, on it, and after. Tally sends polite, specific reminders and stops the moment the invoice is paid.</p>
+<div class="shot"><div class="row"><span>3 days before due</span><span>Friendly heads-up</span></div><div class="row"><span>On due date</span><span>Payment link</span></div><div class="row"><span>7 days late</span><span>Firm reminder</span></div></div></div>
+<div class="list"><div><h4>Cards and bank transfer</h4><p>Clients pay from the invoice link.</p></div><div><h4>Multi-currency</h4><p>Invoice in the client's currency.</p></div><div><h4>Recurring invoices</h4><p>Retainers go out on the same day each month.</p></div><div><h4>Revenue view</h4><p>Paid, due and late, in one list.</p></div></div></div></section>
+<section class="cta"><h2>Send your first invoice in five minutes.</h2><a class="btn">Start free</a></section>
+</div></body></html>
