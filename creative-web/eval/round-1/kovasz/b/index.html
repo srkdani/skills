@@ -57,12 +57,14 @@
   .layer-front { z-index: 3; pointer-events: none; }
   .jar, .ticket, .latch, #chalk { pointer-events: auto; }
 
+  [hidden] { display: none !important; }
+
   .plate {
     position: absolute;
     z-index: 4;
-    left: 5%;
-    top: 4%;
-    width: min(46%, 640px);
+    left: 4%;
+    top: 3.5%;
+    width: min(50%, 700px);
   }
 
   .plate-top {
@@ -211,12 +213,44 @@
     flex: none;
   }
 
+  .oven-mass {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    top: 0;
+    width: 46%;
+    height: 63%;
+    background: var(--soot);
+    border-left: 18px solid var(--oak);
+    border-bottom: 18px solid var(--oak);
+  }
+
+  .courses {
+    position: absolute;
+    z-index: 1;
+    left: 51%;
+    width: 7%;
+    top: 16%;
+    height: 28%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    pointer-events: none;
+  }
+
+  .courses span {
+    display: block;
+    height: 3px;
+    background: var(--oak);
+    opacity: 0.55;
+  }
+
   .arch {
     position: absolute;
     z-index: 2;
-    right: 5%;
-    top: 7%;
-    width: min(34vw, 430px);
+    right: 2.5%;
+    top: 4%;
+    width: min(40vw, 470px);
     height: auto;
   }
 
@@ -243,8 +277,8 @@
     z-index: 2;
     left: 0;
     right: 0;
-    bottom: 34%;
-    height: 18px;
+    bottom: 37%;
+    height: 16px;
     background: var(--oak);
     box-shadow: 0 8px 0 var(--soot);
   }
@@ -265,7 +299,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 34%;
+    height: 37%;
     background: var(--oak);
   }
 
@@ -279,9 +313,9 @@
 
   .jar {
     position: absolute;
-    left: 4%;
-    bottom: 10%;
-    width: 168px;
+    left: 3%;
+    bottom: 6%;
+    width: min(22vw, 240px);
     background: none;
     border: 0;
     padding: 0;
@@ -314,10 +348,10 @@
 
   .states {
     position: absolute;
-    left: 26%;
-    bottom: 7%;
-    width: min(44%, 480px);
-    height: 25%;
+    left: 24%;
+    bottom: 4%;
+    width: min(48%, 560px);
+    height: 31%;
     z-index: 3;
   }
 
@@ -339,10 +373,21 @@
 
   .peel {
     position: absolute;
-    left: -6%;
-    bottom: -12%;
-    width: min(62%, 760px);
+    left: auto;
+    right: 30%;
+    bottom: 18%;
+    width: 220px;
     z-index: 4;
+    pointer-events: none;
+    transform: rotate(-8deg);
+  }
+
+  .spare {
+    position: absolute;
+    right: 20%;
+    bottom: 8%;
+    width: min(16vw, 190px);
+    z-index: 3;
     pointer-events: none;
   }
 
@@ -416,15 +461,23 @@
     top: 6%;
     width: 42%;
     height: 48%;
-    background: rgba(228, 215, 196, 0.22);
+    background: rgba(228, 215, 196, 0.5);
   }
 
   .window.noon {
-    left: 5%;
+    left: 18%;
     top: 4%;
-    width: 58%;
-    height: 42%;
+    width: 64%;
+    height: 30%;
     background: var(--flour);
+  }
+
+  .skyline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 46%;
   }
 
   .muntin-v, .muntin-h {
@@ -452,10 +505,10 @@
     position: absolute;
     right: 6%;
     top: 5%;
-    width: min(28%, 280px);
-    height: 56%;
+    width: min(32%, 340px);
+    height: 62%;
     background: var(--oak);
-    border: 8px solid #1A1410;
+    border: 10px solid #1A1410;
   }
 
   .glass {
@@ -510,8 +563,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 46%;
+    height: 52%;
     background: var(--oak);
+    border-top: 8px solid var(--soot);
   }
 
   .counter-lip {
@@ -556,7 +610,7 @@
     color: var(--soot);
     font-family: "Saira Condensed", sans-serif;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 18px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     line-height: 1.05;
@@ -571,14 +625,14 @@
     clip-path: polygon(0 8%, 100% 0, 100% 100%, 0 88%);
   }
 
-  .loaf-a { width: 250px; left: 6%; bottom: 22%; }
-  .loaf-a .string { height: 28px; }
-  .loaf-b { width: 320px; left: 28%; bottom: 14%; }
-  .loaf-b .string { height: 16px; }
-  .loaf-c { width: 130px; left: 58%; bottom: 30%; }
-  .loaf-c .string { height: 40px; }
-  .loaf-d { width: 210px; right: 7%; bottom: 16%; }
-  .loaf-d .string { height: 22px; }
+  .loaf-a { width: 30%; left: 3%; bottom: 16%; }
+  .loaf-a .string { height: 34px; }
+  .loaf-b { width: 38%; left: 24%; bottom: 6%; }
+  .loaf-b .string { height: 18px; }
+  .loaf-c { width: 18%; left: 56%; bottom: 28%; }
+  .loaf-c .string { height: 46px; }
+  .loaf-d { width: 28%; right: 3%; bottom: 10%; }
+  .loaf-d .string { height: 26px; }
 
   .bag {
     position: absolute;
@@ -593,12 +647,12 @@
     position: absolute;
     left: 6%;
     right: 6%;
-    height: 16px;
+    height: 22px;
     background: var(--oak);
   }
 
-  .shelf.one { top: 56%; }
-  .shelf.two { top: 74%; }
+  .shelf.one { top: 48%; }
+  .shelf.two { top: 70%; }
 
   .ring {
     position: absolute;
@@ -609,16 +663,16 @@
 
   #chalk {
     position: absolute;
-    left: 8%;
-    top: 18%;
-    width: min(42%, 460px);
+    left: 4%;
+    top: 36%;
+    width: min(46%, 520px);
     background: var(--flour);
     color: var(--soot);
-    padding: 22px 22px 28px;
+    padding: 18px 18px 26px;
     transform: rotate(-1.5deg);
     z-index: 3;
     cursor: pointer;
-    border: 0;
+    border: 12px solid var(--oak);
     text-align: left;
   }
 
@@ -690,13 +744,13 @@
     pointer-events: none;
   }
 
-  .pantry { min-height: 78vh; }
+  .pantry { min-height: 70vh; }
 
   #sack {
     position: absolute;
     left: 50%;
-    top: 8%;
-    width: min(640px, 86%);
+    top: 3%;
+    width: min(760px, 92%);
     transform: translate(-50%, 0);
     z-index: 3;
   }
@@ -761,52 +815,39 @@
     margin-left: -9px;
   }
 
-  .speck {
-    position: fixed;
-    width: 7px;
-    height: 7px;
-    margin-left: -3px;
-    margin-top: -3px;
-    border-radius: 50%;
-    background: var(--flour);
-    opacity: 0.75;
-    pointer-events: none;
-    z-index: 30;
-    animation: speck-die 480ms linear forwards;
-  }
-
-  @keyframes speck-die {
-    to { opacity: 0; transform: scale(0.4); }
-  }
-
   @media (max-width: 700px) {
     body { font-size: 16px; }
-    .sub { font-size: 16px; }
-    h1 { font-size: 3.5rem; }
-    .plate { width: min(70%, 280px); top: 2%; left: 4%; }
-    .arch { width: 46vw; top: 22%; right: 2%; }
+    .sub { font-size: 15px; max-width: 20ch; }
+    h1 { font-size: 3.25rem; max-width: 6.4ch; }
+    .plate { width: calc(100% - 16px); top: 8px; left: 8px; }
+    .oven-mass { width: 100%; height: 56%; border-left: 0; }
+    .courses { display: none; }
+    .arch { width: 128px; top: auto; bottom: 36%; right: 6px; }
     .rail { display: none; }
-    .hearth { bottom: 38%; }
-    .bench { height: 38%; }
-    .jar { width: 112px; left: 3%; bottom: 8%; }
-    .states { left: 32%; width: 62%; height: 22%; bottom: 7%; }
-    .peel { width: 78%; bottom: -6%; }
-    .ticket { font-size: 26px; right: 3%; bottom: 4%; padding: 10px 12px 8px 28px; }
-    .clock { width: 56px; height: 56px; }
-    .knob, .knob-wrap { width: 68px; height: 68px; }
+    .hearth { bottom: 40%; }
+    .bench { height: 40%; }
+    .jar { width: 104px; left: 2%; bottom: 4%; }
+    .states { left: 28%; width: 68%; height: 24%; bottom: 4%; }
+    .peel { width: 120px; right: 8%; bottom: 20%; }
+    .spare { width: 92px; right: 6%; bottom: 6%; }
+    .ticket { font-size: 22px; right: 3%; bottom: 3%; padding: 10px 10px 8px 26px; }
+    .clock { width: 48px; height: 48px; }
+    .dial { max-width: 196px; margin-top: 6px; }
+    .knob, .knob-wrap { width: 58px; height: 58px; }
     .knob { border-width: 6px; }
-    .door { width: 46%; height: 42%; right: 3%; top: 3%; }
-    .window.dawn { width: 48%; height: 34%; }
-    .loaf-a { width: 42%; left: 2%; bottom: 28%; }
-    .loaf-b { width: 54%; left: 24%; bottom: 12%; }
-    .loaf-c { width: 24%; left: 52%; bottom: 40%; }
-    .loaf-d { width: 36%; right: 2%; bottom: 18%; }
-    .window.noon { width: 90%; height: 28%; left: 5%; }
-    #chalk { top: 34%; width: 84%; }
-    .shelf.one { top: 64%; }
-    .shelf.two { top: 78%; }
-    .pantry { min-height: 92vh; }
-    .sack-copy { top: 36%; }
+    .door { width: 44%; height: 46%; right: 2%; top: 2%; }
+    .window.dawn { width: 52%; height: 34%; }
+    .glass .shop { font-size: 34px; }
+    .loaf-a { width: 48%; left: 0; bottom: 20%; }
+    .loaf-b { width: 60%; left: 18%; bottom: 2%; }
+    .loaf-c { width: 30%; left: 46%; bottom: 34%; }
+    .loaf-d { width: 42%; right: 0; bottom: 12%; }
+    .window.noon { width: 84%; height: 20%; left: 8%; }
+    #chalk { top: 26%; width: 90%; left: 4%; }
+    .shelf.one { top: 56%; }
+    .shelf.two { top: 74%; }
+    .pantry { min-height: 88vh; }
+    .sack-copy h2 { font-size: 46px; }
   }
 
   @media (hover: none), (pointer: coarse) {
@@ -826,6 +867,7 @@
 <body>
 <div id="scene" data-step="0" data-facts="oven lit at 11pm, door opens at 6am, starter is 41 years, jar from a village, boards bare by noon, bakery in Budapest">
   <div class="layer layer-back" id="layer-back">
+    <div class="oven-mass" aria-hidden="true"></div>
     <div class="rivets" aria-hidden="true">
       <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
     </div>
@@ -890,17 +932,17 @@
           <button type="button" data-stop="5">6</button>
         </div>
         <p id="dial-line">Lighting the oven.</p>
-        <p id="now-plate">The oven is on.<span id="hour-mark" class="mark hour-mark" hidden>elfogyott</span></p>
+        <p id="now-plate">Right now the oven is on.<span id="hour-mark" class="mark hour-mark" hidden>elfogyott</span></p>
       </div>
     </div>
   </div>
 
   <div class="layer layer-mid" id="layer-mid">
     <div class="bench" id="bench">
-      <span class="dust" style="width:18px;height:10px;left:22%;top:18%"></span>
-      <span class="dust" style="width:28px;height:14px;left:46%;top:30%"></span>
-      <span class="dust" style="width:12px;height:8px;left:70%;top:22%"></span>
-      <span class="dust" style="width:20px;height:9px;left:38%;top:55%"></span>
+      <span class="dust" style="width:90px;height:28px;left:18%;top:22%"></span>
+      <span class="dust" style="width:140px;height:36px;left:40%;top:48%"></span>
+      <span class="dust" style="width:70px;height:20px;left:68%;top:30%"></span>
+      <span class="dust" style="width:50px;height:16px;left:30%;top:62%"></span>
     </div>
     <button type="button" class="jar" id="jar" data-delight="jar" data-object="jar" aria-label="Tap the jar from the village">
       <svg viewBox="0 0 160 210">
@@ -922,11 +964,10 @@
     <div class="states" id="states">
       <div class="state on" data-state="0">
         <svg viewBox="0 0 360 200">
-          <ellipse cx="120" cy="150" rx="70" ry="18" fill="#E4D7C4" opacity="0.45"/>
-          <ellipse cx="120" cy="140" rx="48" ry="22" fill="#E4D7C4" opacity="0.8"/>
-          <rect x="200" y="108" width="110" height="14" rx="4" fill="#E4D7C4" transform="rotate(-28 200 108)"/>
-          <ellipse cx="196" cy="128" rx="16" ry="10" fill="#E4D7C4"/>
-          <text x="16" y="40" fill="#E4D7C4" font-family="Saira Condensed, sans-serif" font-size="28" font-weight="800">FED AT 11</text>
+          <ellipse cx="150" cy="158" rx="130" ry="30" fill="#E4D7C4" opacity="0.35"/>
+          <ellipse cx="145" cy="124" rx="108" ry="52" fill="#E4D7C4"/>
+          <path d="M210 150 L300 40" stroke="#E4D7C4" stroke-width="16" stroke-linecap="round"/>
+          <ellipse cx="308" cy="36" rx="28" ry="16" fill="#E4D7C4"/>
         </svg>
       </div>
       <div class="state" data-state="1">
@@ -934,17 +975,15 @@
           <path d="M40 150 Q70 60 160 80 Q230 40 310 100 Q340 150 250 165 Q140 180 40 150 Z" fill="#E4D7C4"/>
           <path d="M90 120 Q150 100 210 130" fill="none" stroke="#1A1410" stroke-width="3"/>
           <path d="M120 140 Q180 150 240 120" fill="none" stroke="#7A4B2C" stroke-width="3"/>
-          <text x="16" y="36" fill="#1A1410" font-family="Saira Condensed, sans-serif" font-size="28" font-weight="800">FOLDED</text>
         </svg>
       </div>
       <div class="state" data-state="2">
         <svg viewBox="0 0 360 200">
           <ellipse cx="180" cy="150" rx="110" ry="28" fill="#1A1410" opacity="0.35"/>
-          <path d="M70 130 Q70 70 180 66 Q290 70 290 130 Q240 156 180 156 Q120 156 70 130 Z" fill="#7A4B2C"/>
+          <path d="M70 130 Q70 70 180 66 Q290 70 290 130 Q240 156 180 156 Q120 156 70 130 Z" fill="#1A1410"/>
           <ellipse cx="180" cy="124" rx="78" ry="22" fill="none" stroke="#E4D7C4" stroke-width="3"/>
           <ellipse cx="180" cy="124" rx="48" ry="12" fill="none" stroke="#E4D7C4" stroke-width="2"/>
           <path d="M120 108 Q180 78 240 108" fill="#E4D7C4"/>
-          <text x="16" y="36" fill="#E4D7C4" font-family="Saira Condensed, sans-serif" font-size="28" font-weight="800">IN THE BASKET</text>
         </svg>
       </div>
       <div class="state" data-state="3">
@@ -954,23 +993,20 @@
           <path d="M110 130 Q180 70 250 128" fill="none" stroke="#1A1410" stroke-width="4"/>
           <rect x="286" y="96" width="46" height="8" fill="#E4D7C4"/>
           <polygon points="286,92 286,108 270,100" fill="#E4D7C4"/>
-          <text x="16" y="36" fill="#E4D7C4" font-family="Saira Condensed, sans-serif" font-size="28" font-weight="800">SCORED</text>
         </svg>
       </div>
       <div class="state" data-state="4">
         <svg viewBox="0 0 360 200">
-          <ellipse cx="180" cy="140" rx="90" ry="26" fill="none" stroke="#E4D7C4" stroke-width="3" stroke-dasharray="6 6"/>
-          <text x="40" y="80" fill="#E4D7C4" font-family="Saira Condensed, sans-serif" font-size="32" font-weight="800">IN THE MOUTH</text>
+          <ellipse cx="180" cy="120" rx="120" ry="48" fill="none" stroke="#E4D7C4" stroke-width="4" stroke-dasharray="8 7"/>
         </svg>
       </div>
       <div class="state" data-state="5">
         <svg viewBox="0 0 360 200">
           <ellipse cx="180" cy="156" rx="100" ry="18" fill="#1A1410" opacity="0.3"/>
-          <path d="M70 140 Q78 70 180 64 Q286 72 290 142 Q230 168 180 168 Q120 168 70 140 Z" fill="#7A4B2C"/>
+          <path d="M70 140 Q78 70 180 64 Q286 72 290 142 Q230 168 180 168 Q120 168 70 140 Z" fill="#1A1410"/>
           <path d="M110 120 Q180 78 246 118" fill="none" stroke="#E4D7C4" stroke-width="4"/>
           <path d="M150 100 Q186 72 210 108" fill="#E4D7C4"/>
           <ellipse cx="130" cy="96" rx="22" ry="8" fill="#E4D7C4" opacity="0.4"/>
-          <text x="16" y="36" fill="#E4D7C4" font-family="Saira Condensed, sans-serif" font-size="28" font-weight="800">COOLING TOWARD 6</text>
         </svg>
       </div>
     </div>
@@ -978,10 +1014,9 @@
 
   <div class="layer layer-front" id="layer-front">
     <div class="peel" id="peel" data-object="peel">
-      <svg viewBox="0 0 760 120" aria-hidden="true">
-        <path d="M20 70 H520 L560 20 H700 L730 70 L700 104 H560 L520 54 H20 Z" fill="#7A4B2C"/>
-        <path d="M560 28 H692 L718 70 L692 96 H568 Z" fill="#E4D7C4" opacity="0.28"/>
-        <line x1="40" y1="62" x2="500" y2="62" stroke="#1A1410" stroke-width="2" opacity="0.4"/>
+      <svg viewBox="0 0 280 90" aria-hidden="true">
+        <path d="M8 40 H150 L168 12 H250 L270 44 L250 76 H168 L150 48 H8 Z" fill="#E4D7C4" stroke="#1A1410" stroke-width="3"/>
+        <line x1="20" y1="40" x2="140" y2="40" stroke="#7A4B2C" stroke-width="2"/>
       </svg>
     </div>
     <a class="ticket" id="ticket" href="#room-open">Walk in at 6<span class="punch" aria-hidden="true"></span></a>
@@ -992,9 +1027,11 @@
 <section class="room" id="room-open" aria-label="Six in the morning">
   <div class="layer layer-back">
     <div class="window dawn" aria-hidden="true">
-      <span class="muntin-v" style="left:33%"></span>
-      <span class="muntin-v" style="left:66%"></span>
-      <span class="muntin-h" style="top:50%"></span>
+      <span class="muntin-v" style="left:50%"></span>
+      <span class="muntin-h" style="top:55%"></span>
+      <svg class="skyline" viewBox="0 0 400 80" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 80 V48 H36 V28 H78 V46 H120 V16 H168 V42 H210 V24 H250 V50 H310 V34 H352 V52 H400 V80 Z" fill="#1A1410" opacity="0.45"/>
+      </svg>
     </div>
     <div class="door">
       <div class="glass">
@@ -1014,7 +1051,7 @@
           <span class="hang"><i class="string"></i><span class="tag">K41 A<br>cross</span></span>
           <svg viewBox="0 0 220 150" aria-hidden="true">
             <ellipse cx="110" cy="126" rx="86" ry="14" fill="#1A1410" opacity="0.28"/>
-            <path d="M28 112 Q34 42 110 36 Q190 42 194 112 Q160 132 110 132 Q58 132 28 112 Z" fill="#7A4B2C"/>
+            <path d="M28 112 Q34 42 110 36 Q190 42 194 112 Q160 132 110 132 Q58 132 28 112 Z" fill="#1A1410"/>
             <path d="M70 86 Q110 52 154 86" fill="none" stroke="#E4D7C4" stroke-width="4"/>
             <path d="M110 48 V104" fill="none" stroke="#E4D7C4" stroke-width="4"/>
             <ellipse cx="78" cy="70" rx="26" ry="10" fill="#E4D7C4" opacity="0.45"/>
@@ -1024,24 +1061,24 @@
           <span class="hang"><i class="string"></i><span class="tag">K41 B<br>one slash</span></span>
           <svg viewBox="0 0 280 140" aria-hidden="true">
             <ellipse cx="140" cy="118" rx="120" ry="12" fill="#1A1410" opacity="0.28"/>
-            <path d="M16 104 Q30 58 140 50 Q250 58 264 104 Q210 124 140 124 Q70 124 16 104 Z" fill="#7A4B2C"/>
-            <path d="M50 92 Q140 60 230 96" fill="none" stroke="#1A1410" stroke-width="4"/>
+            <path d="M16 104 Q30 58 140 50 Q250 58 264 104 Q210 124 140 124 Q70 124 16 104 Z" fill="#1A1410"/>
+            <path d="M50 92 Q140 60 230 96" fill="none" stroke="#E4D7C4" stroke-width="4"/>
             <ellipse cx="90" cy="78" rx="20" ry="7" fill="#E4D7C4" opacity="0.25"/>
           </svg>
         </figure>
         <figure class="loaf loaf-c" data-object="loaf">
           <span class="hang"><i class="string"></i><span class="tag torn">K41 C<br>heel</span></span>
           <svg viewBox="0 0 140 120" aria-hidden="true">
-            <path d="M16 96 L40 40 H120 L108 96 Z" fill="#7A4B2C"/>
+            <path d="M16 96 L40 40 H120 L108 96 Z" fill="#1A1410"/>
             <path d="M40 40 L70 28 L120 40" fill="#E4D7C4" opacity="0.55"/>
-            <line x1="48" y1="70" x2="96" y2="62" stroke="#1A1410" stroke-width="3"/>
+            <line x1="48" y1="70" x2="96" y2="62" stroke="#E4D7C4" stroke-width="3"/>
           </svg>
         </figure>
         <figure class="loaf loaf-d" data-object="loaf">
           <span class="hang"><i class="string"></i><span class="tag last">Last</span></span>
           <svg viewBox="0 0 200 150" aria-hidden="true">
             <ellipse cx="100" cy="126" rx="78" ry="14" fill="#1A1410" opacity="0.28"/>
-            <path d="M26 114 Q34 48 100 40 Q170 50 176 114 Q140 134 100 134 Q52 134 26 114 Z" fill="#7A4B2C"/>
+            <path d="M26 114 Q34 48 100 40 Q170 50 176 114 Q140 134 100 134 Q52 134 26 114 Z" fill="#1A1410"/>
             <path d="M60 96 Q100 52 150 100" fill="none" stroke="#E4D7C4" stroke-width="4"/>
             <path d="M96 78 Q118 48 132 90" fill="#E4D7C4"/>
             <ellipse cx="70" cy="72" rx="16" ry="6" fill="#E4D7C4" opacity="0.35"/>
@@ -1066,10 +1103,8 @@
 <section class="room" id="room-noon" aria-label="Noon, boards bare">
   <div class="layer layer-back">
     <div class="window noon">
-      <span class="muntin-v" style="left:25%"></span>
       <span class="muntin-v" style="left:50%"></span>
-      <span class="muntin-v" style="left:75%"></span>
-      <span class="muntin-h" style="top:46%"></span>
+      <span class="muntin-h" style="top:50%"></span>
       <p class="city">Budapest</p>
     </div>
   </div>
@@ -1083,11 +1118,11 @@
     <div id="boards" data-object="board" aria-hidden="true">
       <div class="shelf one"></div>
       <div class="shelf two"></div>
-      <span class="ring" style="width:92px;height:28px;left:46%;top:53%"></span>
-      <span class="ring" style="width:64px;height:20px;left:62%;top:54%;opacity:0.55"></span>
-      <span class="ring" style="width:120px;height:34px;left:74%;top:51%;opacity:0.8"></span>
-      <span class="ring" style="width:48px;height:16px;left:58%;top:72%;opacity:0.4"></span>
-      <span class="ring" style="width:84px;height:24px;left:78%;top:71%"></span>
+      <span class="ring" style="width:170px;height:52px;left:40%;top:43%"></span>
+      <span class="ring" style="width:120px;height:36px;left:56%;top:45%;opacity:0.55"></span>
+      <span class="ring" style="width:210px;height:60px;left:70%;top:42%;opacity:0.85"></span>
+      <span class="ring" style="width:100px;height:30px;left:46%;top:67%;opacity:0.4"></span>
+      <span class="ring" style="width:180px;height:48px;left:66%;top:65%"></span>
     </div>
   </div>
   <div class="layer layer-front">
@@ -1189,12 +1224,12 @@
   var plate = document.getElementById("now-plate");
   var mark = document.getElementById("hour-mark");
   if (hour >= 6 && hour < 12) {
-    plate.firstChild.textContent = "The latch is up.";
+    plate.firstChild.textContent = "Right now the latch is up.";
   } else if (hour >= 12 && hour < 23) {
-    plate.firstChild.textContent = "The boards are bare.";
+    plate.firstChild.textContent = "Right now the boards are bare.";
     mark.hidden = false;
   } else {
-    plate.firstChild.textContent = "The oven is on.";
+    plate.firstChild.textContent = "Right now the oven is on.";
   }
 
   var skip = document.getElementById("skip-tick");
@@ -1307,15 +1342,6 @@
       requestAnimationFrame(loop);
     }
     loop();
-
-    scene.addEventListener("pointermove", function (e) {
-      var speck = document.createElement("span");
-      speck.className = "speck";
-      speck.style.left = e.clientX + "px";
-      speck.style.top = e.clientY + "px";
-      document.body.appendChild(speck);
-      setTimeout(function () { speck.remove(); }, 480);
-    });
   }
 })();
 </script>
