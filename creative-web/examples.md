@@ -24,9 +24,19 @@ Visual system:
 - Motion: calm, `sine.inOut`, 1.1s, because cold water drifts. The tide moves. Nothing bounces.
 - Sound: none.
 
-Objects: today's oysters are stubs on the nail (`#stubs`), each a different length. Hours are the tide chalk (`#tide`). The knife is the delight (`#knife`), a click rocks it. The footer is the bucket of shells (`#bucket`).
+Truths: (1) seating ends when the ice runs out. A rival restaurant does not use the ice as the seating chart. (2) today's boats are paper stubs on one nail. (3) the tide is chalked on the board, not printed.
 
-Storyboard: 0 to 40% the tide rises over the zinc and the lowest stubs darken, because the seating ends when the ice is spent. Touch: scroll does this, no hover. Delight: click the knife, it turns once. Small surface: the footer bucket. Removal: a second ripple on the footer, deleted, because one tide is the story.
+Budget:
+- Small, truth 3: the header chalk reads the local hour and says rising or falling (`data-live="time"`).
+- Small, truth 1: the tab title changes once the hour is past the ice.
+- Small, truth 2: a tap rocks the knife once.
+- Small, truth 1: the footer is the shell bucket, not a link row.
+- Small, truth 2: one cold grade on every picture. A missing photo says placeholder.
+- Medium, truth 2: pull a stub and that boat replaces the board.
+- Medium, truth 3: tap the chalk to see the other hours.
+- Big, truth 1: from 0 to 40% of the scroll the tide rises over the zinc and the lowest stubs darken. Touch is the same scroll.
+
+Rhythms: nail (overlapping stubs), tide board (one chalk field), bucket (a pile). Three shapes. Hours and the pull action stay in the first view. Removal: a second ripple, cut, because one tide is the story. Grade: cold zinc, one light.
 
 Voice: headline "Ice is the seating chart." Button "Pull today's stub." Footer "When the bucket is full, the boats won."
 
@@ -52,9 +62,19 @@ Visual system:
 - Motion: heavy, `expo.inOut`, 1.1s, short travel, because a crate is heavy. Menus are instant.
 - Sound: none.
 
-Objects: services are stencil faces on the crate (`#faces`), each a different word and board width. Prices are a tape-measure tick (`#tape`), marked sample. The stuck truck door is the footer (`#door`).
+Truths: (1) one crate climbs a stair a storage unit does not climb. (2) the room name is stenciled on the board, not chosen from a dropdown. (3) they start at 7 am and the truck door sticks.
 
-Storyboard: the crate is pinned through porch, stair, kitchen. Scroll rotates and wears the same SVG. Touch is the same scroll. Delight: double-click a board and the "this side up" stamp appears. Removal: a second crate in the footer, deleted, because one crate is the point.
+Budget:
+- Small, truth 3: the header reads the local hour and says porch, stair, or door (`data-live="time"`).
+- Small, truth 2: the tab title picks up the room you last stenciled.
+- Small, truth 1: a tap stamps "this side up" on one board.
+- Small, truth 3: the footer is the stuck door, not a link row.
+- Small, truth 2: one stencil grade. Any missing photo of a stair says placeholder.
+- Medium, truth 2: stencil a room name and the crate's label changes.
+- Medium, truth 3: a three-tap "which room first" using the real labels.
+- Big, truth 1: scroll moves the same crate through porch, stair, and kitchen. Touch is the same scroll.
+
+Rhythms: crate in motion, tape ticks, door. Not three copies of heading plus cards. The 7 am booking stays visible. Removal: a second crate, cut, because one crate is the point. Grade: porch bulb on pine, one light.
 
 Voice: headline "This side up the stairs." Button "Book the 7 am." Footer "The truck door sticks. We still make it."
 
@@ -80,8 +100,18 @@ Visual system:
 - Motion: mechanical, `steps(8)`, 120ms a step, because a press is a detent. No bounce.
 - Sound: opt-in, one clunk of the bar, default off.
 
-Objects: projects are locked forms in the chase (`#forms`), each a different lockup. The ink brayer is the control (`#brayer`). The drying rack is the footer (`#rack`).
+Truths: (1) a second ink pass sits a hair off the first. A digital shop does not misregister on purpose. (2) jobs are locked in a chase, not uploaded. (3) they pull until the ink sits even.
 
-Storyboard: scroll steps the brayer across the sheet and the red pass appears misregistered, because that is how they print. Touch: the same scroll, plus a range input under reduced motion. Delight: a tap on the galley sorts one letter upside down. Removal: a paper-grain overlay, deleted, because the misregistration already shows the process.
+Budget:
+- Small, truth 3: the header says pulling or drying from the local hour (`data-live="time"`).
+- Small, truth 1: the tab title names today's ink.
+- Small, truth 2: a tap flips one galley letter upside down.
+- Small, truth 3: the footer is the drying rack.
+- Small, truth 1: one screenprint grade. A missing archive sheet says placeholder.
+- Medium, truth 2: pick a locked form and the sheet shows that lockup.
+- Medium, truth 3: a three-tap "how even is this pull" against the real sheet.
+- Big, truth 1: scroll steps the brayer and the red pass lands 2px off the black. Touch is the same scroll. Reduced motion uses a range input.
+
+Rhythms: chase, brayer pass, rack. The locked jobs stay one tap away. Removal: a paper-grain overlay, cut, because the misregistration already shows the process. Grade: fluorescent on cotton, red pass 2px off.
 
 Voice: headline "Pull until it sits." Button "See the locked jobs." Footer "Two people, one chase, ink on our cuffs."

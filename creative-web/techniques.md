@@ -1,6 +1,6 @@
 # Techniques
 
-Use a technique only when the storyboard names it. A page that uses more than three is too many. Values marked source come from a published case study. Values marked proposed are defaults for this skill. A named site lends one decision, not its concept.
+The big moment uses one technique from this list. Medium features share at most two more. Small details are not extra techniques: they are short, specific, and each one hangs on a truth. Stacking catalog techniques without truths is too many. Values marked source come from a published case study. Values marked proposed are defaults for this skill. A named site lends one decision, not its concept.
 
 1. Metaphor light or material overlay. When the brand is a physical condition. Shadow or color layer at opacity 0.15 to 0.35, `mix-blend-mode: multiply`, sway 8 to 14s, ease in and out, paused off screen (proposed). Build it from a few blurred shapes or one texture of that material.
 

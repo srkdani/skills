@@ -36,7 +36,9 @@ PLAN_HEADS = (
     "pick",
     "visual",
     "object",
-    "storyboard",
+    "budget",
+    "rhythm",
+    "truth",
     "voice",
     "generic",
     "removal",
@@ -80,9 +82,21 @@ def main():
     if len(set(objects)) < 4:
         fails.append(f"need at least 4 different data-object values, found {len(set(objects))}")
 
-    need(len(re.findall(r"data-signature=", low)) == 1, "need exactly one data-signature")
-    need("data-delight=" in low, "missing data-delight")
-    need("data-small=" in low, "missing data-small")
+    def tier_count(name):
+        return len(re.findall(rf'data-tier="{name}"', low))
+
+    small_n, med_n, big_n = tier_count("small"), tier_count("medium"), tier_count("big")
+    need(small_n >= 5, f"need at least 5 data-tier=small, found {small_n}")
+    need(med_n in (2, 3), f"need 2 or 3 data-tier=medium, found {med_n}")
+    need(big_n == 1, f"need exactly one data-tier=big, found {big_n}")
+    missing_truth = 0
+    for tag in re.findall(r"<[^>]*data-tier=\"(?:small|medium|big)\"[^>]*>", html, re.I):
+        if not re.search(r"data-truth=\"[123]\"", tag, re.I):
+            missing_truth += 1
+    need(missing_truth == 0, f"{missing_truth} tier elements missing data-truth=\"1|2|3\"")
+    live_ok = re.search(r'data-live="(time|weekday|season|place|status)"', low)
+    need(bool(live_ok) or "no-live:" in low, "need data-live (time, weekday, season, place, status) or a NO-LIVE: comment")
+    need("grade:" in low, "missing GRADE: comment naming the one picture grade")
 
     shapes = len(re.findall(r"<(circle|rect|ellipse|path|polygon|polyline|line)\b", low))
     has_canvas = "<canvas" in low

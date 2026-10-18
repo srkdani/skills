@@ -8,6 +8,9 @@ Every ban has a replacement. Do the replacement. Escaping a ban into another ban
 |---|---|---|
 | Centered headline on an empty field, big type, blank bands | The page is just text | The dealt world's scene, filling the first viewport |
 | Hero, then three equal feature cards, a bento, cards inside cards | Same grid as every other page | Content as objects in the objects table |
+| The same rhythm on every section: heading, text, card grid | The page is a template with the words swapped | A different rhythm per section, listed in the plan |
+| Motion that only decorates (bobbing icons, generic fade, idle wiggle) | It does not tell a brand truth | Motion that enacts one of the three truths |
+| Photographs in mixed grades, crops, or styles | Not art-directed | One grade for the whole page. Missing assets marked placeholder |
 | Purple, blue, or indigo gradients, gradient blobs, glow | The universal default costume | 2 to 5 hex values from the brand's material |
 | Inter, Roboto, Open Sans, Lato, Arial, system-ui as the display | No decision was made | A display face that belongs to the world |
 | Space Grotesk, Syne, DM Mono, DM Sans, Geist, Poppins, Montserrat as the display | The next font default | A face chosen for this material, named in the plan |
