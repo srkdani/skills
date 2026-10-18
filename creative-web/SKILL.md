@@ -23,7 +23,7 @@ Pass a third argument (a salt) when you are repeating a brief, so the deal chang
 
 Then read `bans.md`, `techniques.md`, `examples.md`, and `rubric.md`. The dealt world is a build spec, not a mood. Copy the examples' specificity, not their worlds, colors, or fonts. If the SVG can be deleted and a themed landing page remains, you skipped the world. Rebuild the scene.
 
-Write the plan below in the conversation, in this order, before you create or edit a page. If you are saving files, save it as `PLAN.md` beside the page first, and only then build. A missing heading means the plan is invalid. Do not open the page "to explore".
+Write the plan below in full and save it as `CREATIVE_PLAN.md` before any HTML. That file is the north star. A missing heading means the plan is invalid. Do not open the page "to explore". Do not start batch 1 until `CREATIVE_PLAN.md` is saved.
 
 ### Harvest
 At least 12 facts only this brand has: materials, place, tools, process, ritual, history, vocabulary, enemies, customers' words, and sensory detail (smell, sound, temperature, light, time of day). At least 6 are physical or sensory. None is a generic virtue (quality, innovation, passion, craft).
@@ -92,9 +92,34 @@ If the project already has a framework or a motion library, stay in it. Do not a
 
 Native scroll. Do not add a smooth-scroll library unless a pin would feel broken without it. One pin at most, shorter than 250vh. Do not scroll-jack the reading text. Horizontal movement only inside a gallery or a stack the storyboard names.
 
-Order: build `#scene` and the hero signature until they work, then the objects, then a voice pass on every string (title, button, error, footer). The scene is the page. A weak scene cannot be saved by sections below it.
+Doing the whole page in one pass fails. The concept gets lost under decoration. Build only the batch in front of you.
 
-Scene contract:
+### Batch 1. Structure
+Grey boxes only: flat fills, real type sizes, no finished illustration. Section rhythms differ. The practical fact and the main action are placed. The big moment's mechanism works (it moves, scrubs, or steps) as a grey box. Finished art in this batch is a failed batch.
+
+### Batch 2. Signature
+Build only the big moment, fully: picture, motion, and the touch path. Medium and small stay quiet placeholders.
+
+### Batch 3. Medium, one at a time
+Build one medium feature, then gate it, then the next. Two or three total. Do not start the next feature while the current one is broken.
+
+### Batch 4. Small details
+Add the small details. Each one is visible, tied to a truth, and stays off the action.
+
+### Batch 5. Polish
+Reduced motion, touch, the 390 width, contrast, a voice pass on every string, delete the named effect, then score with `rubric.md`.
+
+### Gate after every batch
+Do this before the next batch. Never continue while the current batch is broken.
+1. `python3 shoot.py index.html shots/batch-N` (for each medium feature, `shots/batch-3a`, then `shots/batch-3b`).
+2. Re-read `CREATIVE_PLAN.md`. Look at the picked concept and the three truths.
+3. Append `Batch N gate:` and one sentence: how this batch still serves that concept, and what you fixed.
+4. `python3 check.py index.html CREATIVE_PLAN.md --batch N`
+5. If the shot drifted or check.py fails, fix and shoot again. Only then start the next batch.
+
+The scene is the page. A weak scene cannot be saved by sections below it.
+
+Scene contract (the finished page, after batch 5). Earlier batches only have to satisfy `check.py --batch N`. Do not pull later batches forward to satisfy this list:
 - `#scene` fills at least 70% of the first viewport. It is a picture, not a text column.
 - At least 8 drawn parts (SVG shapes) or a canvas that draws the world. Parts that carry no harvest fact are deleted.
 - At least 4 elements with `data-object`, each a different value, matching the objects table.
@@ -126,11 +151,11 @@ The HTML starts with a comment: `CONCEPT:`, `WORLD:`, `SIGNATURE:`, `GRADE:`, `R
 Run, from this folder:
 
 ```sh
-python3 check.py path/to/index.html path/to/PLAN.md
-python3 shoot.py path/to/index.html path/to/outdir
+python3 check.py path/to/index.html path/to/CREATIVE_PLAN.md --batch 5
+python3 shoot.py path/to/index.html path/to/shots/batch-5
 ```
 
-`check.py` is the contract, not the taste test. Fix every failure. A warning is wrong unless you can defend it in one sentence in the plan.
+`check.py` is the contract for that batch, not the taste test. Fix every failure. A warning is wrong unless you can defend it in one sentence in the plan. Batch 5 also requires the earlier `Batch N gate` lines, so a one-pass page cannot pass.
 
 `shoot.py` writes a first viewport and a full page at 1440 and at 390, and a scroll capture of about 10 seconds with the pointer crossing the hero once. If the browser cannot run, say so. Do not claim you saw a screenshot you did not take.
 

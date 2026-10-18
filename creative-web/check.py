@@ -47,8 +47,21 @@ PLAN_HEADS = (
 
 def main():
     if len(sys.argv) < 2:
-        raise SystemExit("usage: check.py index.html [PLAN.md]")
-    html_path = Path(sys.argv[1])
+        raise SystemExit("usage: check.py index.html [CREATIVE_PLAN.md] --batch N")
+    argv = sys.argv[1:]
+    batch = 5
+    if "--batch" in argv:
+        bi = argv.index("--batch")
+        if bi + 1 >= len(argv):
+            raise SystemExit("usage: check.py index.html [CREATIVE_PLAN.md] --batch N")
+        batch = int(argv[bi + 1])
+        if batch not in (1, 2, 3, 4, 5):
+            raise SystemExit("batch must be 1, 2, 3, 4, or 5")
+        del argv[bi:bi + 2]
+    if not argv:
+        raise SystemExit("usage: check.py index.html [CREATIVE_PLAN.md] --batch N")
+    html_path = Path(argv[0])
+    plan_path = Path(argv[1]) if len(argv) > 1 else None
     html = html_path.read_text(errors="replace")
     low = html.lower()
     fails = []
@@ -86,29 +99,39 @@ def main():
         return len(re.findall(rf'data-tier="{name}"', low))
 
     small_n, med_n, big_n = tier_count("small"), tier_count("medium"), tier_count("big")
-    need(small_n >= 5, f"need at least 5 data-tier=small, found {small_n}")
-    need(med_n in (2, 3), f"need 2 or 3 data-tier=medium, found {med_n}")
+    # Batch 1 places the signature. Later batches add medium, then small.
     need(big_n == 1, f"need exactly one data-tier=big, found {big_n}")
+    if batch >= 3:
+        need(med_n in (2, 3), f"need 2 or 3 data-tier=medium, found {med_n}")
+    elif med_n > 3:
+        fails.append(f"need at most 3 data-tier=medium, found {med_n}")
+    if batch >= 4:
+        need(small_n >= 5, f"need at least 5 data-tier=small, found {small_n}")
     missing_truth = 0
     for tag in re.findall(r"<[^>]*data-tier=\"(?:small|medium|big)\"[^>]*>", html, re.I):
         if not re.search(r"data-truth=\"[123]\"", tag, re.I):
             missing_truth += 1
     need(missing_truth == 0, f"{missing_truth} tier elements missing data-truth=\"1|2|3\"")
-    live_ok = re.search(r'data-live="(time|weekday|season|place|status)"', low)
-    need(bool(live_ok) or "no-live:" in low, "need data-live (time, weekday, season, place, status) or a NO-LIVE: comment")
-    need("grade:" in low, "missing GRADE: comment naming the one picture grade")
+    if batch >= 4:
+        live_ok = re.search(r'data-live="(time|weekday|season|place|status)"', low)
+        need(bool(live_ok) or "no-live:" in low, "need data-live (time, weekday, season, place, status) or a NO-LIVE: comment")
+    if batch >= 2:
+        need("grade:" in low, "missing GRADE: comment naming the one picture grade")
 
-    shapes = len(re.findall(r"<(circle|rect|ellipse|path|polygon|polyline|line)\b", low))
-    has_canvas = "<canvas" in low
-    if shapes < 8 and not has_canvas:
-        fails.append(f"scene has {shapes} SVG shapes (need 8) and no canvas")
+    if batch >= 2:
+        shapes = len(re.findall(r"<(circle|rect|ellipse|path|polygon|polyline|line)\b", low))
+        has_canvas = "<canvas" in low
+        if shapes < 8 and not has_canvas:
+            fails.append(f"scene has {shapes} SVG shapes (need 8) and no canvas")
 
-    need("prefers-reduced-motion" in low, "missing prefers-reduced-motion")
-    touch = any(s in low for s in ("pointer: coarse", "hover: none", "ontouchstart", "max-width: 700"))
-    need(touch, "missing a touch or narrow-screen fallback")
+    if batch >= 5:
+        need("prefers-reduced-motion" in low, "missing prefers-reduced-motion")
+        touch = any(s in low for s in ("pointer: coarse", "hover: none", "ontouchstart", "max-width: 700"))
+        need(touch, "missing a touch or narrow-screen fallback")
 
     own_stack = "own-stack" in low
-    need("gsap.min.js" in low or own_stack, "missing GSAP CDN (or an own-stack comment)")
+    if batch >= 2:
+        need("gsap.min.js" in low or own_stack, "missing GSAP CDN (or an own-stack comment)")
 
     need("<button" in low or "<a " in low, "missing a main action (link or button)")
 
@@ -142,8 +165,8 @@ def main():
     if low.count("intersectionobserver") and "translatey" in low:
         warns.append("scroll observer plus translateY: body text should be static")
 
-    if len(sys.argv) > 2:
-        plan = Path(sys.argv[2]).read_text(errors="replace")
+    if plan_path:
+        plan = plan_path.read_text(errors="replace")
         plow = plan.lower()
         for label, ch in (("em dash", EM), ("en dash", EN)):
             if ch in plan:
@@ -155,15 +178,20 @@ def main():
             fails.append("plan needs at least 6 'because' tokens in the visual system")
         if "fail" not in plow and "competitor" not in plow and "rival" not in plow:
             warns.append("plan should show the competitor test")
+        for n in range(1, batch + 1):
+            if f"batch {n} gate" not in plow:
+                fails.append(f"missing Batch {n} gate (re-read the plan and write it before the next batch)")
+    elif batch >= 1:
+        fails.append("missing CREATIVE_PLAN.md")
 
     for msg in fails:
         print(f"FAIL {msg}")
     for msg in warns:
         print(f"WARN {msg}")
     if not fails and not warns:
-        print("PASS")
+        print(f"PASS batch {batch}")
     elif not fails:
-        print(f"PASS with {len(warns)} warning(s)")
+        print(f"PASS batch {batch} with {len(warns)} warning(s)")
     else:
         print(f"{len(fails)} failure(s)")
         sys.exit(1)

@@ -1,6 +1,6 @@
 # Examples
 
-Three sample brands. Copy the specificity and the refusal to merge. Do not reuse these worlds, hex values, or typefaces on a new brand. Every name below is a sample.
+Three sample brands. Copy the specificity and the refusal to merge. Do not reuse these worlds, hex values, or typefaces on a new brand. Every name below is a sample. Each one is built in five batches: grey structure, then the big moment, then medium features one at a time, then small details, then polish. The plan stays the north star after every batch.
 
 ## Sample: North Wharf oyster bar
 
