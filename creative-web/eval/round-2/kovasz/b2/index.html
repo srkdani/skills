@@ -1,0 +1,785 @@
+<!--
+CONCEPT: The site is three rooms of one night, where walking from the oven to the bare rack spends the bread.
+WORLD: Walk into the place. Back wall, mid bench, foreground jar. Later rooms keep three layers.
+SIGNATURE: From 0 to 30 percent of the scroll the round on the bench splits along its score and the oven mouth opens, because the 11pm bake becomes the morning loaf.
+GRADE: screenprint in flour, crust, and oven ink, second crust pass offset 2px.
+REMOVED: flour-dust grain overlay.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kovász sample. The oven is still ticking.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --soot: #2A211C;
+    --flour: #E7D7B8;
+    --crust: #7A3B24;
+    --oven: #E25C28;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 18px; }
+  body {
+    margin: 0;
+    font-family: "Outfit", sans-serif;
+    color: var(--flour);
+    background: var(--soot);
+  }
+  h1, p { margin: 0; }
+  h1 {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: clamp(4rem, 12vw, 11rem);
+    line-height: 0.86;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    color: var(--flour);
+    padding-bottom: 0.22em;
+  }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--oven); outline-offset: 3px; }
+  #scene {
+    height: 100vh;
+    min-height: 640px;
+    position: relative;
+    background: var(--soot);
+    overflow: hidden;
+  }
+  .layer { position: absolute; inset: 0; }
+  .back { z-index: 1; }
+  .mid { z-index: 2; }
+  .fore { z-index: 3; pointer-events: none; }
+  .fore button { pointer-events: auto; }
+  #oven {
+    position: absolute;
+    top: 1.5vh;
+    left: 2.5vw;
+    right: 2.5vw;
+    bottom: 34vh;
+    background: var(--soot);
+    padding: 2.2vh 2.5vw 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 12.5rem;
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    grid-template-areas:
+      "brand tag"
+      "title tag"
+      "sub tag"
+      "mouth mouth";
+    gap: 0.2rem 1rem;
+  }
+  #oven::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 3px solid var(--crust);
+    transform: translate(2px, 2px);
+    pointer-events: none;
+  }
+  .brand { grid-area: brand; font-weight: 700; letter-spacing: 0.06em; position: relative; z-index: 2; }
+  h1 { grid-area: title; position: relative; z-index: 2; max-width: 9ch; }
+  .sub { grid-area: sub; max-width: 24rem; position: relative; z-index: 2; }
+  #tag-hour {
+    grid-area: tag;
+    justify-self: end;
+    align-self: start;
+    width: 12.5rem;
+    background: var(--flour);
+    color: var(--soot);
+    padding: 0.85rem 0.75rem 0.7rem;
+    position: relative;
+    z-index: 2;
+    transform: rotate(1.5deg);
+  }
+  #tag-hour::before {
+    content: "";
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    width: 2px;
+    height: 22px;
+    background: var(--crust);
+  }
+  #tag-hour strong { display: block; font-size: 1.05rem; line-height: 1.15; }
+  #tag-hour span { display: block; margin-top: 0.35rem; font-size: 0.95rem; }
+  #mouth {
+    grid-area: mouth;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    position: relative;
+    z-index: 1;
+    align-self: end;
+  }
+  .handle {
+    position: absolute;
+    right: 22px;
+    bottom: 18%;
+    width: 16px;
+    height: 64px;
+    background: var(--flour);
+    z-index: 2;
+  }
+  .handle::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--crust);
+    transform: translate(2px, 2px);
+    z-index: -1;
+  }
+  #bench {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 36vh;
+    background: var(--flour);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 0.6rem 3vw 0.6rem 15vw;
+  }
+  #bench::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 14px;
+    background: var(--crust);
+    transform: translateY(2px);
+  }
+  #dough {
+    width: min(28vh, 240px);
+    height: min(28vh, 240px);
+    margin-right: auto;
+    overflow: visible;
+    position: relative;
+    z-index: 1;
+    flex: none;
+  }
+  #bag {
+    position: relative;
+    z-index: 2;
+    background: var(--crust);
+    color: var(--flour);
+    border: 0;
+    min-height: 52px;
+    min-width: 44px;
+    padding: 0.35rem 1rem 0.75rem;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+  #bag .fold {
+    display: block;
+    height: 8px;
+    margin: 0 -0.4rem 0.45rem;
+    background: var(--soot);
+  }
+  #lame {
+    position: absolute;
+    left: 39%;
+    bottom: 20%;
+    width: 36px;
+    height: 108px;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    z-index: 3;
+  }
+  #lame svg { width: 100%; height: 100%; display: block; }
+  #stamp {
+    position: absolute;
+    left: 52%;
+    top: 10%;
+    margin: 0;
+    transform: rotate(-7deg);
+    border: 2px solid var(--crust);
+    color: var(--crust);
+    background: var(--flour);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.22rem 0.4rem;
+    z-index: 3;
+  }
+  #stamp::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border: 2px solid var(--soot);
+    transform: translate(2px, 2px);
+    pointer-events: none;
+  }
+  #consent {
+    position: absolute;
+    left: 17vw;
+    bottom: 0.3rem;
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--soot);
+  }
+  #foot {
+    background: var(--soot);
+    color: var(--flour);
+    padding: 1.4rem 6vw 2rem;
+  }
+  #foot p { margin: 0.25rem 0; max-width: 40rem; }
+  #jar {
+    position: absolute;
+    left: 0;
+    bottom: -14vh;
+    width: min(16vw, 180px);
+    height: 52vh;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: var(--flour);
+    text-align: left;
+  }
+  #jar svg { width: 100%; height: 100%; display: block; }
+  #jar-label {
+    position: absolute;
+    top: 28%;
+    left: 18%;
+    width: 62%;
+    background: var(--soot);
+    color: var(--flour);
+    font-size: 0.78rem;
+    line-height: 1.15;
+    padding: 0.28rem 0.3rem;
+    z-index: 2;
+  }
+  .damper {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    color: var(--soot);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0;
+    align-self: center;
+  }
+  .damper input {
+    width: min(42vw, 280px);
+    height: 44px;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .damper input::-webkit-slider-runnable-track {
+    height: 10px;
+    background: var(--soot);
+    border: 2px solid var(--crust);
+  }
+  .damper input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 26px;
+    height: 40px;
+    margin-top: -17px;
+    background: var(--oven);
+    border: 2px solid var(--flour);
+  }
+  .damper input::-moz-range-track {
+    height: 10px;
+    background: var(--soot);
+    border: 2px solid var(--crust);
+  }
+  .damper input::-moz-range-thumb {
+    width: 26px;
+    height: 40px;
+    background: var(--oven);
+    border: 2px solid var(--flour);
+  }
+  .room { min-height: 78vh; position: relative; overflow: hidden; }
+  #room-counter { background: var(--flour); color: var(--soot); }
+  #room-counter .slab {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 32vh;
+    background: var(--soot);
+  }
+  #room-rack { background: var(--flour); color: var(--soot); min-height: 120vh; }
+  .noon-mark {
+    margin: 3vh 0 0 5vw;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: clamp(5rem, 14vw, 11rem);
+    line-height: 0.8;
+    letter-spacing: -0.03em;
+    color: var(--crust);
+  }
+  #rack {
+    position: absolute;
+    inset: 20vh 4vw 3vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .rack-stage { position: relative; flex: 1; min-height: 52vh; }
+  .wire-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .loaf { position: absolute; background: transparent; border: 0; padding: 0; cursor: pointer; }
+  .loaf svg { width: 100%; height: 100%; display: block; }
+  #loaf-cross { top: 2%; left: 6%; width: 190px; height: 190px; }
+  #loaf-slash { top: 24%; left: 46%; width: 140px; height: 140px; }
+  #loaf-square { top: 46%; left: 18%; width: 108px; height: 108px; }
+  #loaf-ear { top: 52%; left: 60%; width: 160px; height: 120px; }
+  .rack-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 0.8rem;
+    background: var(--flour);
+  }
+  #empty-wire { margin: 0; max-width: 18rem; font-weight: 700; }
+  #restore {
+    background: var(--crust);
+    color: var(--flour);
+    border: 0;
+    min-height: 48px;
+    padding: 0.55rem 0.8rem;
+    flex: none;
+  }
+  .bag-crop {
+    position: absolute;
+    right: 0;
+    top: 42%;
+    width: 36px;
+    height: 110px;
+    background: var(--crust);
+    pointer-events: none;
+  }
+  #room-counter { background: var(--flour); color: var(--soot); min-height: 100vh; }
+  #room-counter .door-frame {
+    position: absolute;
+    left: 5vw;
+    top: 4vh;
+    width: min(46vw, 520px);
+    height: 22vh;
+    background: var(--crust);
+  }
+  #room-counter .door-frame span {
+    position: absolute;
+    inset: 14px;
+    background: var(--flour);
+    transform: translate(2px, 2px);
+    display: flex;
+    align-items: flex-start;
+    padding: 0.6rem 1rem;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: clamp(3.4rem, 8vw, 6.5rem);
+    line-height: 0.8;
+    letter-spacing: -0.03em;
+    color: var(--crust);
+  }
+  #counter {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 70vh;
+    background: var(--flour);
+    border: 0;
+    border-top: 16px solid var(--crust);
+    color: var(--soot);
+    text-align: left;
+    padding: 1rem 4vw 8vh;
+    cursor: pointer;
+  }
+  #counter svg { width: min(100%, 920px); height: 48vh; display: block; }
+  #counter-line {
+    display: block;
+    max-width: 18rem;
+    font-weight: 700;
+    font-size: 1.15rem;
+  }
+  .step { opacity: 0; }
+  #room-counter .lip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6vh;
+    background: var(--soot);
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #dough { transform: none; }
+  }
+  @media (max-width: 700px) {
+    #scene { min-height: 0; height: 100vh; }
+    #oven {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto auto minmax(80px, 1fr);
+      grid-template-areas: "brand" "title" "sub" "tag" "mouth";
+      left: 3vw;
+      right: 3vw;
+      bottom: 36vh;
+      padding-top: 1.4vh;
+    }
+    #tag-hour { justify-self: start; width: auto; max-width: 18rem; }
+    h1 { font-size: 4rem; }
+    #bench {
+      height: 38vh;
+      padding: 0.5rem 4vw 0.5rem 100px;
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      grid-template-rows: auto auto;
+      align-items: center;
+      justify-content: stretch;
+      column-gap: 0.6rem;
+    }
+    #dough { width: 136px; height: 136px; grid-row: 1 / span 2; margin: 0; }
+    .damper { grid-column: 2; grid-row: 1; margin: 0; }
+    .damper input { width: 100%; }
+    #bag { grid-column: 2; grid-row: 2; justify-self: start; margin: 0; }
+    #lame { left: 236px; right: auto; top: 46%; bottom: auto; width: 22px; height: 72px; }
+    #stamp { left: 8px; top: 8px; bottom: auto; max-width: 70%; font-size: 0.78rem; }
+    #consent { left: auto; right: 4vw; top: 2px; bottom: auto; width: auto; }
+    #jar { width: 92px; height: 34vh; bottom: -10vh; }
+    #loaf-cross { width: 112px; height: 112px; }
+    #loaf-slash { width: 90px; height: 90px; left: 50%; }
+    #loaf-square { width: 74px; height: 74px; }
+    #loaf-ear { width: 104px; height: 78px; left: 46%; }
+    .rack-bar { flex-direction: column; align-items: flex-start; }
+    #jar-label { font-size: 0.68rem; top: 12%; left: 12%; width: 74%; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <section id="scene" data-facts="bake from 11pm, door opens at 6am, starter is 41 years, carried from her village, bare rack by noon">
+    <div class="layer back">
+      <div id="oven" data-object="oven">
+        <p class="brand">Kovász sample</p>
+        <h1>Night oven.</h1>
+        <p class="sub">Door at 6 in Budapest. Bare wire by noon.</p>
+        <div id="tag-hour" data-object="tag" data-tier="small" data-truth="1" data-live="time">
+          <strong>The oven is still ticking.</strong>
+          <span>Bake 11pm. Door 6. Wire by noon. Budapest.</span>
+        </div>
+        <svg id="mouth" data-object="mouth" viewBox="0 70 640 250" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+          <ellipse id="misreg" data-tier="small" data-truth="1" cx="322" cy="292" rx="248" ry="200" fill="#7A3B24"/>
+          <ellipse id="mouth-arch" cx="320" cy="290" rx="248" ry="200" fill="#E25C28"/>
+          <ellipse id="mouth-soot" cx="320" cy="318" rx="168" ry="132" fill="#2A211C"/>
+        </svg>
+        <div class="handle" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div class="layer mid">
+      <div id="bench" data-object="bench">
+        <svg id="dough" data-object="dough" data-tier="big" data-truth="1" viewBox="0 0 280 280" aria-label="The night round, scored" role="img">
+          <g id="crumb">
+            <ellipse cx="140" cy="140" rx="26" ry="96" fill="#E7D7B8"/>
+            <circle cx="132" cy="92" r="8" fill="#7A3B24"/>
+            <circle cx="150" cy="124" r="5" fill="#2A211C"/>
+            <circle cx="128" cy="150" r="10" fill="#7A3B24"/>
+            <circle cx="152" cy="178" r="6" fill="#2A211C"/>
+            <circle cx="136" cy="198" r="4" fill="#7A3B24"/>
+          </g>
+          <g id="move-l">
+            <path class="ink" transform="translate(2 2)" d="M140 28 A112 112 0 0 0 140 252 L140 28 Z" fill="#2A211C"/>
+            <path class="skin" d="M140 28 A112 112 0 0 0 140 252 L140 28 Z" fill="#7A3B24"/>
+          </g>
+          <g id="move-r">
+            <path class="ink" transform="translate(2 2)" d="M140 28 A112 112 0 0 1 140 252 L140 28 Z" fill="#2A211C"/>
+            <path class="skin" d="M140 28 A112 112 0 0 1 140 252 L140 28 Z" fill="#7A3B24"/>
+          </g>
+          <line id="score" x1="140" y1="48" x2="140" y2="232" stroke="#E7D7B8" stroke-width="10" stroke-linecap="round"/>
+          <line id="extra-score" x1="96" y1="78" x2="118" y2="206" stroke="#E7D7B8" stroke-width="7" stroke-linecap="round" opacity="0"/>
+        </svg>
+        <button id="lame" type="button" data-tier="small" data-truth="1" data-object="lame" aria-label="Flick the lame">
+          <svg viewBox="4 0 32 114" aria-hidden="true">
+          <polygon points="20,2 32,86 8,86" fill="#E7D7B8"/>
+          <polygon points="18,4 30,84 6,84" fill="#7A3B24"/>
+          <rect x="10" y="82" width="16" height="28" fill="#2A211C"/>
+          </svg>
+        </button>
+        <p id="stamp" data-tier="small" data-truth="2" data-object="stamp">41 years, her village</p>
+        <label class="damper">Open the score
+          <input id="damper" type="range" min="0" max="100" value="0">
+        </label>
+        <button id="bag" data-object="bag" type="button"><span class="fold" aria-hidden="true"></span>Bag a loaf</button>
+        <p id="consent">The bench keeps no list.</p>
+      </div>
+    </div>
+    <div class="layer fore">
+      <button id="jar" type="button" data-object="jar" data-tier="medium" data-truth="2">
+        <span id="jar-label">41 years fed</span>
+        <svg viewBox="0 0 160 300" aria-hidden="true">
+          <rect x="34" y="48" width="96" height="210" rx="20" fill="#7A3B24" transform="translate(2 2)"/>
+          <rect x="32" y="46" width="96" height="210" rx="20" fill="#E7D7B8"/>
+          <rect x="52" y="40" width="56" height="14" fill="#2A211C"/>
+          <ellipse cx="80" cy="42" rx="34" ry="12" fill="#7A3B24"/>
+          <ellipse cx="80" cy="40" rx="24" ry="7" fill="#E25C28"/>
+          <circle cx="68" cy="110" r="9" fill="#E25C28"/>
+          <circle cx="98" cy="148" r="5" fill="#E25C28"/>
+          <circle cx="72" cy="176" r="12" fill="#E25C28"/>
+          <rect x="48" y="214" width="64" height="28" fill="#2A211C"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+  <section class="room" id="room-counter" aria-label="6am counter">
+    <div class="layer back">
+      <div class="door-frame"><span>6am</span></div>
+    </div>
+    <div class="layer mid">
+      <button id="counter" type="button" data-tier="medium" data-truth="1" data-object="counter">
+        <svg viewBox="40 50 620 200" aria-hidden="true">
+          <g id="step-mix" class="step">
+            <ellipse cx="300" cy="150" rx="240" ry="86" fill="#7A3B24" transform="translate(2 2)"/>
+            <ellipse cx="298" cy="148" rx="240" ry="86" fill="#2A211C"/>
+            <ellipse cx="298" cy="136" rx="180" ry="52" fill="#E7D7B8"/>
+            <circle cx="210" cy="120" r="42" fill="#7A3B24"/>
+            <circle cx="310" cy="112" r="30" fill="#7A3B24"/>
+            <circle cx="390" cy="128" r="20" fill="#E25C28"/>
+          </g>
+          <g id="step-score" class="step">
+            <circle cx="252" cy="136" r="112" fill="#2A211C" transform="translate(2 2)"/>
+            <circle cx="250" cy="134" r="112" fill="#7A3B24"/>
+            <line x1="250" y1="48" x2="250" y2="220" stroke="#E7D7B8" stroke-width="12" stroke-linecap="round"/>
+            <line x1="390" y1="170" x2="520" y2="36" stroke="#2A211C" stroke-width="10" stroke-linecap="round"/>
+            <line x1="512" y1="44" x2="580" y2="28" stroke="#7A3B24" stroke-width="8"/>
+          </g>
+          <g id="step-peel" class="step">
+            <rect x="30" y="176" width="500" height="30" fill="#7A3B24" transform="translate(2 2)"/>
+            <rect x="28" y="174" width="500" height="30" fill="#2A211C"/>
+            <circle cx="400" cy="150" r="72" fill="#2A211C"/>
+            <circle cx="398" cy="148" r="72" fill="#7A3B24"/>
+            <ellipse cx="590" cy="190" rx="86" ry="64" fill="#7A3B24" transform="translate(2 2)"/>
+            <ellipse cx="588" cy="188" rx="86" ry="64" fill="#E25C28"/>
+            <ellipse cx="588" cy="208" rx="52" ry="36" fill="#2A211C"/>
+          </g>
+        </svg>
+        <span id="counter-line">11pm. Flour, water, the jar.</span>
+      </button>
+    </div>
+    <div class="layer fore" aria-hidden="true"><div class="lip"></div></div>
+  </section>
+  <section class="room" id="room-rack" aria-label="Noon wire">
+    <div class="layer back">
+      <p class="noon-mark">12</p>
+    </div>
+    <div class="layer mid">
+      <div id="rack" data-tier="medium" data-truth="3" data-object="rack">
+        <div class="rack-stage">
+        <svg class="wire-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="16" y1="0" x2="16" y2="100" stroke="#2A211C" stroke-width="3" vector-effect="non-scaling-stroke"/>
+          <line x1="40" y1="0" x2="40" y2="100" stroke="#2A211C" stroke-width="3" vector-effect="non-scaling-stroke"/>
+          <line x1="64" y1="0" x2="64" y2="100" stroke="#2A211C" stroke-width="3" vector-effect="non-scaling-stroke"/>
+          <line x1="86" y1="0" x2="86" y2="100" stroke="#2A211C" stroke-width="3" vector-effect="non-scaling-stroke"/>
+          <line x1="0" y1="97" x2="100" y2="97" stroke="#2A211C" stroke-width="8" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <button class="loaf" id="loaf-cross" type="button" data-object="loaf-cross" aria-label="Large cross loaf">
+          <svg viewBox="0 0 180 180">
+            <circle cx="92" cy="92" r="74" fill="#2A211C"/>
+            <circle cx="90" cy="90" r="74" fill="#7A3B24"/>
+            <line x1="90" y1="36" x2="90" y2="144" stroke="#E7D7B8" stroke-width="8"/>
+            <line x1="36" y1="90" x2="144" y2="90" stroke="#E7D7B8" stroke-width="8"/>
+          </svg>
+        </button>
+        <button class="loaf" id="loaf-slash" type="button" data-object="loaf-slash" aria-label="Slashed loaf">
+          <svg viewBox="0 0 140 140">
+            <circle cx="72" cy="72" r="56" fill="#2A211C"/>
+            <circle cx="70" cy="70" r="56" fill="#7A3B24"/>
+            <circle cx="96" cy="58" r="18" fill="#E7D7B8"/>
+            <line x1="40" y1="96" x2="104" y2="40" stroke="#E7D7B8" stroke-width="7"/>
+          </svg>
+        </button>
+        <button class="loaf" id="loaf-square" type="button" data-object="loaf-square" aria-label="Small square loaf">
+          <svg viewBox="0 0 110 110">
+            <circle cx="57" cy="57" r="44" fill="#2A211C"/>
+            <circle cx="55" cy="55" r="44" fill="#7A3B24"/>
+            <rect x="36" y="36" width="38" height="38" fill="none" stroke="#E7D7B8" stroke-width="6"/>
+          </svg>
+        </button>
+        <button class="loaf" id="loaf-ear" type="button" data-object="loaf-ear" aria-label="Torn ear loaf">
+          <svg viewBox="0 0 170 120">
+            <ellipse cx="82" cy="64" rx="68" ry="42" fill="#2A211C"/>
+            <ellipse cx="80" cy="62" rx="68" ry="42" fill="#7A3B24"/>
+            <path d="M108 40 L146 18 L132 62 Z" fill="#E25C28"/>
+          </svg>
+        </button>
+        </div>
+        <div class="rack-bar">
+          <p id="empty-wire" data-tier="small" data-truth="3">Tap a loaf off. Noon leaves the wire.</p>
+          <button id="restore" type="button">Bring the morning back</button>
+        </div>
+      </div>
+    </div>
+    <div class="layer fore" aria-hidden="true"><div class="bag-crop"></div></div>
+  </section>
+  <footer id="foot" data-tier="small" data-truth="3">
+    <p>Kovász sample. Budapest. If you smell the crust and see wire, you are late.</p>
+    <p>Wrong tray: this one was never baked.</p>
+  </footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.set("#crumb", { scaleX: 0, opacity: 0, transformOrigin: "50% 50%" });
+  var tl = gsap.timeline({ paused: true });
+  tl.to("#move-l", { x: -48, duration: 1, ease: "none" }, 0);
+  tl.to("#move-r", { x: 48, duration: 1, ease: "none" }, 0);
+  tl.to("#crumb", { scaleX: 1, opacity: 1, duration: 1, ease: "none" }, 0);
+  tl.to("#score", { opacity: 0, duration: 0.35, ease: "none" }, 0);
+  tl.to("#mouth-arch", { scaleY: 1.2, transformOrigin: "50% 100%", duration: 1, ease: "none" }, 0);
+  tl.to("#mouth-soot", { opacity: 0.15, duration: 1, ease: "none" }, 0);
+  var damper = document.getElementById("damper");
+  var locked = false;
+  ScrollTrigger.create({
+    trigger: "#scene",
+    start: "top top",
+    end: "+=420",
+    scrub: 0.2,
+    onUpdate: function (self) {
+      if (locked) return;
+      tl.progress(self.progress);
+      damper.value = Math.round(self.progress * 100);
+    }
+  });
+  damper.addEventListener("input", function () {
+    locked = true;
+    tl.progress(Number(damper.value) / 100);
+  });
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) {
+    ScrollTrigger.getAll().forEach(function (trigger) { trigger.kill(); });
+    tl.progress(1);
+    damper.value = 100;
+  }
+  var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (fine && !reduceMotion) {
+    var scene = document.getElementById("scene");
+    var bench = document.getElementById("bench");
+    var tx = 0;
+    var cx = 0;
+    scene.addEventListener("pointermove", function (e) {
+      var r = scene.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width - 0.5) * r.width * 0.02;
+    });
+    scene.addEventListener("pointerleave", function () { tx = 0; });
+    (function loop() {
+      cx += (tx - cx) * 0.08;
+      bench.style.transform = "translateX(" + cx.toFixed(2) + "px)";
+      requestAnimationFrame(loop);
+    })();
+  }
+  document.getElementById("bag").addEventListener("click", function () {
+    var bake = document.getElementById("scene").getAttribute("data-bake");
+    this.lastChild.textContent = bake === "bare" ? "Come back at 6." : "Held for 6am.";
+  });
+  document.getElementById("lame").addEventListener("click", function () {
+    var blade = this;
+    gsap.fromTo(blade, { rotation: -6 }, { rotation: 16, duration: 0.08, ease: "power3.out", yoyo: true, repeat: 1, transformOrigin: "50% 80%" });
+    var extra = document.getElementById("extra-score");
+    var show = extra.getAttribute("opacity") !== "1";
+    gsap.to(extra, { opacity: show ? 1 : 0, duration: 0.08, ease: "power3.out" });
+    extra.setAttribute("opacity", show ? "1" : "0");
+  });
+  var clock = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Budapest",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23"
+  }).formatToParts(new Date());
+  var hour = 8;
+  var minute = "00";
+  clock.forEach(function (part) {
+    if (part.type === "hour") hour = Number(part.value);
+    if (part.type === "minute") minute = part.value;
+  });
+  var bake = "door";
+  var live = "Door is open";
+  if (hour >= 23 || hour < 6) {
+    bake = "oven";
+    live = "Oven is on";
+  } else if (hour >= 12) {
+    bake = "bare";
+    live = "Racks are bare";
+  }
+  document.getElementById("scene").setAttribute("data-bake", bake);
+  document.getElementById("tag-hour").querySelector("strong").textContent = "Budapest " + String(hour).padStart(2, "0") + ":" + minute + ". " + live + ".";
+  document.title = "Kovász sample. " + live + ".";
+  var jarLines = [
+    "41 years fed",
+    "From her village. Placeholder.",
+    "Flour and water each night"
+  ];
+  var jarAt = 0;
+  var jarBtn = document.getElementById("jar");
+  var jarLabel = document.getElementById("jar-label");
+  jarBtn.addEventListener("click", function () {
+    jarAt = (jarAt + 1) % jarLines.length;
+    jarLabel.textContent = jarLines[jarAt];
+    gsap.fromTo(jarBtn, { rotation: 0 }, { rotation: -8, duration: 0.07, ease: "power3.out", yoyo: true, repeat: 1, transformOrigin: "50% 80%" });
+  });
+  var steps = ["step-mix", "step-score", "step-peel"];
+  var stepLines = [
+    "11pm. Flour, water, the jar.",
+    "One cut. Then the door shuts.",
+    "On the peel until the door at 6."
+  ];
+  var stepAt = 0;
+  var counterLine = document.getElementById("counter-line");
+  function showStep(n) {
+    steps.forEach(function (id, i) {
+      gsap.to("#" + id, { opacity: i === n ? 1 : 0, duration: 0.14, ease: "power3.out" });
+    });
+    counterLine.textContent = stepLines[n];
+  }
+  showStep(0);
+  document.getElementById("counter").addEventListener("click", function () {
+    stepAt = (stepAt + 1) % steps.length;
+    showStep(stepAt);
+  });
+  var emptyWire = document.getElementById("empty-wire");
+  if (bake === "bare" || bake === "oven") {
+    document.querySelectorAll(".loaf").forEach(function (btn) {
+      btn.setAttribute("data-gone", "1");
+      btn.style.opacity = "0";
+      btn.style.pointerEvents = "none";
+    });
+    emptyWire.textContent = bake === "bare" ? "The wire is showing. Come back at 6." : "Still in the oven. The wire waits.";
+    if (bake === "bare") gsap.set("#mouth-arch", { opacity: 0.22 });
+  }
+  function loavesLeft() {
+    return document.querySelectorAll(".loaf:not([data-gone='1'])").length;
+  }
+  document.querySelectorAll(".loaf").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      if (btn.getAttribute("data-gone") === "1") return;
+      btn.setAttribute("data-gone", "1");
+      gsap.to(btn, {
+        y: 70,
+        opacity: 0,
+        duration: 0.14,
+        ease: "power3.out",
+        onComplete: function () {
+          btn.style.pointerEvents = "none";
+          if (loavesLeft() === 0) emptyWire.textContent = "The wire is showing. Come back at 6.";
+        }
+      });
+    });
+  });
+  document.getElementById("restore").addEventListener("click", function () {
+    document.querySelectorAll(".loaf").forEach(function (btn) {
+      btn.setAttribute("data-gone", "0");
+      btn.style.pointerEvents = "auto";
+      gsap.to(btn, { y: 0, opacity: 1, duration: 0.14, ease: "power3.out" });
+    });
+    emptyWire.textContent = "Tap a loaf off. Noon leaves the wire.";
+  });
+</script>
+</body>
+</html>

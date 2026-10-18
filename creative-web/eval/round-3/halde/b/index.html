@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halde FM-1, sample</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Familjen+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --al: #D5D8D2;
+    --ink: #1C1F1A;
+    --ash: #8F6436;
+    --brass: #C6A15A;
+    --paper: #E4D7C3;
+    --display: "Big Shoulders Display", Impact, sans-serif;
+    --body: "Familjen Grotesk", Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--al);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 18px;
+    line-height: 1.4;
+    overflow-x: hidden;
+  }
+  button, input { font-family: inherit; }
+  #loading { margin: 0; padding: 8px 16px; font-size: 16px; }
+  #scene {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    background: var(--al);
+    position: relative;
+  }
+  .cheek-col { position: relative; min-height: 100%; min-width: 0; }
+  .plate { min-width: 0; }
+  .corner-notes {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  #sound-toggle {
+    min-height: 44px;
+    min-width: 128px;
+    padding: 8px 14px;
+    border: 1.75px solid var(--ink);
+    border-radius: 0;
+    background: var(--al);
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #sound-toggle[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--al);
+  }
+  .sound-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8% 32px;
+  }
+  .sound-row p { margin: 0; }
+  #ash-cheek {
+    width: 100%;
+    border: 0;
+    background: var(--ash);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 0;
+    cursor: pointer;
+    transition: transform 120ms steps(1, end);
+  }
+  #ash-cheek[aria-expanded="true"] { transform: translateX(8px); }
+  #ash-cheek { height: 100%; }
+  #proud-screw {
+    position: absolute;
+    z-index: 4;
+    left: 50%;
+    bottom: 18px;
+    width: 44px;
+    height: 44px;
+    margin-left: -22px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    cursor: pointer;
+    transform: translateX(4px);
+    transition: transform 80ms steps(1, end);
+  }
+  #proud-screw::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 11px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.75px solid var(--ink);
+    background: var(--brass);
+  }
+  #proud-screw::after {
+    content: "";
+    position: absolute;
+    left: 21px;
+    top: 16px;
+    width: 1.75px;
+    height: 12px;
+    background: var(--ink);
+  }
+  #proud-screw.flush { transform: translateX(0) rotate(90deg); }
+  #bench-lamp, #heard-stamp, #empty-partials {
+    font-size: 14px;
+    color: var(--ink);
+  }
+  #bench-lamp {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    text-align: right;
+    padding: 4px;
+    min-height: 44px;
+  }
+  #heard-stamp { margin: 0; }
+  #empty-partials {
+    margin: 0;
+    max-width: 28em;
+    text-align: center;
+  }
+  #lamp-ticks:not([hidden]) { display: block; margin-left: auto; }
+  .screw {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--brass);
+    border: 1.75px solid var(--ink);
+  }
+  .screw.proud { transform: translateX(3px); }
+  .plate {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 12px 16px;
+    text-align: center;
+  }
+  .fact { margin: 0; font-size: 16px; }
+  .verb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  #ratio-knob { margin: 0; line-height: 0; }
+  .knob-svg { width: min(62vw, 42vh); height: auto; display: block; }
+  .comb-svg { width: 72px; height: 160px; display: block; }
+  h1 {
+    margin: 8px 0 0;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 72px;
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .sub { margin: 0; max-width: 34em; font-size: 16px; }
+  .tool {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: min(420px, 100%);
+  }
+  .tool label { font-size: 16px; width: 100%; }
+  #ratio-range { width: 100%; height: 44px; accent-color: var(--ink); }
+  #step-btn {
+    min-height: 48px;
+    min-width: 180px;
+    padding: 10px 18px;
+    border: 1.75px solid var(--ink);
+    border-radius: 0;
+    background: var(--ink);
+    color: var(--al);
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #step-btn:focus-visible, #ratio-range:focus-visible, .mini:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+  .hint { margin: 0; font-size: 16px; }
+  .minis {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin-top: 2px;
+  }
+  .mini { display: block; background: transparent; }
+  #index-knob { width: 46px; height: 46px; }
+  #decay-knob { width: 34px; height: 34px; }
+  #level-knob { width: 26px; height: 26px; transform: rotate(8deg); }
+  #jobs {
+    background: var(--al);
+    display: flex;
+    align-items: center;
+    padding: 8px 32px 36px;
+  }
+  #operator-strip {
+    width: 100%;
+    min-height: 120px;
+    background: #C5C8C2;
+    border: 1.75px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 22px;
+  }
+  #job-line { margin: 0; text-align: left; max-width: 38em; }
+  .job-picks { display: flex; flex-wrap: wrap; gap: 8px; }
+  .job-picks button, .mini-btn {
+    min-height: 44px;
+    border: 1.75px solid var(--ink);
+    border-radius: 0;
+    background: var(--al);
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .job-picks button { min-width: 76px; padding: 8px 12px; }
+  .job-picks button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--al);
+  }
+  .mini-btn {
+    padding: 4px;
+    min-width: 44px;
+    background: transparent;
+    border-color: transparent;
+  }
+  .mini-btn[aria-pressed="true"] { border-color: var(--ink); }
+  #cheek-panel {
+    position: relative;
+    min-height: 72vh;
+    background: var(--paper);
+    overflow: hidden;
+  }
+  #paper-strip {
+    min-height: 72vh;
+    padding: 64px 8vw 64px 42%;
+    color: var(--ink);
+  }
+  #strip-note {
+    margin: 0 0 12px;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 64px;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  #paper-strip p { margin: 0 0 8px; visibility: hidden; }
+  #cheek-panel.is-open #paper-strip p { visibility: visible; }
+  #cheek-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 92%;
+    border: 0;
+    background: var(--ash);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+    padding: 28px 22px;
+    cursor: pointer;
+    text-align: left;
+    transition: transform 120ms steps(1, end);
+  }
+  #cheek-panel.is-open #cheek-toggle { transform: translateX(-78%); }
+  .tag {
+    background: var(--al);
+    color: var(--ink);
+    padding: 8px 10px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  #builder-mill p, #builder-wire p, .chip p { margin: 0; }
+  #builders {
+    background: var(--al);
+    min-height: 42vh;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 36px 28px 28px;
+  }
+  #builder-mill {
+    background: var(--ink);
+    color: var(--al);
+    width: 68%;
+    min-height: 220px;
+    padding: 22px;
+  }
+  #builder-wire {
+    background: var(--al);
+    color: var(--ink);
+    border: 1.75px solid var(--ink);
+    width: 28%;
+    min-height: 140px;
+    margin-top: 72px;
+    padding: 16px;
+  }
+  #plate-photo {
+    margin: 0;
+    background: var(--al);
+    padding: 0 28px 36px;
+  }
+  #plate-photo svg { width: min(480px, 100%); height: auto; display: block; }
+  #plate-photo figcaption { margin-top: 8px; font-size: 16px; }
+  #heap {
+    position: relative;
+    min-height: 52vh;
+    background: var(--al);
+    overflow: hidden;
+  }
+  #offcut-pile { position: relative; min-height: 52vh; }
+  .heap-svg { width: min(860px, 100%); height: auto; display: block; margin: 0 auto; }
+  .heap-line {
+    position: absolute;
+    left: 8%;
+    bottom: 28px;
+    margin: 0;
+    max-width: 16em;
+    font-size: 18px;
+  }
+  @media (min-width: 800px) {
+    #scene { grid-template-columns: 72px 1fr; }
+    .screw { width: 16px; height: 16px; }
+    #ash-cheek { padding: 36px 0; }
+    .knob-svg { width: min(46vh, 480px); }
+    .comb-svg { width: 150px; height: 280px; }
+    h1 { font-size: 128px; }
+    .sub { font-size: 18px; }
+  }
+  @media (max-width: 700px) {
+    body { font-size: 16px; }
+    .sub { font-size: 16px; }
+    .plate { padding-top: 78px; }
+    .knob-svg { width: min(54vw, 34vh); }
+    #empty-partials {
+      position: static;
+      max-width: 22em;
+      text-align: center;
+      margin-top: 4px;
+    }
+    #jobs { padding: 8px 16px 28px; }
+    #operator-strip { flex-direction: column; align-items: flex-start; }
+    #cheek-panel { min-height: 0; display: flex; flex-direction: column; }
+    #cheek-toggle { order: 1; }
+    #paper-strip { order: 2; }
+    #cheek-toggle {
+      position: relative;
+      width: 100%;
+      min-height: 220px;
+      transform: none;
+    }
+    #cheek-panel.is-open #cheek-toggle { transform: none; }
+    #paper-strip { display: none; min-height: 0; padding: 0; }
+    #cheek-panel.is-open #paper-strip { display: block; padding: 20px 16px 32px; }
+    #strip-note { font-size: 48px; visibility: visible; }
+    #builders { flex-direction: column; }
+    #builder-mill, #builder-wire { width: 100%; margin-top: 0; }
+    #builder-wire { min-height: 100px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #ash-cheek, #cheek-toggle, #proud-screw { transition: none; }
+  }
+</style>
+</head>
+<body>
+<!--
+CONCEPT: The site is a detent knob where each click is an FM ratio and turning it stamps sidebands into the aluminium.
+WORLD: The verb. The plate is the stage and the ratio knob is the control.
+SIGNATURE: Six detents on the ratio knob. Each click restamps the ratio and adds a partial.
+GRADE: north-window ink on brushed aluminium, one ink and one fill
+REMOVED: filing-dust grain overlay, deleted because the detent and the ink comb already show the mill
+-->
+<p id="loading">Filing the edge.</p>
+<section id="scene" data-facts="brushed aluminium, four detented knobs, oiled ash cheek, Gothenburg bench">
+  <div class="cheek-col">
+    <button type="button" id="ash-cheek" data-object="ash-cheek" aria-expanded="false" aria-controls="paper-strip">
+      <span class="screw"></span>
+      <span class="screw"></span>
+      <span class="screw"></span>
+    </button>
+    <button type="button" id="proud-screw" data-tier="small" data-truth="2" data-object="brass-screw" aria-pressed="true" aria-label="Proud screw"></button>
+  </div>
+  <div class="plate">
+    <div class="corner-notes">
+    <button type="button" id="bench-lamp" data-tier="small" data-truth="3" data-live="time" aria-pressed="false">
+      <span id="lamp-label">North window</span>
+      <svg id="lamp-ticks" viewBox="0 0 40 16" width="40" height="16" hidden>
+        <g fill="none" stroke="#1C1F1A" stroke-width="1.75" stroke-linecap="round">
+          <line x1="4" y1="14" x2="8" y2="2"/>
+          <line x1="14" y1="14" x2="16" y2="3"/>
+          <line x1="24" y1="14" x2="22" y2="4"/>
+          <line x1="34" y1="14" x2="30" y2="5"/>
+        </g>
+      </svg>
+    </button>
+    <p id="heard-stamp" data-tier="small" data-truth="1">Heard 1 to 1</p>
+    </div>
+    <p class="fact">Halde FM-1, sample. Gothenburg. Two people.</p>
+    <div class="verb">
+      <div id="ratio-knob" data-object="ratio-knob" data-tier="big" data-truth="1">
+        <svg class="knob-svg" viewBox="0 0 460 460" role="img" aria-label="Ratio knob">
+          <defs>
+            <filter id="ink-wobble" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="4" result="n"/>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+          </defs>
+          <g filter="url(#ink-wobble)" fill="none" stroke="#1C1F1A" stroke-width="1.75" stroke-linecap="round">
+            <circle cx="230" cy="230" r="156" fill="#D5D8D2"/>
+            <circle class="double-ring" data-ring="ratio" cx="230" cy="230" r="170" display="none"/>
+            <circle cx="230" cy="230" r="118"/>
+            <circle cx="230" cy="230" r="14" fill="#D5D8D2"/>
+            <line x1="230" y1="62" x2="230" y2="78"/>
+            <line x1="375" y1="146" x2="362" y2="154"/>
+            <line x1="375" y1="314" x2="362" y2="306"/>
+            <line x1="230" y1="398" x2="230" y2="382"/>
+            <line x1="85" y1="314" x2="98" y2="306"/>
+            <line x1="85" y1="146" x2="98" y2="154"/>
+            <g id="knob-rotor">
+              <line x1="230" y1="230" x2="230" y2="96"/>
+              <circle cx="230" cy="96" r="5" fill="#D5D8D2"/>
+            </g>
+            <text x="230" y="128" text-anchor="middle" fill="#1C1F1A" stroke="none" font-family="Familjen Grotesk, Georgia, serif" font-size="15">1:1</text>
+            <text x="332" y="176" text-anchor="middle" fill="#1C1F1A" stroke="none" font-family="Familjen Grotesk, Georgia, serif" font-size="15">2:1</text>
+            <text x="332" y="292" text-anchor="middle" fill="#1C1F1A" stroke="none" font-family="Familjen Grotesk, Georgia, serif" font-size="15">3:2</text>
+            <text x="230" y="348" text-anchor="middle" fill="#1C1F1A" stroke="none" font-family="Familjen Grotesk, Georgia, serif" font-size="15">3:1</text>
+            <text x="128" y="292" text-anchor="middle" fill="#1C1F1A" stroke="none" font-family="Familjen Grotesk, Georgia, serif" font-size="15">4:1</text>
+            <text x="128" y="176" text-anchor="middle" fill="#1C1F1A" stroke="none" font-family="Familjen Grotesk, Georgia, serif" font-size="15">5:2</text>
+          </g>
+        </svg>
+      </div>
+      <svg id="partial-comb" class="comb-svg" data-object="partial-comb" viewBox="0 0 140 280" role="img" aria-label="Partials">
+        <g fill="none" stroke="#1C1F1A" stroke-width="1.75" stroke-linecap="round">
+          <line x1="8" y1="250" x2="132" y2="250"/>
+          <line data-partial="0" x1="14" y1="70" x2="14" y2="250"/>
+          <line data-partial="1" x1="32" y1="250" x2="32" y2="250"/>
+          <line data-partial="2" x1="50" y1="250" x2="50" y2="250"/>
+          <line data-partial="3" x1="68" y1="250" x2="68" y2="250"/>
+          <line data-partial="4" x1="86" y1="250" x2="86" y2="250"/>
+          <line data-partial="5" x1="104" y1="250" x2="104" y2="250"/>
+          <line data-partial="6" x1="122" y1="250" x2="122" y2="250"/>
+        </g>
+      </svg>
+    </div>
+    <h1 id="headline" aria-live="polite">1 to 1, carrier alone</h1>
+    <p class="sub">Four knobs, one ash cheek, Gothenburg. Sample.</p>
+    <p id="empty-partials" data-tier="small" data-truth="1">No sidebands. The carrier is sitting alone.</p>
+    <div class="tool">
+      <label for="ratio-range">Ratio detent
+        <input id="ratio-range" type="range" min="0" max="5" step="1" value="0">
+      </label>
+      <button type="button" id="step-btn">Step the ratio</button>
+      <p class="hint">Six clicks. No menu.</p>
+    </div>
+    <div class="minis">
+      <button type="button" class="mini-btn" data-job="index">
+        <svg id="index-knob" class="mini" data-object="index-knob" viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="28" fill="#D5D8D2" stroke="#1C1F1A" stroke-width="1.75"/>
+          <circle class="double-ring" data-ring="index" cx="32" cy="32" r="23" fill="none" stroke="#1C1F1A" stroke-width="1.75" display="none"/>
+          <line x1="32" y1="32" x2="32" y2="12" stroke="#1C1F1A" stroke-width="1.75" stroke-linecap="round"/>
+          <line x1="18" y1="20" x2="46" y2="24" stroke="#1C1F1A" stroke-width="1.75" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button type="button" class="mini-btn" data-job="decay">
+        <svg id="decay-knob" class="mini" data-object="decay-knob" viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="28" fill="#D5D8D2" stroke="#1C1F1A" stroke-width="1.75"/>
+          <circle class="double-ring" data-ring="decay" cx="32" cy="32" r="23" fill="none" stroke="#1C1F1A" stroke-width="1.75" display="none"/>
+          <line x1="32" y1="32" x2="32" y2="20" stroke="#1C1F1A" stroke-width="1.75" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button type="button" class="mini-btn" data-job="level">
+        <svg id="level-knob" class="mini" data-object="level-knob" viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="28" fill="#D5D8D2" stroke="#1C1F1A" stroke-width="1.75"/>
+          <circle class="double-ring" data-ring="level" cx="32" cy="32" r="23" fill="none" stroke="#1C1F1A" stroke-width="1.75" display="none"/>
+          <line x1="32" y1="32" x2="46" y2="18" stroke="#1C1F1A" stroke-width="1.75" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+<section id="jobs" aria-label="Knob jobs">
+  <div id="operator-strip" data-tier="medium" data-truth="1" data-object="operator-strip">
+    <p id="job-line">Ratio is the integer between carrier and modulator. The click is the patch.</p>
+    <div class="job-picks">
+      <button type="button" data-job="ratio" aria-pressed="true">Ratio</button>
+      <button type="button" data-job="index" aria-pressed="false">Index</button>
+      <button type="button" data-job="decay" aria-pressed="false">Decay</button>
+      <button type="button" data-job="level" aria-pressed="false">Level</button>
+    </div>
+  </div>
+</section>
+<section id="cheek-panel" data-tier="medium" data-truth="2" data-object="cheek-panel">
+  <div id="paper-strip" data-object="paper-strip">
+    <p id="strip-note">Heard 3 to 1. Left it.</p>
+    <p>Two people wrote this under the ash. Sample. Ask the bench.</p>
+  </div>
+  <button type="button" id="cheek-toggle" aria-expanded="false" aria-controls="paper-strip">
+    <span class="screw"></span>
+    <span class="tag">Ash cheek</span>
+    <span class="screw"></span>
+    <span class="tag" id="cheek-label">Tap to see the strip</span>
+    <span class="screw"></span>
+    <span class="screw proud"></span>
+  </button>
+</section>
+<section id="builders" aria-label="Two builders">
+  <div id="builder-mill" data-object="builder-mill">
+    <p>One mills the plate.</p>
+    <p id="mill-day">Today the mill runs.</p>
+  </div>
+  <div id="builder-wire" data-object="builder-wire">
+    <p>One wires the operators.</p>
+    <p>Sample. Two people.</p>
+  </div>
+</section>
+<figure id="plate-photo" data-tier="small" data-truth="3" data-object="placeholder-photo">
+  <svg viewBox="0 0 320 160" role="img" aria-label="Placeholder for the milled plate">
+    <rect x="4" y="4" width="312" height="152" fill="none" stroke="#1C1F1A" stroke-width="1.75"/>
+    <line x1="4" y1="4" x2="316" y2="156" stroke="#1C1F1A" stroke-width="1.75" stroke-linecap="round"/>
+    <line x1="316" y1="4" x2="4" y2="156" stroke="#1C1F1A" stroke-width="1.75" stroke-linecap="round"/>
+  </svg>
+  <figcaption>Placeholder. This plate was never milled.</figcaption>
+</figure>
+<footer id="heap">
+  <div id="offcut-pile" data-object="offcut" data-tier="small" data-truth="3">
+    <svg class="heap-svg" viewBox="0 0 800 380" role="img" aria-label="Pile of aluminium chips">
+      <polygon points="70,230 250,200 290,280 40,300" fill="#D5D8D2" stroke="#1C1F1A" stroke-width="1.75" stroke-linejoin="round"/>
+      <polygon points="430,70 560,48 590,130 410,150" fill="#D5D8D2" stroke="#1C1F1A" stroke-width="1.75" stroke-linejoin="round"/>
+      <polygon points="180,250 640,220 700,360 140,380" fill="#D5D8D2" stroke="#1C1F1A" stroke-width="1.75" stroke-linejoin="round"/>
+      <text x="250" y="330" fill="#1C1F1A" font-family="Big Shoulders Display, Impact, sans-serif" font-size="72">HALDE</text>
+    </svg>
+    <p class="heap-line">The name is the pile of chips beside the mill.</p>
+  </div>
+  <div class="sound-row">
+    <button type="button" id="sound-toggle" aria-pressed="false">Sound off</button>
+    <p>Sound stays off until you ask.</p>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+  var LINES = [
+    "1 to 1, carrier alone",
+    "2 to 1, a wooden bell",
+    "3 to 2, a fifth buzz",
+    "3 to 1, nasal metal",
+    "4 to 1, a tight clang",
+    "5 to 2, a bright heap"
+  ];
+  var PATTERNS = [
+    [180],
+    [90, 180, 70],
+    [56, 110, 180, 100, 48],
+    [40, 84, 130, 186, 120, 72, 36],
+    [34, 68, 108, 150, 186, 132, 76],
+    [28, 58, 96, 140, 180, 154, 96]
+  ];
+  var detent = 0;
+  var target = 0;
+  var timer = null;
+  var taken = false;
+  var booted = false;
+  var soundOn = false;
+  var audioCtx = null;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var rotor = document.getElementById("knob-rotor");
+  var headline = document.getElementById("headline");
+  var range = document.getElementById("ratio-range");
+  var partials = document.querySelectorAll("#partial-comb line[data-partial]");
+  var loading = document.getElementById("loading");
+  if (loading) loading.remove();
+
+  function paint(step) {
+    var prev = detent;
+    detent = step;
+    rotor.setAttribute("transform", "rotate(" + (step * 60) + " 230 230)");
+    headline.textContent = LINES[step];
+    range.value = String(step);
+    range.setAttribute("aria-valuetext", LINES[step]);
+    document.title = "Halde FM-1, " + LINES[step] + ", sample";
+    var shortRatio = ["1 to 1", "2 to 1", "3 to 2", "3 to 1", "4 to 1", "5 to 2"][step];
+    var heard = document.getElementById("heard-stamp");
+    if (heard) heard.textContent = "Heard " + shortRatio;
+    var empty = document.getElementById("empty-partials");
+    var pattern = PATTERNS[step];
+    if (empty) {
+      empty.textContent = step === 0
+        ? "No sidebands. The carrier is sitting alone."
+        : (pattern.length - 1) + " sidebands on the carrier.";
+    }
+    if (booted && step !== prev) blip(step);
+    for (var i = 0; i < partials.length; i++) {
+      if (i < pattern.length) {
+        partials[i].setAttribute("y1", String(250 - pattern[i]));
+        partials[i].setAttribute("opacity", "1");
+      } else {
+        partials[i].setAttribute("y1", "250");
+        partials[i].setAttribute("opacity", "0");
+      }
+    }
+  }
+
+  function queue(step) {
+    target = Math.max(0, Math.min(5, step));
+    if (reduced) {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+      paint(target);
+      return;
+    }
+    if (timer) return;
+    function tick() {
+      if (detent === target) {
+        timer = null;
+        return;
+      }
+      paint(detent + (target > detent ? 1 : -1));
+      timer = setTimeout(tick, 120);
+    }
+    tick();
+  }
+
+  range.addEventListener("input", function () {
+    taken = true;
+    queue(Number(range.value));
+  });
+  document.getElementById("step-btn").addEventListener("click", function () {
+    taken = true;
+    queue((target + 1) % 6);
+  });
+
+  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (finePointer) {
+    var dragging = false;
+    var knobEl = document.getElementById("ratio-knob");
+    knobEl.style.cursor = "grab";
+    knobEl.addEventListener("pointerdown", function (event) {
+      if (event.button !== 0) return;
+      dragging = true;
+      taken = true;
+      knobEl.setPointerCapture(event.pointerId);
+      knobEl.style.cursor = "grabbing";
+      queue(stepFromPointer(event));
+    });
+    knobEl.addEventListener("pointermove", function (event) {
+      if (!dragging) return;
+      queue(stepFromPointer(event));
+    });
+    knobEl.addEventListener("pointerup", function () {
+      dragging = false;
+      knobEl.style.cursor = "grab";
+    });
+  }
+
+  function stepFromPointer(event) {
+    var svg = document.querySelector(".knob-svg");
+    var rect = svg.getBoundingClientRect();
+    var cx = rect.left + rect.width * (230 / 460);
+    var cy = rect.top + rect.height * (230 / 460);
+    var ang = Math.atan2(event.clientX - cx, cy - event.clientY);
+    if (ang < 0) ang += Math.PI * 2;
+    return Math.round(ang / (Math.PI * 2) * 6) % 6;
+  }
+
+  if (window.gsap && window.ScrollTrigger && !reduced) {
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.create({
+      trigger: "#scene",
+      start: "top top",
+      end: "30% top",
+      onUpdate: function (self) {
+        if (taken) return;
+        queue(Math.round(self.progress * 5));
+      }
+    });
+  }
+
+  var JOBS = {
+    ratio: "Ratio is the integer between carrier and modulator. The click is the patch.",
+    index: "Index is how hard the modulator pushes. More index, more sidebands.",
+    decay: "Decay is how fast the bell dies. Short is a tick. Long is a hang.",
+    level: "Level is how loud it leaves the jack."
+  };
+  var jobLine = document.getElementById("job-line");
+  function showJob(name) {
+    if (!JOBS[name]) return;
+    jobLine.textContent = JOBS[name];
+    var picks = document.querySelectorAll("[data-job]");
+    for (var i = 0; i < picks.length; i++) {
+      picks[i].setAttribute("aria-pressed", picks[i].getAttribute("data-job") === name ? "true" : "false");
+    }
+    var rings = document.querySelectorAll(".double-ring");
+    for (var r = 0; r < rings.length; r++) {
+      rings[r].style.display = rings[r].getAttribute("data-ring") === name ? "inline" : "none";
+    }
+  }
+  var jobButtons = document.querySelectorAll("[data-job]");
+  for (var j = 0; j < jobButtons.length; j++) {
+    jobButtons[j].addEventListener("click", function () {
+      showJob(this.getAttribute("data-job"));
+    });
+  }
+  showJob("ratio");
+
+  function toggleCheek() {
+    var panel = document.getElementById("cheek-panel");
+    var open = panel.classList.toggle("is-open");
+    var state = open ? "true" : "false";
+    document.getElementById("ash-cheek").setAttribute("aria-expanded", state);
+    document.getElementById("cheek-toggle").setAttribute("aria-expanded", state);
+    document.getElementById("cheek-label").textContent = open ? "Tap to shut the cheek" : "Tap to see the strip";
+  }
+  document.getElementById("ash-cheek").addEventListener("click", toggleCheek);
+  document.getElementById("cheek-toggle").addEventListener("click", toggleCheek);
+
+  var lampOn = new Date().getHours() >= 15;
+  function paintLamp() {
+    document.getElementById("lamp-label").textContent = lampOn ? "Bench lamp" : "North window";
+    var ticks = document.getElementById("lamp-ticks");
+    ticks.hidden = !lampOn;
+    ticks.style.display = lampOn ? "block" : "none";
+    document.getElementById("bench-lamp").setAttribute("aria-pressed", lampOn ? "true" : "false");
+  }
+  document.getElementById("bench-lamp").addEventListener("click", function () {
+    lampOn = !lampOn;
+    paintLamp();
+  });
+  paintLamp();
+
+  var day = new Date().getDay();
+  var millLine = "The bench is quiet.";
+  if (day >= 1 && day <= 3) millLine = "Today the mill runs.";
+  if (day >= 4 && day <= 5) millLine = "Today the iron heats.";
+  document.getElementById("mill-day").textContent = millLine;
+
+  var proud = document.getElementById("proud-screw");
+  proud.addEventListener("click", function (event) {
+    event.stopPropagation();
+    var flush = proud.classList.toggle("flush");
+    proud.setAttribute("aria-pressed", flush ? "false" : "true");
+  });
+
+  function blip(step) {
+    if (!soundOn) return;
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    if (!audioCtx) audioCtx = new Ctx();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    var ratios = [1, 2, 1.5, 3, 4, 2.5];
+    var t = audioCtx.currentTime;
+    var carrier = audioCtx.createOscillator();
+    var mod = audioCtx.createOscillator();
+    var modGain = audioCtx.createGain();
+    var out = audioCtx.createGain();
+    mod.frequency.value = 220 * ratios[step];
+    carrier.frequency.value = 220;
+    modGain.gain.value = 30 + step * 24;
+    mod.connect(modGain);
+    modGain.connect(carrier.frequency);
+    carrier.connect(out);
+    out.connect(audioCtx.destination);
+    out.gain.setValueAtTime(0.0001, t);
+    out.gain.exponentialRampToValueAtTime(0.05, t + 0.02);
+    out.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+    mod.start(t);
+    carrier.start(t);
+    mod.stop(t + 0.18);
+    carrier.stop(t + 0.18);
+  }
+  var soundBtn = document.getElementById("sound-toggle");
+  soundBtn.addEventListener("click", function () {
+    soundOn = !soundOn;
+    soundBtn.setAttribute("aria-pressed", soundOn ? "true" : "false");
+    soundBtn.textContent = soundOn ? "Sound on" : "Sound off";
+    if (soundOn) blip(detent);
+  });
+
+  paint(0);
+  booted = true;
+</script>
+</body>
+</html>

@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halde FM-1 sample</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&family=Azeret+Mono:wght@500&family=Schibsted+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --alu: #E4E2D8;
+    --oak: #BE8A50;
+    --bench: #5C3E2A;
+    --ink: #1B1612;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: auto; }
+  body {
+    margin: 0;
+    background: var(--bench);
+    color: var(--ink);
+    font-family: "Schibsted Grotesk", sans-serif;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  ::selection { background: var(--ink); color: var(--alu); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  #scene {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 28px 20px;
+  }
+  .sheet {
+    position: relative;
+    width: min(960px, 100%);
+  }
+  .sheet-shadow {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 100%;
+    height: 100%;
+    background: var(--ink);
+    z-index: 0;
+  }
+  .panel {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 92px;
+    background: var(--alu);
+    border: 3px solid var(--ink);
+    min-height: 70vh;
+  }
+  .face-body {
+    padding: 18px 16px 14px 20px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .meta-tools { display: flex; gap: 8px; flex: 0 0 auto; }
+  #lamp-note {
+    margin: 0;
+    font-family: "Azeret Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    line-height: 1.35;
+    max-width: 34em;
+    padding-top: 10px;
+  }
+  #lamp-flap, #sound, #step-index, .stub, .cheek-hit, .bench-link {
+    font-family: "Azeret Mono", monospace;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  #lamp-flap {
+    min-width: 52px;
+    min-height: 44px;
+    border: 3px solid var(--ink);
+    background: var(--oak);
+    color: var(--ink);
+    font-size: 11px;
+    padding: 0 8px;
+  }
+  #lamp-flap[data-mode="lamp"] { background: var(--alu); }
+  #lamp-flap[data-mode="early"] { background: var(--ink); color: var(--alu); }
+  #sound {
+    min-height: 44px;
+    padding: 0 10px;
+    background: transparent;
+    color: var(--ink);
+    border: 3px solid var(--ink);
+    font-size: 12px;
+  }
+  #sound[aria-pressed="true"] { background: var(--ink); color: var(--alu); }
+  .brand {
+    margin: 8px 0 0;
+    font-family: "Azeret Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 2px 0 0;
+    font-family: "Antonio", sans-serif;
+    font-weight: 700;
+    font-size: clamp(64px, 5.4vw, 80px);
+    line-height: 0.84;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  .sub {
+    margin: 8px 0 0;
+    max-width: 36em;
+    font-size: 18px;
+  }
+  .operators {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: 1fr 176px;
+    gap: 8px 12px;
+    align-items: center;
+    position: relative;
+    flex: 1;
+  }
+  .ops-stage { position: relative; min-width: 0; }
+  .ops-svg { width: 100%; height: auto; display: block; }
+  #knob-index { position: relative; }
+  #oxide {
+    position: absolute;
+    width: 26px;
+    height: 36px;
+    left: -16px;
+    bottom: 18px;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  [data-detent] { fill: var(--alu); }
+  [data-detent].on { fill: var(--ink); }
+  .readout { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+  #voice-state {
+    margin: 0;
+    font-family: "Antonio", sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+  }
+  #step-index {
+    min-height: 48px;
+    border: 0;
+    background: var(--ink);
+    color: var(--alu);
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+  #empty-state {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-family: "Azeret Mono", monospace;
+    font-size: 13px;
+  }
+  #knob-bay {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 14px;
+    align-items: flex-end;
+  }
+  .knob { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+  .knob-face { position: relative; width: 68px; height: 68px; display: block; }
+  #knob-index .knob-face { width: 96px; height: 96px; }
+  .knob-face svg { width: 100%; height: 100%; display: block; }
+  .knob-face input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .knob-name {
+    font-family: "Azeret Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  #slip {
+    margin-top: 14px;
+    border: 3px solid var(--ink);
+    padding: 8px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  #slip p { margin: 0; font-size: 14px; line-height: 1.35; }
+  #photo-stamp { font-family: "Azeret Mono", monospace; font-size: 12px; letter-spacing: 0.03em; }
+  .bench-link {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  #cheek {
+    background: var(--oak);
+    border-left: 3px solid var(--ink);
+    position: relative;
+    min-height: 100%;
+  }
+  .cheek-hit {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .grain { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .cheek-word, .lift-word {
+    position: relative;
+    writing-mode: vertical-rl;
+    font-family: "Antonio", sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+  .cheek-word { font-size: 20px; }
+  .lift-word {
+    display: none;
+    font-size: 22px;
+    background: var(--ink);
+    color: var(--alu);
+    padding: 10px 4px;
+  }
+  #cheek.is-lift .lift-word { display: block; }
+  #patches {
+    width: min(960px, calc(100% - 32px));
+    margin: 4px auto 0;
+    position: relative;
+  }
+  .punch-label {
+    margin: 0 0 8px;
+    font-family: "Azeret Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--alu);
+  }
+  .stub-bed { position: relative; height: 220px; }
+  .stub {
+    position: absolute;
+    border: 3px solid var(--ink);
+    text-align: left;
+    color: var(--ink);
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .stub-bell { width: 250px; height: 156px; left: 1%; top: 28px; background: var(--oak); transform: rotate(-8deg); }
+  .stub-clang { width: 340px; height: 176px; left: 28%; top: 6px; background: var(--alu); transform: rotate(2deg); z-index: 2; }
+  .stub-knock { width: 228px; height: 148px; right: -8px; top: 46px; background: var(--oak); transform: rotate(11deg); }
+  .hole {
+    width: 18px;
+    height: 18px;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    background: transparent;
+    display: block;
+  }
+  .stub.is-on .hole { background: var(--ink); }
+  .stub-name {
+    font-family: "Antonio", sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+  .stub-spec { font-family: "Azeret Mono", monospace; font-size: 12px; letter-spacing: 0.04em; }
+  .joint-wrap {
+    position: relative;
+    width: min(960px, calc(100% - 32px));
+    margin: 6px auto 28px;
+  }
+  #joint {
+    position: relative;
+    z-index: 1;
+    background: var(--alu);
+    border: 3px solid var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+  }
+  #joint p { margin: 0; font-size: 16px; }
+  .joint-screw { width: 28px; height: 28px; flex: 0 0 auto; }
+  @media (hover: hover) and (pointer: fine) {
+    .cheek-hit:hover .grain path { stroke-width: 4px; }
+    .stub:hover { z-index: 3; }
+  }
+  @media (pointer: coarse) {
+    .knob-face { width: 64px; height: 64px; }
+    #knob-index .knob-face { width: 80px; height: 80px; }
+  }
+  @media (max-width: 700px) {
+    body { font-size: 16px; }
+    #scene { min-height: 70vh; align-items: flex-start; padding: 14px 12px 12px; }
+    .panel { grid-template-columns: 1fr 56px; min-height: 0; }
+    .face-body { padding: 12px 10px 12px 12px; }
+    .meta { flex-wrap: wrap; }
+    h1 { font-size: 64px; }
+    .sub { font-size: 16px; }
+    .operators { grid-template-columns: 1fr; }
+    .readout { flex-direction: row; align-items: center; justify-content: space-between; }
+    #voice-state { font-size: 36px; }
+    #knob-bay { gap: 4px; }
+    .knob-face { width: 56px; height: 56px; }
+    #knob-index .knob-face { width: 72px; height: 72px; }
+    .stub-bed { height: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
+    .stub { position: relative; left: auto; right: auto; top: auto; height: auto; }
+    .stub-bell { width: 84%; transform: rotate(-4deg); margin-bottom: -12px; }
+    .stub-clang { width: 94%; margin-left: 6%; transform: rotate(2deg); margin-bottom: -12px; }
+    .stub-knock { width: 72%; margin-left: 18%; transform: rotate(6deg); }
+    #joint { align-items: flex-start; }
+    #joint p { font-size: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #mod-group { transition: none; }
+  }
+</style>
+</head>
+<body>
+<!--
+CONCEPT: The site is the FM-1 panel you are holding, where four knobs are the only chapters and turning index detents a wooden modulator into an aluminium carrier.
+WORLD: Operable document
+SIGNATURE: Index steps the wood modulator disc into the aluminium carrier across six detents.
+GRADE: tungsten cut-paper, aluminium and oak sheets, one ink, shadow offset 6px
+REMOVED: continuous modulator orbit
+-->
+<main id="scene" data-facts="aluminium face, four knobs, wooden cheek, Gothenburg bench">
+  <div class="sheet">
+    <div class="sheet-shadow" aria-hidden="true"></div>
+    <article id="panel" class="panel" data-object="face">
+      <div class="face-body">
+        <div class="meta">
+          <p id="lamp-note" data-tier="small" data-truth="3" data-live="time">The aluminium is still cold.</p>
+          <div class="meta-tools">
+            <button type="button" id="lamp-flap" data-tier="medium" data-truth="3" data-mode="harbor">Lamp</button>
+            <button type="button" id="sound" aria-pressed="false">Sound off</button>
+          </div>
+        </div>
+        <p class="brand">Halde FM-1, sample</p>
+        <h1>Four knobs. No screen.</h1>
+        <p class="sub">Halde FM-1, sample. An aluminium FM voice with one wooden cheek, made by two people in Gothenburg.</p>
+        <div id="operators" class="operators" data-object="operators" data-tier="big" data-truth="1">
+          <div class="ops-stage">
+            <svg class="ops-svg" viewBox="0 0 560 262" role="img" aria-label="Wood modulator disc and aluminium carrier disc">
+              <circle cx="366" cy="141" r="86" fill="#1B1612"/>
+              <circle cx="360" cy="135" r="86" fill="#E4E2D8" stroke="#1B1612" stroke-width="3"/>
+              <circle cx="360" cy="135" r="6" fill="#1B1612"/>
+              <text x="360" y="168" text-anchor="middle" font-family="Azeret Mono, monospace" font-size="13" fill="#1B1612">CAR</text>
+              <g id="mod-group">
+                <circle cx="136" cy="141" r="68" fill="#1B1612"/>
+                <circle cx="130" cy="135" r="68" fill="#BE8A50" stroke="#1B1612" stroke-width="3"/>
+                <circle cx="130" cy="135" r="5" fill="#1B1612"/>
+                <g id="spokes">
+                  <line data-spoke="0" x1="130" y1="135" x2="130.0" y2="89.0" stroke="#1B1612" stroke-width="3"/>
+                  <line data-spoke="1" x1="130" y1="135" x2="166.0" y2="106.3" stroke="#1B1612" stroke-width="3"/>
+                  <line data-spoke="2" x1="130" y1="135" x2="174.8" y2="145.2" stroke="#1B1612" stroke-width="3"/>
+                  <line data-spoke="3" x1="130" y1="135" x2="150.0" y2="176.4" stroke="#1B1612" stroke-width="3"/>
+                  <line data-spoke="4" x1="130" y1="135" x2="110.0" y2="176.4" stroke="#1B1612" stroke-width="3"/>
+                  <line data-spoke="5" x1="130" y1="135" x2="85.2" y2="145.2" stroke="#1B1612" stroke-width="3"/>
+                  <line data-spoke="6" x1="130" y1="135" x2="94.0" y2="106.3" stroke="#1B1612" stroke-width="3"/>
+                </g>
+                <path id="feedback-arc" d="M130 62 A 62 62 0 1 1 72 120" fill="none" stroke="#1B1612" stroke-width="3" stroke-linecap="butt"/>
+                <text x="130" y="168" text-anchor="middle" font-family="Azeret Mono, monospace" font-size="13" fill="#1B1612">MOD</text>
+              </g>
+              <line id="bridge" x1="198" y1="135" x2="274" y2="135" stroke="#1B1612" stroke-width="4"/>
+              <g id="detent-marks">
+                <rect data-detent="0" x="198" y="246" width="16" height="8" stroke="#1B1612" stroke-width="2"/>
+                <rect data-detent="1" x="218" y="246" width="16" height="8" stroke="#1B1612" stroke-width="2"/>
+                <rect data-detent="2" x="238" y="246" width="16" height="8" stroke="#1B1612" stroke-width="2"/>
+                <rect data-detent="3" x="258" y="246" width="16" height="8" stroke="#1B1612" stroke-width="2"/>
+                <rect data-detent="4" x="278" y="246" width="16" height="8" stroke="#1B1612" stroke-width="2"/>
+                <rect data-detent="5" x="298" y="246" width="16" height="8" stroke="#1B1612" stroke-width="2"/>
+                <rect data-detent="6" x="318" y="246" width="16" height="8" stroke="#1B1612" stroke-width="2"/>
+              </g>
+              <g id="decay-ticks">
+                <rect data-tick="0" x="468" y="146" width="10" height="42" stroke="#1B1612" stroke-width="2"/>
+                <rect data-tick="1" x="482" y="154" width="10" height="34" stroke="#1B1612" stroke-width="2"/>
+                <rect data-tick="2" x="496" y="162" width="10" height="26" stroke="#1B1612" stroke-width="2"/>
+                <rect data-tick="3" x="510" y="170" width="10" height="18" stroke="#1B1612" stroke-width="2"/>
+                <rect data-tick="4" x="524" y="176" width="10" height="12" stroke="#1B1612" stroke-width="2"/>
+                <rect data-tick="5" x="538" y="180" width="10" height="8" stroke="#1B1612" stroke-width="2"/>
+              </g>
+            </svg>
+          </div>
+          <div class="readout">
+            <p id="voice-state" data-tier="small" data-truth="1">BELL</p>
+            <button type="button" id="step-index">Step the index</button>
+          </div>
+          <p id="empty-state" data-tier="small" data-truth="1" hidden>All four at zero: a sine with nothing to modulate.</p>
+        </div>
+        <div id="knob-bay" data-tier="medium" data-truth="1">
+          <label class="knob" id="knob-ratio" data-object="knob-ratio">
+            <span class="knob-face">
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                <circle cx="46" cy="46" r="28" fill="#1B1612"/>
+                <circle cx="40" cy="40" r="28" fill="#E4E2D8" stroke="#1B1612" stroke-width="3"/>
+                <g id="needle-ratio"><polygon points="40,14 43.5,40 36.5,40" fill="#1B1612"/></g>
+              </svg>
+              <input type="range" id="in-ratio" min="0" max="6" step="1" value="2" aria-label="Ratio">
+            </span>
+            <span class="knob-name">Ratio</span>
+          </label>
+          <label class="knob" id="knob-index" data-object="knob-index">
+            <span class="knob-face">
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                <circle cx="46" cy="46" r="30" fill="#1B1612"/>
+                <circle cx="40" cy="40" r="30" fill="#BE8A50" stroke="#1B1612" stroke-width="3"/>
+                <circle cx="40" cy="40" r="18" fill="none" stroke="#1B1612" stroke-width="2"/>
+                <g id="needle-index"><polygon points="40,12 44,40 36,40" fill="#1B1612"/></g>
+              </svg>
+              <input type="range" id="in-index" min="0" max="6" step="1" value="0" aria-label="Index">
+            </span>
+            <span class="knob-name">Index</span>
+            <svg id="oxide" data-tier="small" data-truth="2" viewBox="0 0 40 70" aria-hidden="true">
+              <path d="M8 6 C 12 24, 4 42, 10 64" fill="none" stroke="#1B1612" stroke-width="2"/>
+              <path d="M16 4 C 20 22, 10 46, 18 66" fill="none" stroke="#1B1612" stroke-width="2"/>
+              <path d="M24 8 C 28 26, 18 48, 26 64" fill="none" stroke="#1B1612" stroke-width="2"/>
+              <path d="M32 14 C 34 30, 26 50, 32 62" fill="none" stroke="#1B1612" stroke-width="2"/>
+            </svg>
+          </label>
+          <label class="knob" id="knob-feedback" data-object="knob-feedback">
+            <span class="knob-face">
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                <circle cx="46" cy="46" r="26" fill="#1B1612"/>
+                <circle cx="40" cy="40" r="26" fill="#E4E2D8" stroke="#1B1612" stroke-width="3"/>
+                <path d="M40 28 A 12 12 0 1 1 30 40" fill="none" stroke="#1B1612" stroke-width="2"/>
+                <g id="needle-feedback"><polygon points="40,16 43,40 37,40" fill="#1B1612"/></g>
+              </svg>
+              <input type="range" id="in-feed" min="0" max="6" step="1" value="1" aria-label="Feedback">
+            </span>
+            <span class="knob-name">Feed</span>
+          </label>
+          <label class="knob" id="knob-decay" data-object="knob-decay">
+            <span class="knob-face">
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                <circle cx="46" cy="46" r="26" fill="#1B1612"/>
+                <circle cx="40" cy="40" r="26" fill="#E4E2D8" stroke="#1B1612" stroke-width="3"/>
+                <g id="needle-decay"><polygon points="40,16 43,40 37,40" fill="#1B1612"/></g>
+              </svg>
+              <input type="range" id="in-decay" min="0" max="6" step="1" value="4" aria-label="Decay">
+            </span>
+            <span class="knob-name">Decay</span>
+          </label>
+        </div>
+        <div id="slip" data-object="slip">
+          <p>Gothenburg bench. Sample price 4 800 kr.</p>
+          <p id="photo-stamp" data-tier="small" data-truth="3">Bench photo: placeholder. The panel stands in.</p>
+          <a class="bench-link" href="#joint">Write the bench</a>
+        </div>
+        <noscript><p>The aluminium is still cold. Knobs want a tap. The face still reads. Halde is a sample.</p></noscript>
+      </div>
+      <aside id="cheek" data-object="cheek" data-tier="small" data-truth="2">
+        <button type="button" class="cheek-hit" aria-pressed="false" aria-label="Lift by the wood">
+          <svg class="grain" viewBox="0 0 80 640" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M18 0 C 28 80, 8 140, 20 220 C 32 300, 6 400, 18 500 C 26 560, 10 600, 18 640" fill="none" stroke="#1B1612" stroke-width="2"/>
+            <path d="M36 0 C 46 90, 24 170, 38 260 C 50 350, 22 450, 36 560 C 42 600, 30 620, 36 640" fill="none" stroke="#1B1612" stroke-width="2"/>
+            <path d="M54 0 C 62 70, 44 160, 56 250 C 66 360, 42 470, 54 580 C 60 610, 48 630, 54 640" fill="none" stroke="#1B1612" stroke-width="2"/>
+          </svg>
+          <span class="cheek-word">CHEEK</span>
+          <span class="lift-word">LIFT</span>
+        </button>
+      </aside>
+    </article>
+  </div>
+</main>
+<section id="patches" data-tier="medium" data-truth="1" aria-label="Sample punches">
+  <p class="punch-label">Sample punches</p>
+  <div class="stub-bed">
+    <button type="button" class="stub stub-bell" data-patch="bell">
+      <span class="hole" aria-hidden="true"></span>
+      <span class="stub-name">Bell</span>
+      <span class="stub-spec">R 3 / I 1 / F 0 / D 5</span>
+    </button>
+    <button type="button" class="stub stub-clang" data-patch="clang">
+      <span class="hole" aria-hidden="true"></span>
+      <span class="stub-name">Clang</span>
+      <span class="stub-spec">R 5 / I 6 / F 2 / D 2</span>
+    </button>
+    <button type="button" class="stub stub-knock" data-patch="knock">
+      <span class="hole" aria-hidden="true"></span>
+      <span class="stub-name">Knock</span>
+      <span class="stub-spec">R 2 / I 4 / F 6 / D 1</span>
+    </button>
+  </div>
+</section>
+<div class="joint-wrap">
+  <div class="sheet-shadow" aria-hidden="true"></div>
+  <footer id="joint" data-object="joint" data-tier="small" data-truth="3">
+    <svg class="joint-screw" viewBox="0 0 28 28" aria-hidden="true">
+      <circle cx="18" cy="18" r="8" fill="#1B1612"/>
+      <circle cx="12" cy="12" r="8" fill="#E4E2D8" stroke="#1B1612" stroke-width="2"/>
+      <line x1="5" y1="12" x2="19" y2="12" stroke="#1B1612" stroke-width="2"/>
+    </svg>
+    <p>Two people, one wooden cheek, Gothenburg. The face stays cold. Halde is a sample.</p>
+    <svg class="joint-screw" viewBox="0 0 28 28" aria-hidden="true">
+      <circle cx="18" cy="18" r="8" fill="#1B1612"/>
+      <circle cx="12" cy="12" r="8" fill="#E4E2D8" stroke="#1B1612" stroke-width="2"/>
+      <line x1="7" y1="7" x2="17" y2="17" stroke="#1B1612" stroke-width="2"/>
+    </svg>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+(function () {
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var state = { ratio: 2, index: 0, feed: 1, decay: 4, sound: false, held: false, lamp: "harbor", modX: 0 };
+  var needles = { ratio: -140, index: -140, feed: -140, decay: -140 };
+  var audioCtx = null;
+  var keys = ["ratio", "index", "feed", "decay"];
+  var inputs = {
+    ratio: document.getElementById("in-ratio"),
+    index: document.getElementById("in-index"),
+    feed: document.getElementById("in-feed"),
+    decay: document.getElementById("in-decay")
+  };
+  var patches = {
+    bell: { ratio: 3, index: 1, feed: 0, decay: 5 },
+    clang: { ratio: 5, index: 6, feed: 2, decay: 2 },
+    knock: { ratio: 2, index: 4, feed: 6, decay: 1 }
+  };
+
+  function clock() {
+    var fmt = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Stockholm",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    });
+    var bag = {};
+    fmt.formatToParts(new Date()).forEach(function (p) { bag[p.type] = p.value; });
+    return { hour: Number(bag.hour), text: bag.hour + ":" + bag.minute };
+  }
+
+  function modeFromHour(h) {
+    if (h >= 8 && h < 16) return "harbor";
+    if (h >= 16 && h < 23) return "lamp";
+    return "early";
+  }
+
+  function paintLamp() {
+    var now = clock();
+    var lines = {
+      harbor: now.text + " Stockholm. Harbor light.",
+      lamp: now.text + " Stockholm. Lamp on.",
+      early: now.text + " Stockholm. Early bench."
+    };
+    document.getElementById("lamp-note").textContent = lines[state.lamp];
+    document.getElementById("lamp-flap").setAttribute("data-mode", state.lamp);
+  }
+
+  function voiceWord() {
+    var allZero = state.ratio === 0 && state.index === 0 && state.feed === 0 && state.decay === 0;
+    if (allZero) return "SINE";
+    if (state.index <= 1) return "BELL";
+    if (state.index <= 4) return "METAL";
+    return "CLANG";
+  }
+
+  function applyMod(v) {
+    var g = document.getElementById("mod-group");
+    g.setAttribute("transform", "translate(" + v.toFixed(2) + " 0)");
+    var x1 = 198 + v;
+    var bridge = document.getElementById("bridge");
+    if (x1 >= 272) bridge.setAttribute("visibility", "hidden");
+    else {
+      bridge.setAttribute("visibility", "visible");
+      bridge.setAttribute("x1", x1.toFixed(1));
+      bridge.setAttribute("x2", "274");
+    }
+  }
+
+  function placeMod(animate) {
+    var x = (state.index * 150) / 6;
+    if (animate && !reduced && window.gsap) {
+      var proxy = { v: state.modX };
+      gsap.to(proxy, {
+        v: x,
+        duration: 0.12,
+        ease: "none",
+        overwrite: true,
+        onUpdate: function () { applyMod(proxy.v); }
+      });
+    } else {
+      if (window.gsap) gsap.killTweensOf(document.getElementById("mod-group"));
+      applyMod(x);
+    }
+    state.modX = x;
+  }
+
+  function setNeedle(name, animate) {
+    var angle = -140 + (state[name] / 6) * 280;
+    var g = document.getElementById("needle-" + name);
+    var from = needles[name];
+    needles[name] = angle;
+    function paint(a) { g.setAttribute("transform", "rotate(" + a.toFixed(2) + " 40 40)"); }
+    if (animate && !reduced && window.gsap) {
+      var proxy = { a: from };
+      gsap.to(proxy, {
+        a: angle,
+        duration: 0.12,
+        ease: "none",
+        overwrite: true,
+        onUpdate: function () { paint(proxy.a); }
+      });
+    } else {
+      paint(angle);
+    }
+  }
+
+  function render(animate) {
+    keys.forEach(function (k) { inputs[k].value = String(state[k]); });
+    placeMod(animate);
+    keys.forEach(function (k) { setNeedle(k, animate); });
+    document.querySelectorAll("[data-spoke]").forEach(function (line) {
+      var n = Number(line.getAttribute("data-spoke"));
+      line.setAttribute("visibility", n <= state.ratio ? "visible" : "hidden");
+    });
+    var arc = document.getElementById("feedback-arc");
+    if (state.feed === 0) arc.setAttribute("visibility", "hidden");
+    else {
+      arc.setAttribute("visibility", "visible");
+      arc.setAttribute("stroke-width", String(2 + state.feed));
+    }
+    document.querySelectorAll("[data-tick]").forEach(function (rect) {
+      var n = Number(rect.getAttribute("data-tick"));
+      rect.setAttribute("fill", n < state.decay ? "#1B1612" : "#E4E2D8");
+    });
+    document.querySelectorAll("[data-detent]").forEach(function (mark) {
+      var n = Number(mark.getAttribute("data-detent"));
+      mark.classList.toggle("on", n <= state.index);
+    });
+    var word = voiceWord();
+    document.getElementById("voice-state").textContent = word;
+    document.title = "Halde FM-1 sample, " + word.toLowerCase();
+    var empty = document.getElementById("empty-state");
+    if (word === "SINE") empty.removeAttribute("hidden");
+    else empty.setAttribute("hidden", "");
+    document.getElementById("step-index").textContent = state.index >= 6 ? "Back to the bell" : "Step the index";
+    document.querySelectorAll(".stub").forEach(function (stub) {
+      stub.classList.toggle("is-on", stub.getAttribute("data-patch") === state.patch);
+    });
+  }
+
+  function blip() {
+    if (!state.sound) return;
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    if (!audioCtx) audioCtx = new Ctx();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    var t = audioCtx.currentTime;
+    var ratios = [1, 1.5, 2, 3, 4, 5.5, 7];
+    var carrier = audioCtx.createOscillator();
+    var mod = audioCtx.createOscillator();
+    var modGain = audioCtx.createGain();
+    var out = audioCtx.createGain();
+    carrier.type = "sine";
+    mod.type = "sine";
+    carrier.frequency.value = 196;
+    mod.frequency.value = 196 * ratios[state.ratio];
+    modGain.gain.value = 40 + state.index * 90;
+    var hold = 0.04 + state.decay * 0.012;
+    out.gain.setValueAtTime(0.0001, t);
+    out.gain.exponentialRampToValueAtTime(0.07, t + 0.015);
+    out.gain.exponentialRampToValueAtTime(0.0001, t + Math.min(0.16, 0.05 + hold));
+    mod.connect(modGain);
+    modGain.connect(carrier.frequency);
+    carrier.connect(out);
+    out.connect(audioCtx.destination);
+    carrier.start(t);
+    mod.start(t);
+    carrier.stop(t + 0.16);
+    mod.stop(t + 0.16);
+  }
+
+  keys.forEach(function (k) {
+    inputs[k].addEventListener("input", function () {
+      state[k] = Number(inputs[k].value);
+      state.held = true;
+      state.patch = null;
+      render(true);
+      blip();
+    });
+  });
+
+  document.getElementById("step-index").addEventListener("click", function () {
+    state.held = true;
+    state.patch = null;
+    state.index = state.index >= 6 ? 0 : state.index + 1;
+    render(true);
+    blip();
+  });
+
+  document.getElementById("sound").addEventListener("click", function () {
+    state.sound = !state.sound;
+    this.setAttribute("aria-pressed", state.sound ? "true" : "false");
+    this.textContent = state.sound ? "Sound on" : "Sound off";
+    if (state.sound) blip();
+  });
+
+  document.getElementById("lamp-flap").addEventListener("click", function () {
+    var order = ["harbor", "lamp", "early"];
+    state.lamp = order[(order.indexOf(state.lamp) + 1) % 3];
+    paintLamp();
+  });
+
+  document.getElementById("cheek").addEventListener("click", function () {
+    var on = this.classList.toggle("is-lift");
+    this.querySelector(".cheek-hit").setAttribute("aria-pressed", on ? "true" : "false");
+  });
+
+  document.querySelectorAll(".stub").forEach(function (stub) {
+    stub.addEventListener("click", function () {
+      var name = stub.getAttribute("data-patch");
+      var patch = patches[name];
+      state.patch = name;
+      state.held = true;
+      state.ratio = patch.ratio;
+      state.index = patch.index;
+      state.feed = patch.feed;
+      state.decay = patch.decay;
+      render(true);
+      blip();
+    });
+  });
+
+  var now = clock();
+  state.lamp = modeFromHour(now.hour);
+  paintLamp();
+  render(false);
+
+  if (!reduced && window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.create({
+      trigger: "#scene",
+      start: "top top",
+      end: function () {
+        var total = document.documentElement.scrollHeight - window.innerHeight;
+        return "+=" + Math.max(160, Math.round(total * 0.3));
+      },
+      onUpdate: function (self) {
+        if (state.held) return;
+        var step = Math.round(self.progress * 6);
+        if (step !== state.index) {
+          state.index = step;
+          state.patch = null;
+          render(false);
+        }
+      }
+    });
+  }
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!--
+CONCEPT: The site is a green blotter where marketplace tickets and carbon payouts are unlike slips, and lining one onto its pair shows a kiss or a china-marker flag.
+WORLD: Unlike objects on a surface. A green desk blotter holds slips that do not share a height.
+SIGNATURE: Lining the carbon payout onto the manila ticket until the baselines kiss, while the short slip stays proud.
+GRADE: Screenprint, carbon pass 2px off the manila pass, under one green lamp.
+REMOVED: Lamp flicker. A looping shade pulse that did not teach the kiss or the flag.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ledgerline sample, open item</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Courier+Prime:wght@400;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html { font-size: 18px; }
+    body {
+      margin: 0;
+      background: #c8c8c8;
+      color: #1a1a1a;
+      font-family: "Newsreader", serif;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+    button, input { font: inherit; }
+    h1, h2, p { margin: 0; }
+    h1 {
+      font-family: "Big Shoulders Display", sans-serif;
+      font-weight: 800;
+      font-size: 5.2rem;
+      line-height: 0.84;
+      letter-spacing: -0.03em;
+      max-width: 11ch;
+    }
+    .wordmark {
+      font-family: "Big Shoulders Display", sans-serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .sub {
+      max-width: 34ch;
+      font-size: 1rem;
+    }
+    .figs {
+      font-family: "Courier Prime", monospace;
+      font-size: 0.85rem;
+      line-height: 1.45;
+    }
+
+    #scene {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      background: #163C2C;
+      overflow: hidden;
+      color: #163C2C;
+    }
+    #pad {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    #signature { position: absolute; inset: 0; z-index: 1; }
+    #manila-ticket,
+    #carbon-payout,
+    #short-slip,
+    #adding-tape,
+    #anvil {
+      position: absolute;
+    }
+    #manila-ticket {
+      left: 3%;
+      top: 72px;
+      width: 52%;
+      height: 64%;
+      z-index: 1;
+    }
+    #carbon-payout {
+      left: 34%;
+      top: 58%;
+      width: 32%;
+      height: 24%;
+      z-index: 2;
+      cursor: pointer;
+    }
+    #short-slip {
+      left: 66%;
+      top: 72px;
+      width: 24%;
+      height: 78%;
+      z-index: 2;
+      cursor: pointer;
+    }
+    #adding-tape {
+      right: -32px;
+      top: 0;
+      width: 72px;
+      height: 100%;
+      z-index: 3;
+      padding: 16px 8px;
+    }
+    #anvil {
+      left: 3%;
+      bottom: 148px;
+      width: 72px;
+      height: 48px;
+      z-index: 3;
+    }
+    .slip-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    #manila-ticket .on-slip {
+      top: auto;
+      bottom: 14px;
+    }
+    #manila-ticket .slip-fig { bottom: 46px; }
+    #short-slip .slip-fig { bottom: auto; top: 74%; }
+    #adding-tape .figs { position: relative; z-index: 1; color: #163C2C; }
+    @media (hover: hover) and (pointer: fine) {
+      #carbon-payout:hover .on-slip { letter-spacing: 0.1em; }
+      #spike .pile:hover { color: #0e2a1c; }
+    }
+    .on-slip {
+      position: absolute;
+      left: 12px;
+      top: 10px;
+      z-index: 1;
+      color: #163C2C;
+      font-family: "Big Shoulders Display", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+    }
+    .slip-fig {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      z-index: 1;
+      color: #163C2C;
+    }
+    #state-stamp {
+      font-family: "Big Shoulders Display", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      font-size: 1.15rem;
+      text-transform: uppercase;
+    }
+    .copy-layer {
+      position: absolute;
+      left: 5%;
+      top: 92px;
+      z-index: 4;
+      display: grid;
+      gap: 8px;
+      width: min(460px, 46%);
+    }
+    #live-plate {
+      position: absolute;
+      top: 16px;
+      left: 4%;
+      z-index: 5;
+      background: #E8C16A;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+    }
+    .action {
+      position: absolute;
+      left: 3%;
+      bottom: 18px;
+      z-index: 6;
+      display: grid;
+      gap: 10px;
+      width: 340px;
+    }
+    .scrub {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: center;
+      color: #E8C16A;
+      font-family: "Courier Prime", monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    #line-slips {
+      font-family: "Big Shoulders Display", sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      background: #C4382C;
+      color: #E8C16A;
+      border: 0;
+      border-radius: 0;
+      padding: 8px 14px;
+      text-align: left;
+      cursor: pointer;
+    }
+    #line-range {
+      width: 100%;
+      height: 10px;
+      margin: 0;
+      accent-color: #C4382C;
+      background: #E8C16A;
+      appearance: none;
+      border-radius: 0;
+    }
+    #line-range::-webkit-slider-thumb {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      background: #C4382C;
+      border: 0;
+    }
+
+    .band-margin {
+      background: #163C2C;
+      padding: 56px 5% 64px;
+      color: #163C2C;
+    }
+    .sheet {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.85fr 0.42fr;
+      min-height: 420px;
+      background: #E8C16A;
+      outline: 2px solid #D2E1EA;
+      outline-offset: 2px;
+    }
+    .amounts { padding: 36px 32px 28px; }
+    .amounts .figs { font-size: 1.35rem; margin-bottom: 16px; }
+    .margin-note {
+      padding: 36px 18px;
+      border-left: 2px solid #163C2C;
+      font-size: 1.05rem;
+    }
+    .sheet-label {
+      font-family: "Big Shoulders Display", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 1.5rem;
+      margin-bottom: 18px;
+    }
+    #fee-cent { font-size: 1.8rem; margin-top: 12px; }
+    #fee-flag {
+      position: absolute;
+      left: 7%;
+      top: 46%;
+      width: 42%;
+      height: 10px;
+      background: #C4382C;
+      transform: rotate(-7deg);
+    }
+    .fee-taps {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .fee-taps button {
+      font-family: "Big Shoulders Display", sans-serif;
+      font-weight: 700;
+      font-size: 1.7rem;
+      letter-spacing: 0.04em;
+      background: #2C7A50;
+      color: #E8C16A;
+      border: 0;
+      border-radius: 0;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+    .fee-taps button[aria-pressed="true"] {
+      background: #C4382C;
+      color: #E8C16A;
+    }
+
+    .band-spike {
+      position: relative;
+      height: 620px;
+      background: #163C2C;
+      overflow: hidden;
+      color: #163C2C;
+    }
+    .nail {
+      position: absolute;
+      left: 50%;
+      top: 28px;
+      bottom: 28px;
+      width: 14px;
+      margin-left: -7px;
+      background: #E8C16A;
+    }
+    .pile {
+      position: absolute;
+      border: 0;
+      border-radius: 0;
+      padding: 12px;
+      text-align: left;
+      cursor: pointer;
+      color: #163C2C;
+      font-family: "Big Shoulders Display", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      outline: 2px solid #D2E1EA;
+      outline-offset: 2px;
+    }
+    .pile.is-spiked::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      right: 12px;
+      top: 12px;
+      border: 3px solid #163C2C;
+      border-radius: 50%;
+    }
+    #spindle-a { width: 240px; height: 96px; left: 16%; top: 12%; background: #E8C16A; }
+    #spindle-b { width: 340px; height: 120px; right: 10%; top: 30%; background: #D2E1EA; }
+    #spindle-c { width: 180px; height: 150px; left: 24%; bottom: 10%; background: #E8C16A; }
+    .empty-line {
+      position: absolute;
+      right: 6%;
+      bottom: 28px;
+      width: min(320px, 36%);
+      margin: 0;
+      color: #E8C16A;
+      font-family: "Newsreader", serif;
+      opacity: 0;
+    }
+    .band-spike.is-clear .empty-line { opacity: 1; }
+
+    .band-tape {
+      background: #163C2C;
+      min-height: 280px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: stretch;
+    }
+    .curl {
+      width: min(360px, 78%);
+      margin: 40px 7% 48px 0;
+      background: #E8C16A;
+      color: #163C2C;
+      padding: 28px 20px;
+      display: grid;
+      align-content: space-between;
+      gap: 28px;
+      outline: 2px solid #D2E1EA;
+      outline-offset: 2px;
+      transform: rotate(-1.5deg);
+    }
+    .missing { font-size: 0.95rem; }
+    #anvil { cursor: pointer; }
+    #anvil.is-settled { outline: 3px solid #C4382C; outline-offset: 2px; }
+    :focus-visible { outline: 3px solid #163C2C; outline-offset: 3px; }
+    @media (pointer: coarse) {
+      #line-range::-webkit-slider-thumb { width: 36px; height: 36px; }
+      #line-slips, .fee-taps button, .pile { min-height: 48px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #lamp-pool { animation: none; }
+    }
+
+    @media (max-width: 700px) {
+      html { font-size: 16px; }
+      h1 { font-size: 4.5rem; max-width: 7ch; }
+      .copy-layer { width: 86%; top: 64px; }
+      #manila-ticket { left: 12px; top: 56px; width: 74%; height: 58%; }
+      #carbon-payout { left: 18%; top: 62%; width: 62%; height: 18%; }
+      #short-slip { left: auto; right: 12px; top: 47%; width: 42%; height: 30%; }
+      #adding-tape { width: 36px; right: -18px; }
+      #anvil { left: 12px; right: auto; bottom: 132px; }
+      #short-slip .slip-fig { top: auto; bottom: 8px; left: auto; right: 6px; }
+      #manila-ticket .on-slip,
+      #manila-ticket .slip-fig { display: none; }
+      .action { width: 68%; }
+      .sheet { grid-template-columns: 1.35fr 0.75fr; min-height: 0; }
+      .amounts { padding: 20px 14px; }
+      .margin-note { padding: 20px 10px; }
+      .fee-taps { flex-wrap: wrap; }
+      .band-spike { height: 640px; }
+      #spindle-a { width: 150px; height: 78px; left: 6%; }
+      #spindle-b { width: 170px; height: 88px; right: 4%; }
+      #spindle-c { width: 130px; height: 110px; left: 10%; }
+    }
+  </style>
+</head>
+<body>
+  <section id="scene" data-facts="green desk blotter, carbon payout slip, china marker flag, night cutoff batch">
+    <p id="live-plate" data-tier="small" data-truth="2" data-live="time">Warming the green shade.</p>
+    <div id="signature" data-tier="big" data-truth="1">
+      <svg id="pad" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="1440" height="900" fill="#163C2C"></rect>
+        <ellipse id="lamp-pool" cx="620" cy="500" rx="580" ry="360" fill="#2C7A50"></ellipse>
+      </svg>
+      <article id="manila-ticket" data-object="manila-ticket">
+        <svg class="slip-svg" viewBox="0 0 400 280" preserveAspectRatio="none" aria-hidden="true">
+          <rect x="0" y="0" width="400" height="280" fill="#D2E1EA" style="transform:translate(2px,2px)"></rect>
+          <rect x="0" y="0" width="400" height="280" fill="#E8C16A"></rect>
+          <line x1="28" y1="214" x2="250" y2="214" stroke="#163C2C" stroke-width="3"></line>
+          <line x1="28" y1="232" x2="160" y2="232" stroke="#163C2C" stroke-width="2"></line>
+        </svg>
+        <p class="on-slip">Manila ticket</p>
+        <p class="figs slip-fig">48.20 sample</p>
+      </article>
+      <article id="carbon-payout" data-object="carbon-payout">
+        <svg class="slip-svg" viewBox="0 0 320 180" preserveAspectRatio="none" aria-hidden="true">
+          <rect x="0" y="0" width="320" height="180" fill="#E8C16A" style="transform:translate(2px,2px)"></rect>
+          <rect x="0" y="0" width="320" height="180" fill="#D2E1EA"></rect>
+          <line x1="16" y1="128" x2="210" y2="128" stroke="#163C2C" stroke-width="3"></line>
+        </svg>
+        <p class="on-slip">Carbon payout</p>
+        <p class="figs slip-fig">47.90 sample</p>
+      </article>
+      <article id="short-slip" data-object="short-slip">
+        <svg class="slip-svg" viewBox="0 0 200 360" preserveAspectRatio="none" aria-hidden="true">
+          <rect x="0" y="0" width="200" height="360" fill="#D2E1EA" style="transform:translate(2px,2px)"></rect>
+          <rect x="0" y="0" width="200" height="360" fill="#E8C16A"></rect>
+          <line x1="16" y1="300" x2="150" y2="300" stroke="#163C2C" stroke-width="3"></line>
+          <rect x="156" y="18" width="26" height="8" fill="#C4382C"></rect>
+          <line id="china-flag" data-tier="small" data-truth="3" x1="24" y1="150" x2="170" y2="210" stroke="#C4382C" stroke-width="10" opacity="0.55"></line>
+        </svg>
+        <p class="on-slip">Short slip</p>
+        <p class="figs slip-fig">48.20 sample</p>
+      </article>
+      <article id="adding-tape" data-object="adding-tape">
+        <svg class="slip-svg" viewBox="0 0 72 900" preserveAspectRatio="none" aria-hidden="true">
+          <rect x="0" y="0" width="72" height="900" fill="#D2E1EA" style="transform:translate(2px,2px)"></rect>
+          <rect x="0" y="0" width="72" height="900" fill="#E8C16A"></rect>
+          <g id="tape-rule" data-tier="small" data-truth="1" opacity="0.35">
+            <line x1="10" y1="820" x2="58" y2="820" stroke="#163C2C" stroke-width="2"></line>
+            <line x1="10" y1="828" x2="58" y2="828" stroke="#163C2C" stroke-width="2"></line>
+          </g>
+        </svg>
+        <p class="figs">NIGHT<br>TAPE<br>18:00<br>SAMPLE</p>
+      </article>
+      <div id="anvil" data-object="anvil" data-tier="small" data-truth="2" tabindex="0" role="button" aria-label="Settle the anvil">
+        <svg class="slip-svg" viewBox="0 0 64 44" aria-hidden="true">
+          <polygon points="2,40 8,26 16,26 20,12 44,12 48,26 56,26 62,40" fill="#E8C16A" style="transform:translate(2px,2px)"></polygon>
+          <polygon points="0,38 6,24 14,24 18,10 42,10 46,24 54,24 60,38" fill="#D2E1EA"></polygon>
+        </svg>
+      </div>
+    </div>
+    <div class="copy-layer">
+      <p class="wordmark">Ledgerline sample</p>
+      <p id="state-stamp" data-tier="small" data-truth="1">Open item</p>
+      <h1>Flag what will not kiss.</h1>
+      <p class="sub">The payout API that seats a marketplace ticket on its carbon copy and flags the slip that does not share the sum.</p>
+    </div>
+    <div class="action">
+      <button id="line-slips" type="button">Line the slips</button>
+      <div class="scrub">
+        <span>Open</span>
+        <input id="line-range" type="range" min="0" max="100" value="0" aria-label="Line the slips">
+        <span>Kiss</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band-margin" id="fee-margin" data-tier="medium" data-truth="3" data-object="fee-margin" aria-label="Fee margin">
+    <div class="sheet">
+      <div class="amounts">
+        <p class="sheet-label">Amount column</p>
+        <p class="figs">ticket 48.20 sample</p>
+        <p class="figs" id="fee-carbon">carbon 47.90 sample</p>
+        <p class="figs" id="fee-gap">gap 0.30 sample</p>
+      </div>
+      <div class="margin-note">
+        <p class="sheet-label">Margin</p>
+        <p id="fee-hand">Fee 0.30 sits in this thinner hand. The cent is visible. The slips can kiss.</p>
+        <p class="figs" id="fee-cent">0.30</p>
+      </div>
+      <div id="fee-flag" hidden></div>
+    </div>
+    <div class="fee-taps">
+      <button type="button" id="fee-margin-btn" aria-pressed="true">In the margin</button>
+      <button type="button" id="fee-ship-btn" aria-pressed="false">In the shipping line</button>
+    </div>
+  </section>
+
+  <section class="band-spike" id="spike" data-tier="medium" data-truth="2" aria-label="Spindle">
+    <div class="nail"></div>
+    <button type="button" id="spindle-a" class="pile" data-object="spindle-a">North market</button>
+    <button type="button" id="spindle-b" class="pile" data-object="spindle-b">Dock sellers</button>
+    <button type="button" id="spindle-c" class="pile" data-object="spindle-c">Lamp street</button>
+    <p id="empty-state" class="empty-line" data-tier="small" data-truth="2">No open item. The spike took the night.</p>
+  </section>
+
+  <footer class="band-tape">
+    <div class="curl">
+      <p id="footer-line" data-tier="small" data-truth="2">Ledgerline sample. Open items stay flat. Only a kiss takes the spike.</p>
+      <p class="missing">This page is off the blotter. The slips are still on the desk.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    var carbon = document.getElementById("carbon-payout");
+    var flag = document.getElementById("china-flag");
+    var rule = document.getElementById("tape-rule");
+    var stamp = document.getElementById("state-stamp");
+    var range = document.getElementById("line-range");
+    var button = document.getElementById("line-slips");
+    var held = false;
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.set(carbon, { rotation: 11, y: -10, scale: 1, transformOrigin: "50% 60%" });
+
+    var plate = document.getElementById("live-plate");
+    var hour = new Date().getHours();
+    var night = hour >= 18 || hour < 6;
+    plate.textContent = night
+      ? "Night batch after 6 pm. Open items stay flat."
+      : "Waiting on the 6 pm cutoff.";
+    gsap.set("#lamp-pool", { opacity: night ? 1 : 0.48 });
+
+    var anvil = document.getElementById("anvil");
+    function settleAnvil() {
+      if (reduceMotion) {
+        anvil.classList.toggle("is-settled");
+        return;
+      }
+      gsap.fromTo(anvil, { y: 0 }, { y: 6, duration: 0.045, ease: "sine.inOut", yoyo: true, repeat: 1 });
+    }
+    anvil.addEventListener("click", settleAnvil);
+    anvil.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        settleAnvil();
+      }
+    });
+
+    ["manila-ticket", "carbon-payout", "short-slip"].forEach(function (id) {
+      var el = document.getElementById(id);
+      el.addEventListener("click", function () {
+        el.parentNode.appendChild(el);
+      });
+    });
+
+    function paint(p, animate) {
+      var amount = reduceMotion ? (p >= 0.5 ? 1 : 0) : p;
+      var y = -10 + (10 * amount);
+      var scale = amount > 0.92 ? 1.02 : 1;
+      if (!reduceMotion && animate) {
+        gsap.to(carbon, { y: y, scale: scale, duration: 1.1, ease: "sine.inOut", overwrite: true });
+      } else {
+        gsap.set(carbon, { y: y, scale: scale });
+      }
+      flag.style.opacity = String(0.55 + (0.45 * amount));
+      rule.style.opacity = amount > 0.9 ? "1" : "0.35";
+      var kissed = amount > 0.85;
+      stamp.textContent = kissed ? "Kissed" : "Open item";
+      document.title = kissed ? "Ledgerline sample, kissed" : "Ledgerline sample, open item";
+      range.value = String(Math.round(p * 100));
+    }
+
+    range.addEventListener("input", function () {
+      held = true;
+      paint(Number(range.value) / 100, false);
+    });
+    button.addEventListener("click", function () {
+      held = true;
+      paint(1, true);
+    });
+
+    if (!reduceMotion) {
+      ScrollTrigger.create({
+        trigger: "#scene",
+        start: "top top",
+        end: "+=270",
+        onUpdate: function (self) {
+          if (held) return;
+          paint(self.progress, false);
+        }
+      });
+    }
+
+    document.fonts.ready.then(function () {
+      ScrollTrigger.refresh();
+    });
+
+    var feeRoot = document.getElementById("fee-margin");
+    var feeHand = document.getElementById("fee-hand");
+    var feeCent = document.getElementById("fee-cent");
+    var feeFlag = document.getElementById("fee-flag");
+    var feeGap = document.getElementById("fee-gap");
+    function setFee(shipping) {
+      document.getElementById("fee-margin-btn").setAttribute("aria-pressed", shipping ? "false" : "true");
+      document.getElementById("fee-ship-btn").setAttribute("aria-pressed", shipping ? "true" : "false");
+      feeHand.textContent = shipping
+        ? "The fee hid in the shipping line. The carbon is short."
+        : "Fee 0.30 sits in this thinner hand. The cent is visible. The slips can kiss.";
+      feeCent.hidden = shipping;
+      feeFlag.hidden = !shipping;
+      feeGap.textContent = shipping ? "short by 0.30 sample" : "gap 0.30 sample";
+      feeRoot.classList.toggle("is-short", shipping);
+    }
+    document.getElementById("fee-margin-btn").addEventListener("click", function () { setFee(false); });
+    document.getElementById("fee-ship-btn").addEventListener("click", function () { setFee(true); });
+
+    var spike = document.getElementById("spike");
+    var spikeRot = { "spindle-a": 8, "spindle-b": -12, "spindle-c": 3 };
+    var spikeNudge = { "spindle-a": 8, "spindle-b": -8, "spindle-c": 8 };
+    Object.keys(spikeRot).forEach(function (id) {
+      gsap.set("#" + id, { rotation: spikeRot[id], transformOrigin: "50% 50%" });
+    });
+    document.querySelectorAll("#spike .pile").forEach(function (slip) {
+      slip.addEventListener("click", function () {
+        if (slip.classList.contains("is-spiked")) return;
+        slip.classList.add("is-spiked");
+        slip.textContent = slip.textContent + " spiked";
+        if (reduceMotion) {
+          gsap.set(slip, { x: spikeNudge[slip.id], rotation: spikeRot[slip.id] });
+        } else {
+          gsap.to(slip, {
+            x: spikeNudge[slip.id],
+            rotation: spikeRot[slip.id],
+            duration: 1.1,
+            ease: "sine.inOut"
+          });
+        }
+        var done = document.querySelectorAll("#spike .pile.is-spiked").length === 3;
+        if (done) spike.classList.add("is-clear");
+      });
+    });
+  </script>
+</body>
+</html>

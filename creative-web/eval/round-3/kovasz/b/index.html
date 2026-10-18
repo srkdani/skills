@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kovász, sample</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+<!--
+CONCEPT: The site is an overnight oven spring, where the hours from 11pm to noon become one opening score and sliding the peel springs the loaf.
+WORLD: The verb
+SIGNATURE: Scroll or the peel presses the dough, one spring opens the score, and noon leaves flour.
+GRADE: Morning window on one dough, five shades, no second grade.
+REMOVED: Second ear overshoot. It was a second lip after the first spring, then deleted, because the dough springs once.
+-->
+<style>
+  :root {
+    --skin: #E0BE78;
+    --flour: #EAD7B0;
+    --crumb: #C9843F;
+    --crust: #6B3A22;
+    --score: #2A160F;
+    --ash: #c8c8c8;
+    --ash-2: #b0b0b0;
+    --ash-3: #8a8a8a;
+    --ash-4: #4e4e4e;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--skin);
+    color: var(--score);
+    font-family: "Newsreader", serif;
+    font-size: 18px;
+    line-height: 1.35;
+  }
+  button, input { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--flour); outline-offset: 3px; }
+  #scene-wrap { background: var(--crust); }
+  #scene {
+    position: sticky;
+    top: 0;
+    height: 86vh;
+    min-height: 560px;
+    background: var(--skin);
+    overflow: hidden;
+  }
+  #dough-skin {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .copy {
+    position: relative;
+    z-index: 2;
+    padding: 28px 32px 0;
+    max-width: 640px;
+  }
+  .brand {
+    font-family: "Newsreader", serif;
+    font-size: 16px;
+    margin: 0 0 8px;
+  }
+  h1 {
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    font-size: 104px;
+    line-height: 0.84;
+    letter-spacing: -0.03em;
+    max-width: 7ch;
+    margin: 0;
+    color: var(--score);
+  }
+  .sub {
+    max-width: 28ch;
+    margin: 12px 0 0;
+    color: var(--score);
+  }
+  #pest-stamp {
+    position: absolute;
+    z-index: 2;
+    top: 28px;
+    right: 28px;
+    margin: 0;
+    padding: 8px 10px;
+    background: var(--flour);
+    color: var(--score);
+    font-family: "Anton", sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.12em;
+    transform: rotate(-7deg);
+  }
+  .controls {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px 16px;
+    align-items: center;
+    padding: 10px 20px 12px;
+    background: var(--crust);
+    color: var(--flour);
+  }
+  #press {
+    grid-row: 1 / span 2;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 2px;
+    background: var(--flour);
+    color: var(--score);
+    cursor: pointer;
+  }
+  .controls label { font-size: 14px; }
+  #peel-bar {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 44px;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  #peel-bar::-webkit-slider-runnable-track {
+    height: 12px;
+    background: var(--score);
+    border-radius: 2px;
+  }
+  #peel-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 44px;
+    height: 44px;
+    margin-top: -16px;
+    background: var(--flour);
+    border: 3px solid var(--score);
+    border-radius: 50%;
+  }
+  #peel-bar::-moz-range-track {
+    height: 12px;
+    background: var(--score);
+    border: 0;
+    border-radius: 2px;
+  }
+  #peel-bar::-moz-range-thumb {
+    width: 44px;
+    height: 44px;
+    background: var(--flour);
+    border: 3px solid var(--score);
+    border-radius: 50%;
+  }
+  #peel-track {
+    min-height: 72vh;
+    background: var(--crust);
+    color: var(--flour);
+    padding: 28px 8vw 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  #peel-track p { margin: 0; font-size: 16px; }
+  .smear { height: 12px; background: var(--flour); }
+  .s1 { width: 18%; }
+  .s2 { width: 36%; margin-left: 28%; }
+  .s3 { width: 14%; margin-left: 6%; }
+  .notch {
+    height: 32px;
+    background: var(--flour);
+    color: var(--score);
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    font-size: 16px;
+  }
+  .n1 { width: 34%; }
+  .n2 { width: 48%; }
+  .n3 { width: 88%; }
+  .n4 { width: 60%; }
+  .n5 { width: 28%; }
+  #well {
+    min-height: 88vh;
+    background: var(--skin);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 16px 56px;
+  }
+  #year-switch {
+    width: min(640px, 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .well-face {
+    position: relative;
+    width: min(480px, 88vw);
+  }
+  #starter-well { width: 100%; height: auto; display: block; }
+  #well-fidget {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    min-height: 72px;
+    margin: 0;
+    padding: 8px;
+    border: 0;
+    background: transparent;
+    color: var(--score);
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+  }
+  #well-line {
+    display: block;
+    margin: 0;
+    text-align: center;
+    font-size: 16px;
+  }
+  #hour-mark {
+    display: inline-block;
+    margin: 14px 0 0;
+    padding: 6px 10px;
+    font-size: 14px;
+    background: var(--crumb);
+    color: var(--score);
+  }
+  #hour-mark[data-state="oven"] { background: var(--crust); color: var(--flour); }
+  #hour-mark[data-state="door"] { background: var(--crumb); color: var(--score); }
+  #hour-mark[data-state="bare"] { background: var(--flour); color: var(--score); }
+  .year-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .year-buttons button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 2px;
+    background: var(--crust);
+    color: var(--flour);
+    cursor: pointer;
+  }
+  .year-buttons button[aria-pressed="true"] {
+    background: var(--score);
+    color: var(--flour);
+  }
+  #rack-section {
+    background: var(--flour);
+    color: var(--score);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 48px 5vw 8px;
+  }
+  #noon-rack {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    border-bottom: 16px solid var(--crust);
+    min-height: 260px;
+  }
+  .loaf {
+    background: transparent;
+    border: 0;
+    padding: 0 0 8px;
+    min-height: 44px;
+    min-width: 44px;
+    cursor: pointer;
+    color: var(--score);
+    text-align: center;
+  }
+  .loaf svg { display: block; width: 100%; height: auto; }
+  .loaf span { display: block; font-size: 14px; margin-top: 4px; }
+  .loaf-a { width: 18%; margin-right: 9%; }
+  .loaf-b { width: 32%; margin-right: 16%; }
+  .loaf-c { width: 22%; }
+  .loaf.taken .skin { fill: var(--flour); stroke: var(--score); stroke-width: 3; stroke-dasharray: 5 4; }
+  .loaf.taken .blister,
+  .loaf.taken .crumb { fill: var(--flour); }
+  .loaf.taken .cut { opacity: 0.35; }
+  .rack-note { font-size: 16px; margin: 16px 0 18px; max-width: 36ch; }
+  #jar-section {
+    background: var(--skin);
+    display: flex;
+    justify-content: center;
+    padding: 28px 16px 40px;
+  }
+  #village-jar {
+    position: relative;
+    width: min(230px, 68vw);
+  }
+  #village-jar svg { display: block; width: 100%; height: auto; }
+  .jar-label {
+    position: absolute;
+    left: 26%;
+    right: 26%;
+    top: 46%;
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--score);
+  }
+  #footer-peel {
+    min-height: 18vh;
+    background: var(--crust);
+    color: var(--flour);
+    border-top: 8px solid var(--flour);
+    display: flex;
+    align-items: center;
+    padding: 28px 8vw;
+  }
+  #footer-peel p { margin: 0; max-width: 40ch; }
+  @media (max-width: 700px) {
+    #scene { min-height: 100vh; height: 100vh; }
+    h1 { font-size: 64px; }
+    .copy { padding: 16px 16px 0; max-width: 78%; }
+    #pest-stamp { top: 16px; right: 10px; font-size: 13px; padding: 4px 6px; }
+    .controls { grid-template-columns: 1fr; padding: 10px 12px 12px; }
+    #press { grid-row: auto; width: 100%; }
+    #noon-rack { min-height: 180px; }
+    .loaf-a { width: 22%; margin-right: 4%; }
+    .loaf-b { width: 36%; margin-right: 6%; }
+    .loaf-c { width: 26%; }
+    .loaf span { font-size: 12px; }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    #press:hover { background: var(--skin); }
+  }
+  @media (pointer: coarse) {
+    #peel-bar::-webkit-slider-thumb { width: 48px; height: 48px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #scene { position: relative; height: auto; min-height: 100vh; }
+    #peel-track { min-height: 0; height: auto; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+  <div id="scene-wrap">
+    <section id="scene" data-facts="41 year starter, grandmother village, oven from 11pm, bare by noon">
+      <svg id="dough-skin" data-object="dough" data-tier="big" data-truth="2" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-label="One loaf of dough, the score still shut at 11pm">
+        <rect width="1200" height="800" fill="#E0BE78"></rect>
+        <g id="dough-mass">
+          <ellipse cx="640" cy="520" rx="520" ry="230" fill="#C9843F"></ellipse>
+          <ellipse cx="930" cy="240" rx="120" ry="46" fill="#EAD7B0"></ellipse>
+          <ellipse cx="600" cy="470" rx="700" ry="360" fill="none" stroke="#6B3A22" stroke-width="54"></ellipse>
+          <ellipse cx="860" cy="250" rx="96" ry="34" fill="#EAD7B0"></ellipse>
+          <ellipse cx="1020" cy="560" rx="74" ry="26" fill="#EAD7B0"></ellipse>
+          <ellipse cx="430" cy="650" rx="120" ry="28" fill="#EAD7B0"></ellipse>
+          <circle cx="900" cy="360" r="18" fill="#6B3A22"></circle>
+          <circle cx="900" cy="360" r="8" fill="#E0BE78"></circle>
+          <circle cx="1040" cy="470" r="13" fill="#6B3A22"></circle>
+          <circle cx="1040" cy="470" r="5" fill="#E0BE78"></circle>
+          <circle cx="250" cy="600" r="16" fill="#6B3A22"></circle>
+          <circle cx="250" cy="600" r="7" fill="#E0BE78"></circle>
+          <circle cx="760" cy="660" r="11" fill="#C9843F"></circle>
+          <circle cx="1120" cy="340" r="9" fill="#6B3A22"></circle>
+          <circle cx="140" cy="470" r="4" fill="#EAD7B0"></circle>
+          <circle cx="210" cy="390" r="3" fill="#EAD7B0"></circle>
+          <circle cx="980" cy="220" r="4" fill="#EAD7B0"></circle>
+          <circle cx="1088" cy="610" r="5" fill="#EAD7B0"></circle>
+          <circle cx="520" cy="700" r="3" fill="#EAD7B0"></circle>
+          <circle cx="330" cy="680" r="4" fill="#EAD7B0"></circle>
+          <g id="score-cut" data-object="score">
+            <ellipse id="crumb" cx="640" cy="560" rx="340" ry="12" fill="#C9843F"></ellipse>
+            <path id="lip-bot" fill="#2A160F" d="M210,578 C360,556 500,598 660,574 C820,552 960,590 1080,566 L1072,598 C950,626 800,584 660,606 C500,628 360,590 220,610 Z"></path>
+            <path id="lip-top" fill="#2A160F" d="M220,566 C380,546 520,584 680,560 C840,538 980,574 1060,552 L1050,574 C940,596 820,564 680,584 C520,604 380,572 230,588 Z"></path>
+            <g id="ear">
+              <path fill="#6B3A22" d="M250,540 C340,468 470,462 620,520 C530,562 390,574 260,558 Z"></path>
+              <path fill="#E0BE78" d="M280,528 C360,486 470,484 590,524 C520,530 400,540 290,542 Z"></path>
+            </g>
+            <ellipse id="dimple" cx="640" cy="560" rx="26" ry="14" fill="#6B3A22"></ellipse>
+          </g>
+        </g>
+        <g id="flour-ghost" opacity="0">
+          <rect width="1200" height="800" fill="#EAD7B0"></rect>
+          <ellipse cx="600" cy="480" rx="520" ry="250" fill="none" stroke="#2A160F" stroke-width="8"></ellipse>
+          <path fill="none" stroke="#2A160F" stroke-width="6" d="M240,560 C420,530 560,590 760,550 C900,524 1000,570 1080,548"></path>
+        </g>
+      </svg>
+      <div class="copy">
+        <p class="brand">Kovász, sample</p>
+        <h1>It springs once.</h1>
+        <p class="sub">Oven lit at 11. Door at 6. Bare by noon.</p>
+        <p id="hour-mark" data-tier="small" data-truth="2" data-live="time" data-state="door">Door open</p>
+      </div>
+      <p id="pest-stamp" data-object="stamp" data-tier="small" data-truth="1">BUDAPEST</p>
+      <div class="controls">
+        <button id="press" type="button">Press the dough</button>
+        <label for="peel-bar">From 11pm to noon</label>
+        <input id="peel-bar" data-object="peel" type="range" min="0" max="100" value="0" aria-valuemin="0" aria-valuemax="100">
+      </div>
+    </section>
+    <div id="peel-track">
+      <p id="loading-line">The oven is still finding the spring.</p>
+      <div class="smear s1"></div>
+      <div class="notch n1"><span>11pm</span></div>
+      <div class="notch n2"><span>2am</span></div>
+      <div class="smear s2"></div>
+      <div class="notch n3"><span>6am</span></div>
+      <div class="notch n4"><span>9am</span></div>
+      <div class="smear s3"></div>
+      <div class="notch n5"><span>Noon</span></div>
+    </div>
+  </div>
+
+  <section id="well">
+    <div id="year-switch" data-tier="medium" data-truth="1">
+      <div class="well-face">
+        <svg id="starter-well" data-object="starter-well" viewBox="0 0 400 400" aria-label="The starter well"></svg>
+        <button id="well-fidget" type="button" data-tier="small" data-truth="1" aria-label="Feed the well once">
+          <span id="well-line">Forty-one years in this dough.</span>
+        </button>
+      </div>
+      <div class="year-buttons" role="group" aria-label="Age of the starter">
+        <button type="button" id="age-village">Village</button>
+        <button type="button" id="age-years">The years</button>
+        <button type="button" id="age-now" aria-pressed="true">This morning</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="rack-section">
+    <div id="noon-rack" data-object="rack" data-tier="medium" data-truth="3" aria-label="Sample bake on the rack">
+      <button class="loaf loaf-a" type="button" aria-pressed="false">
+        <svg viewBox="0 0 140 120" aria-hidden="true">
+          <ellipse class="skin" cx="70" cy="78" rx="58" ry="36" fill="#E0BE78" stroke="#6B3A22" stroke-width="4"></ellipse>
+          <path class="cut" d="M28,74 C50,66 90,82 112,70" fill="none" stroke="#2A160F" stroke-width="3"></path>
+          <circle class="blister" cx="40" cy="58" r="5" fill="#C9843F"></circle>
+          <circle class="blister" cx="96" cy="90" r="4" fill="#6B3A22"></circle>
+        </svg>
+        <span>First out, sample</span>
+      </button>
+      <button class="loaf loaf-b" type="button" aria-pressed="false">
+        <svg viewBox="0 0 260 170" aria-hidden="true">
+          <ellipse class="skin" cx="130" cy="100" rx="118" ry="58" fill="#C9843F" stroke="#6B3A22" stroke-width="6"></ellipse>
+          <ellipse class="crumb" cx="130" cy="96" rx="70" ry="16" fill="#E0BE78"></ellipse>
+          <path class="cut" d="M30,96 C80,78 150,112 230,88" fill="none" stroke="#2A160F" stroke-width="5"></path>
+          <circle class="blister" cx="48" cy="70" r="7" fill="#6B3A22"></circle>
+          <circle class="blister" cx="78" cy="124" r="5" fill="#2A160F"></circle>
+          <circle class="blister" cx="190" cy="68" r="6" fill="#6B3A22"></circle>
+          <circle class="blister" cx="210" cy="118" r="4" fill="#2A160F"></circle>
+          <circle class="blister" cx="150" cy="130" r="5" fill="#6B3A22"></circle>
+        </svg>
+        <span>Middle, sample</span>
+      </button>
+      <button class="loaf loaf-c" type="button" aria-pressed="false">
+        <svg viewBox="0 0 180 150" aria-hidden="true">
+          <ellipse class="skin" cx="90" cy="88" rx="74" ry="48" fill="#6B3A22"></ellipse>
+          <ellipse class="crumb" cx="90" cy="84" rx="40" ry="14" fill="#C9843F"></ellipse>
+          <path class="cut" d="M36,86 C70,70 120,100 150,78" fill="none" stroke="#2A160F" stroke-width="4"></path>
+          <circle class="blister" cx="48" cy="60" r="5" fill="#E0BE78"></circle>
+          <circle class="blister" cx="128" cy="108" r="4" fill="#EAD7B0"></circle>
+          <circle class="blister" cx="100" cy="52" r="3" fill="#E0BE78"></circle>
+        </svg>
+        <span>Last out, sample</span>
+      </button>
+    </div>
+    <p id="empty-line" class="rack-note" hidden>The rack remembers the loaves. Your thumb is late.</p>
+    <p id="missing-line" class="rack-note" hidden>This crumb is not on the peel.</p>
+  </section>
+
+  <section id="jar-section">
+    <div id="village-jar" data-object="jar" data-tier="small" data-truth="1">
+      <svg viewBox="0 0 220 280" aria-hidden="true">
+        <rect x="74" y="16" width="72" height="18" fill="#6B3A22"></rect>
+        <rect x="88" y="34" width="44" height="26" fill="#C9843F"></rect>
+        <rect x="40" y="60" width="140" height="190" fill="#E0BE78" stroke="#6B3A22" stroke-width="4"></rect>
+        <path d="M156,60 L184,74 L166,98 Z" fill="#EAD7B0"></path>
+        <rect x="58" y="108" width="104" height="96" fill="#EAD7B0"></rect>
+      </svg>
+      <p class="jar-label">Carried from a grandmother's village. Placeholder.</p>
+    </div>
+  </section>
+
+  <footer id="footer-peel" data-tier="small" data-truth="3">
+    <p>Kovász, sample. Forty-one years from a grandmother's village. Bare by noon.</p>
+  </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script>
+(function () {
+  var peel = document.getElementById("peel-bar");
+  var press = document.getElementById("press");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var dragging = false;
+  var lock = false;
+
+  gsap.set("#dough-mass", { transformOrigin: "50% 62%" });
+  gsap.set("#ear", { transformOrigin: "30% 80%" });
+  gsap.set("#lip-top", { transformOrigin: "50% 50%" });
+
+  var tl = gsap.timeline({ paused: true });
+  tl.to("#dimple", { attr: { rx: 108, ry: 48 }, duration: 0.35, ease: "none" }, 0);
+  tl.to("#dough-mass", { scaleY: 0.9, duration: 0.35, ease: "none" }, 0);
+  tl.to("#crumb", { attr: { ry: 16 }, duration: 0.35, ease: "none" }, 0);
+  tl.to("#dimple", { attr: { rx: 36, ry: 16 }, duration: 0.35, ease: "back.out(1.4)" }, 0.35);
+  tl.to("#dough-mass", { scaleY: 1.05, duration: 0.35, ease: "back.out(1.4)" }, 0.35);
+  tl.to("#crumb", { attr: { ry: 78 }, duration: 0.35, ease: "back.out(1.4)" }, 0.35);
+  tl.to("#ear", { y: -52, rotation: -8, duration: 0.35, ease: "back.out(1.4)" }, 0.35);
+  tl.to("#lip-top", { y: -46, duration: 0.35, ease: "back.out(1.4)" }, 0.35);
+  tl.to("#flour-ghost", { opacity: 0.94, duration: 0.24, ease: "none" }, 0.74);
+  tl.to("#dimple", { opacity: 0, duration: 0.2, ease: "none" }, 0.74);
+
+  function sync(p) {
+    tl.progress(p);
+    peel.value = String(Math.round(p * 100));
+  }
+
+  function onScroll() {
+    if (dragging || lock) return;
+    var wrap = document.getElementById("scene-wrap");
+    var span = wrap.offsetHeight - window.innerHeight;
+    var y = window.scrollY - wrap.offsetTop;
+    var p = Math.min(1, Math.max(0, y / Math.max(span, 1)));
+    sync(p);
+  }
+
+  peel.addEventListener("pointerdown", function () { dragging = true; });
+  window.addEventListener("pointerup", function () { dragging = false; });
+  function snapped(p) {
+    if (p < 0.34) return 0;
+    if (p < 0.67) return 0.66;
+    return 1;
+  }
+
+  peel.addEventListener("input", function () {
+    gsap.killTweensOf(tl);
+    lock = false;
+    var p = Number(peel.value) / 100;
+    if (reduce) {
+      p = snapped(p);
+      peel.value = String(Math.round(p * 100));
+    }
+    tl.progress(p);
+  });
+
+  press.addEventListener("click", function () {
+    gsap.killTweensOf(tl);
+    if (reduce) {
+      sync(0.66);
+      return;
+    }
+    lock = true;
+    gsap.to(tl, {
+      progress: 0.66,
+      duration: 0.5,
+      ease: "none",
+      onUpdate: function () {
+        peel.value = String(Math.round(tl.progress() * 100));
+      },
+      onComplete: function () { lock = false; }
+    });
+  });
+
+  if (!reduce) window.addEventListener("scroll", onScroll, { passive: true });
+  sync(0);
+  var loading = document.getElementById("loading-line");
+  if (loading) loading.hidden = true;
+
+  var ages = {
+    village: { n: 1, line: "A jar left a village." },
+    years: { n: 20, line: "Fed, carried, kept." },
+    now: { n: 41, line: "Forty-one years in this dough." }
+  };
+
+  function drawWell(key) {
+    var spec = ages[key];
+    var svg = document.getElementById("starter-well");
+    var parts = ['<circle cx="200" cy="200" r="190" fill="#C9843F"></circle>'];
+    var inner = 86;
+    var outer = 184;
+    var i;
+    for (i = 0; i < spec.n; i++) {
+      var r = spec.n === 1 ? 150 : outer - (i * (outer - inner) / (spec.n - 1));
+      var stroke = i % 2 === 0 ? "#2A160F" : "#6B3A22";
+      var weight = spec.n > 20 ? 1.5 : 4;
+      parts.push('<circle cx="200" cy="200" r="' + r.toFixed(1) + '" fill="none" stroke="' + stroke + '" stroke-width="' + weight + '"></circle>');
+    }
+    parts.push('<circle cx="200" cy="200" r="78" fill="#E0BE78"></circle>');
+    svg.innerHTML = parts.join("");
+    document.getElementById("well-line").textContent = spec.line;
+    Object.keys(ages).forEach(function (name) {
+      document.getElementById("age-" + name).setAttribute("aria-pressed", name === key ? "true" : "false");
+    });
+  }
+
+  Object.keys(ages).forEach(function (name) {
+    document.getElementById("age-" + name).addEventListener("click", function () {
+      drawWell(name);
+    });
+  });
+  drawWell("now");
+
+  var loafButtons = Array.prototype.slice.call(document.querySelectorAll("#noon-rack .loaf"));
+  var emptyLine = document.getElementById("empty-line");
+  var missingLine = document.getElementById("missing-line");
+  var hourMark = document.getElementById("hour-mark");
+  var hourNow = new Date().getHours();
+  var hourWord = "Bare rack";
+  var hourState = "bare";
+  if (hourNow >= 23 || hourNow < 6) {
+    hourWord = "Oven lit";
+    hourState = "oven";
+  } else if (hourNow < 12) {
+    hourWord = "Door open";
+    hourState = "door";
+  }
+  hourMark.textContent = hourWord;
+  hourMark.setAttribute("data-state", hourState);
+  document.title = "Kovász, sample: " + hourWord;
+
+  document.getElementById("well-fidget").addEventListener("click", function () {
+    var rings = document.querySelectorAll("#starter-well circle[stroke]");
+    var ring = rings.length > 1 ? rings[1] : rings[0];
+    if (ring) ring.setAttribute("stroke", "#2A160F");
+  });
+
+  loafButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      if (btn.classList.contains("taken")) {
+        missingLine.hidden = false;
+        return;
+      }
+      btn.classList.add("taken");
+      btn.setAttribute("aria-pressed", "true");
+      missingLine.hidden = true;
+      var allGone = loafButtons.every(function (item) { return item.classList.contains("taken"); });
+      emptyLine.hidden = !allGone;
+    });
+  });
+})();
+</script>
+</body>
+</html>

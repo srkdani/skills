@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kovász sample</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #222222;
+    --g0: #e6e6e6;
+    --g1: #d2d2d2;
+    --g2: #b7b7b7;
+    --g3: #8f8f8f;
+    --g4: #6a6a6a;
+    --g5: #4a4a4a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: #3E3228;
+    color: #1C1612;
+    font-family: "Newsreader", "Iowan Old Style", serif;
+    font-size: 18px;
+    line-height: 1.35;
+  }
+  button, a { font: inherit; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+  #scene {
+    position: relative;
+    height: 100vh;
+    background: #3E3228;
+    color: #E4D3B0;
+    overflow: hidden;
+  }
+  #scene::before {
+    content: "";
+    position: absolute;
+    left: 54%;
+    top: 50%;
+    width: 12%;
+    height: 12%;
+    background: #F6EBD4;
+    border-radius: 50%;
+    z-index: 0;
+  }
+  .brand {
+    position: absolute;
+    top: 3vh;
+    left: 3vw;
+    margin: 0;
+    z-index: 3;
+    font-family: "Alfa Slab One", Rockwell, serif;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .brand span {
+    font-family: "Newsreader", "Iowan Old Style", serif;
+    font-size: 14px;
+    letter-spacing: 0;
+    margin-left: 6px;
+  }
+  h1 {
+    position: absolute;
+    top: 9vh;
+    left: 3vw;
+    margin: 0;
+    z-index: 3;
+    max-width: 8ch;
+    font-family: "Alfa Slab One", Rockwell, serif;
+    font-size: clamp(72px, 7.5vw, 108px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 0.86;
+  }
+  .sub {
+    position: absolute;
+    top: 34vh;
+    left: 3vw;
+    margin: 0;
+    z-index: 3;
+    max-width: 22ch;
+    font-size: 18px;
+  }
+  #hours-tag {
+    position: absolute;
+    right: 3vw;
+    top: 3vh;
+    margin: 0;
+    z-index: 3;
+    max-width: 24ch;
+    background: #E4D3B0;
+    color: #1C1612;
+    padding: 10px 12px;
+  }
+  #lamp-label {
+    position: absolute;
+    left: 3vw;
+    bottom: 18vh;
+    margin: 0;
+    z-index: 3;
+    font-size: 14px;
+    max-width: 22ch;
+  }
+  #bench-field {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  #bench-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  #bench-art path,
+  #bench-art rect,
+  #bench-art ellipse,
+  #bench-art circle,
+  #bench-art line {
+    stroke: #1C1612;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: #E4D3B0;
+  }
+  #bench-art path.open,
+  #bench-art line.open,
+  #bench-art circle.open,
+  #bench-art ellipse.open { fill: none; }
+  #bench-art circle.speck { stroke: none; fill: #E4D3B0; }
+  .lump-state, #empty-basket, #banneton {
+    transform-box: fill-box;
+    transform-origin: 50% 60%;
+  }
+  #bench-art [hidden] { display: none; }
+  #stage-step {
+    position: absolute;
+    left: 22vw;
+    bottom: 4vh;
+    z-index: 5;
+    min-height: 44px;
+    background: #E4D3B0;
+    color: #1C1612;
+    border: 1.75px solid #1C1612;
+    font-family: "Alfa Slab One", Rockwell, serif;
+    font-size: 16px;
+    letter-spacing: -0.03em;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #lame-flick { transition: none; }
+  }
+  #place-plate {
+    position: absolute;
+    left: 3vw;
+    top: 62vh;
+    margin: 0;
+    z-index: 3;
+    background: #E4D3B0;
+    color: #1C1612;
+    padding: 8px 10px;
+    font-family: "Alfa Slab One", Rockwell, serif;
+    font-size: 16px;
+    letter-spacing: -0.03em;
+  }
+  #stage-note {
+    position: absolute;
+    left: 3vw;
+    top: 40vh;
+    width: 28ch;
+    margin: 0;
+    z-index: 3;
+    background: #E4D3B0;
+    color: #1C1612;
+    padding: 12px 14px;
+  }
+  #peel {
+    position: absolute;
+    left: 3vw;
+    bottom: 4vh;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 12px 18px;
+    background: #E4D3B0;
+    color: #1C1612;
+    text-decoration: none;
+    border: 1.75px solid #1C1612;
+    font-family: "Alfa Slab One", Rockwell, serif;
+    font-size: 18px;
+    letter-spacing: -0.03em;
+  }
+  #hour-note {
+    position: absolute;
+    right: 3vw;
+    bottom: 4vh;
+    z-index: 3;
+    margin: 0;
+    background: #E4D3B0;
+    color: #1C1612;
+    padding: 10px 12px;
+    min-width: 8ch;
+  }
+  #jar-feed {
+    min-height: 100vh;
+    background: #3E3228;
+    color: #E4D3B0;
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: start;
+    align-items: center;
+    gap: 4vh 6vw;
+    padding: 8vh 6vw;
+  }
+  #jar-art { width: min(440px, 100%); height: auto; display: block; }
+  #jar-art path,
+  #jar-art rect,
+  #jar-art ellipse {
+    stroke: #1C1612;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: #E4D3B0;
+  }
+  #jar-art .open { fill: none; }
+  #jar-art [hidden] { display: none; }
+  #feed-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: flex-start;
+  }
+  #feed-controls button {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    border: 1.75px solid #E4D3B0;
+    background: transparent;
+    color: #E4D3B0;
+    font-family: "Alfa Slab One", Rockwell, serif;
+    font-size: 18px;
+    letter-spacing: -0.03em;
+    cursor: pointer;
+  }
+  #feed-controls button.is-done {
+    background: #E4D3B0;
+    color: #1C1612;
+  }
+  #feed-note {
+    grid-column: 1 / -1;
+    margin: 0;
+    max-width: 36ch;
+    font-size: 18px;
+  }
+  #score-station {
+    min-height: 70vh;
+    background: #3E3228;
+    padding: 5vh 3vw 6vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  #skin-wrap { position: relative; }
+  #skin-art { width: 100%; height: auto; display: block; }
+  #skin-art path {
+    stroke: #1C1612;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: #E4D3B0;
+  }
+  #skin-art .open { fill: none; }
+  #skin-art [hidden] { display: none; }
+  #cuts {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 22%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2vw;
+  }
+  #cuts button {
+    min-height: 48px;
+    background: #E4D3B0;
+    color: #1C1612;
+    border: 0;
+    border-bottom: 1.75px solid #1C1612;
+    font-family: "Alfa Slab One", Rockwell, serif;
+    font-size: 20px;
+    letter-spacing: -0.03em;
+    cursor: pointer;
+    padding: 10px 6px;
+  }
+  #cuts button[aria-pressed="true"] {
+    background: #1C1612;
+    color: #F6EBD4;
+  }
+  #score-line {
+    position: absolute;
+    top: 8%;
+    left: 6%;
+    margin: 0;
+    color: #E4D3B0;
+    font-size: 16px;
+  }
+  #shelf {
+    min-height: 26vh;
+    background: #3E3228;
+    color: #E4D3B0;
+    display: flex;
+    align-items: flex-end;
+    gap: 3vw;
+    padding: 4vh 4vw;
+  }
+  #shelf p {
+    margin: 0;
+    max-width: 28ch;
+    color: #E4D3B0;
+    border-bottom: 1.75px solid #E4D3B0;
+    padding: 10px 0 8px;
+  }
+  #footer-ring { width: 140px; height: 80px; flex: none; }
+  #lame-flick {
+    position: absolute;
+    left: 72%;
+    top: 70%;
+    z-index: 4;
+    width: 84px;
+    height: 44px;
+    padding: 4px 6px;
+    background: #E4D3B0;
+    border: 1.75px solid #1C1612;
+    cursor: pointer;
+    transition: transform 90ms linear;
+  }
+  #lame-flick.is-flick { transform: rotate(12deg); }
+  #lame-flick svg { display: block; width: 100%; height: 100%; }
+  .actions { display: contents; }
+  @media (max-width: 700px) {
+    #scene {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 14px 14px 16px;
+    }
+    .brand, h1, .sub, #hours-tag, #stage-note, #lamp-label {
+      position: static;
+      max-width: none;
+    }
+    h1 { font-size: 72px; max-width: 100%; }
+    #bench-art {
+      width: 155%;
+      height: 155%;
+      left: -28%;
+      top: -36%;
+      max-width: none;
+    }
+    .sub { font-size: 16px; }
+    #hours-tag { align-self: flex-start; }
+    #bench-field {
+      position: relative;
+      inset: auto;
+      flex: 1 1 auto;
+      min-height: 26vh;
+    }
+    #place-plate { left: auto; right: 2%; top: auto; bottom: 6%; }
+    #scene::before { display: none; }
+    #stage-note { width: auto; font-size: 16px; padding: 8px 10px; }
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    #peel, #hour-note, #stage-step { position: static; }
+    #lamp-label { font-size: 14px; }
+    #jar-feed { grid-template-columns: 1fr; min-height: auto; }
+    #feed-controls { flex-direction: row; justify-content: space-between; width: 100%; }
+    #feed-controls button { width: 88px; height: 88px; }
+    #jar-vessel { height: 42vh; }
+    #shelf { flex-direction: column; align-items: flex-start; }
+    #cuts button { font-size: 15px; }
+    #cuts { bottom: 16%; }
+  }
+</style>
+</head>
+<body>
+<!--
+CONCEPT: The site is a night bench where one lump of village dough becomes the morning loaf and scrolling springs the next hour.
+WORLD: Bench in stages
+SIGNATURE: Scroll advances one dough lump through 11pm slack, night proof, one oven spring, and a bare noon basket.
+GRADE: baker's lamp on flour, one ink #1C1612 and one dough fill #E4D3B0
+REMOVED: looping steam puff over the oven mouth
+-->
+<section id="scene" data-facts="11pm bench start, 6am door open, 41 year starter, grandmother village jar, noon basket empty">
+  <p class="brand">Kovász <span>sample</span></p>
+  <h1>Gone by noon.</h1>
+  <p class="sub">The bench starts at 11. The door opens at 6.</p>
+  <p id="hours-tag">Bench 11pm. Door 6am. Basket empty at noon.</p>
+  <div id="bench-field">
+    <svg id="bench-art" viewBox="0 0 1440 900" role="img" aria-label="Dough on the night bench">
+      <defs>
+        <filter id="wobble" x="-8%" y="-8%" width="116%" height="116%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="4" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+      <g id="ink" filter="url(#wobble)">
+        <circle class="speck" cx="180" cy="140" r="3"/>
+        <circle class="speck" cx="240" cy="620" r="2.5"/>
+        <circle class="speck" cx="1180" cy="220" r="2"/>
+        <circle class="speck" cx="1260" cy="640" r="3"/>
+        <circle class="speck" cx="900" cy="180" r="2"/>
+        <circle class="speck" cx="640" cy="760" r="2.5"/>
+        <g id="starter-jar" data-object="starter-jar">
+          <path d="M468 268 C448 268 436 292 434 334 C430 392 446 424 468 434 H548 C570 424 586 392 582 334 C580 292 568 268 548 268 Z"/>
+          <rect x="486" y="220" width="44" height="50"/>
+          <ellipse cx="508" cy="220" rx="26" ry="9"/>
+          <path class="open" d="M452 348 C478 336 538 336 564 350"/>
+          <path class="open" d="M456 386 H560"/>
+          <path class="open" d="M450 404 H566"/>
+          <text id="year-stamp" data-tier="small" data-truth="2" x="478" y="330" fill="#1C1612" font-size="28" font-family="Alfa Slab One, Rockwell, serif">41</text>
+        </g>
+        <g id="banneton" data-object="banneton">
+          <ellipse class="open" cx="860" cy="520" rx="210" ry="36"/>
+          <path class="open" d="M660 530 C710 690 1010 690 1060 530"/>
+          <path class="open" d="M710 555 C770 650 960 650 1020 555"/>
+          <path class="open" d="M750 575 C810 640 930 640 980 575"/>
+          <path class="open" d="M790 590 C840 630 910 630 950 590"/>
+        </g>
+        <g id="dough-lump" data-object="dough-lump" data-tier="big" data-truth="1">
+          <g class="lump-state" data-stage="0">
+            <ellipse cx="860" cy="572" rx="155" ry="50"/>
+            <circle class="open" cx="800" cy="568" r="4"/>
+            <circle class="open" cx="910" cy="586" r="3"/>
+          </g>
+          <g class="lump-state" data-stage="1" hidden>
+            <path d="M690 560 C710 300 1020 280 1060 550 C990 640 760 650 690 560 Z"/>
+            <path class="open" d="M760 470 C840 410 980 410 1040 480"/>
+            <path class="open" d="M800 420 C870 380 970 380 1030 430"/>
+          </g>
+          <g class="lump-state" data-stage="2" hidden>
+            <path d="M670 575 C730 300 1080 270 1120 530 C1020 680 780 690 670 575 Z"/>
+            <path class="open" d="M780 520 L1000 430"/>
+            <path class="open" d="M820 555 L980 490"/>
+            <circle class="open" cx="900" cy="470" r="7"/>
+            <circle class="open" cx="960" cy="530" r="5"/>
+          </g>
+          <g class="lump-state" data-stage="3" hidden>
+            <circle class="speck" cx="820" cy="560" r="3"/>
+            <circle class="speck" cx="870" cy="580" r="2.5"/>
+            <circle class="speck" cx="780" cy="590" r="2"/>
+            <circle class="speck" cx="910" cy="550" r="2"/>
+          </g>
+        </g>
+        <g id="empty-basket" data-object="empty-basket">
+          <ellipse class="open" cx="1200" cy="590" rx="78" ry="36"/>
+          <ellipse class="open" cx="1200" cy="590" rx="52" ry="20"/>
+          <circle class="speck" cx="1154" cy="618" r="2.5"/>
+          <circle class="speck" cx="1236" cy="624" r="2"/>
+          <circle class="speck" cx="1190" cy="560" r="2"/>
+        </g>
+      </g>
+    </svg>
+    <p id="place-plate" data-object="place-plate">Budapest</p>
+    <button id="lame-flick" type="button" data-tier="small" data-truth="1" aria-label="Flick the lame">
+      <svg viewBox="0 0 84 36" aria-hidden="true">
+        <line x1="4" y1="26" x2="54" y2="8" stroke="#1C1612" stroke-width="1.75" stroke-linecap="round"/>
+        <path d="M54 8 l20 -8 l5 14 z" fill="#E4D3B0" stroke="#1C1612" stroke-width="1.75" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+  <p id="stage-note">11pm. Flour, water, and the village jar. The lump is slack.</p>
+  <p id="lamp-label">The lamp is finding the flour.</p>
+  <div class="actions">
+    <a id="peel" data-object="peel" href="#score-station">Score the 6am loaf</a>
+    <button id="stage-step" type="button" hidden>Next hour</button>
+    <p id="hour-note" data-object="hour-note" data-tier="small" data-truth="3" data-live="time">On the bench</p>
+  </div>
+</section>
+
+<section id="jar-feed" aria-label="Feed the jar">
+  <svg id="jar-art" viewBox="0 0 420 760" role="img" aria-label="The village starter jar">
+    <defs>
+      <filter id="wobble-jar" x="-8%" y="-8%" width="116%" height="116%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="4" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+    <g id="feed-jar" data-tier="medium" data-truth="2" data-object="starter-jar" filter="url(#wobble-jar)">
+      <path d="M146 200 C96 214 78 300 82 420 C88 560 118 640 156 668 H264 C302 640 332 560 338 420 C342 300 324 214 274 200 Z"/>
+      <rect x="174" y="108" width="72" height="96"/>
+      <ellipse cx="210" cy="108" rx="42" ry="14"/>
+      <path id="jar-fill" class="open" d="M102 500 C160 478 260 478 318 502"/>
+      <path class="open" d="M108 560 H312"/>
+      <path id="old-ring" class="open" d="M114 610 H306"/>
+      <path id="year-ring" class="open" hidden d="M100 360 H320"/>
+      <g id="village-placeholder" data-tier="small" data-truth="2">
+        <rect x="118" y="676" width="190" height="56"/>
+        <text x="128" y="698" fill="#1C1612" font-size="14" font-family="Newsreader, serif">Village photo,</text>
+        <text x="128" y="718" fill="#1C1612" font-size="14" font-family="Newsreader, serif">placeholder</text>
+      </g>
+    </g>
+  </svg>
+  <div id="feed-controls">
+    <button type="button" data-feed="stir">Stir</button>
+    <button type="button" data-feed="flour">Flour</button>
+    <button type="button" data-feed="wait">Wait</button>
+  </div>
+  <p id="feed-note">Forty-one years. It wants a stir.</p>
+</section>
+
+<section id="score-station" aria-label="Score the loaf">
+  <div id="skin-wrap">
+    <svg id="skin-art" viewBox="0 0 1200 420" role="img" aria-label="The loaf skin, ready to score">
+      <defs>
+        <filter id="wobble-skin" x="-6%" y="-6%" width="112%" height="112%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="4" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+      <g filter="url(#wobble-skin)">
+        <path d="M60 250 C220 70 980 60 1140 230 C980 360 220 380 60 250 Z"/>
+        <g id="score-mark" data-tier="medium" data-truth="1" data-object="lame">
+          <path id="cut-slash" class="open" d="M300 250 L900 160"/>
+          <path id="cut-cross" class="open" hidden d="M340 270 L900 170 M380 175 L860 285"/>
+          <path id="cut-leaf" class="open" hidden d="M400 260 C560 140 780 130 920 210 C760 190 560 200 400 260"/>
+        </g>
+      </g>
+    </svg>
+    <p id="score-line">The last cut before the oven.</p>
+    <div id="cuts">
+      <button type="button" data-cut="slash" aria-pressed="true">One slash</button>
+      <button type="button" data-cut="cross" aria-pressed="false">Cross</button>
+      <button type="button" data-cut="leaf" aria-pressed="false">Leaf</button>
+    </div>
+  </div>
+</section>
+
+<footer id="shelf">
+  <svg id="footer-ring" data-tier="small" data-truth="3" viewBox="0 0 140 80" role="img" aria-label="The flour ring left by the basket">
+    <ellipse cx="70" cy="42" rx="52" ry="24" fill="none" stroke="#E4D3B0" stroke-width="1.75"/>
+    <ellipse cx="70" cy="42" rx="32" ry="14" fill="none" stroke="#E4D3B0" stroke-width="1.75"/>
+    <circle cx="46" cy="56" r="2.5" fill="#E4D3B0"/>
+    <circle cx="92" cy="58" r="2" fill="#E4D3B0"/>
+    <circle cx="74" cy="28" r="2" fill="#E4D3B0"/>
+  </svg>
+  <p>Kovász sample, Budapest. The basket does not come back.</p>
+  <p>This crumb is not on the bench.</p>
+  <p id="shelf-hours">Bench 11pm. Door 6am. Basket empty at noon.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+  var stages = [
+    {
+      w: "30%",
+      h: "24%",
+      r: "46%",
+      note: "11pm. Flour, water, and the village jar. The lump is slack.",
+      hour: "11pm"
+    },
+    {
+      w: "28%",
+      h: "40%",
+      r: "42% 42% 48% 48%",
+      note: "The night holds it in the banneton. Coils print the skin.",
+      hour: "3am"
+    },
+    {
+      w: "36%",
+      h: "32%",
+      r: "48% 48% 28% 28%",
+      note: "Dawn. One spring, then the score stays open.",
+      hour: "6am"
+    },
+    {
+      w: "22%",
+      h: "14%",
+      r: "50%",
+      note: "Noon. The basket is a flour ring.",
+      hour: "noon"
+    }
+  ];
+  var current = 0;
+  var note = document.getElementById("stage-note");
+  var lumps = document.querySelectorAll(".lump-state");
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function setShown(node, on) {
+    if (on) node.removeAttribute("hidden");
+    else node.setAttribute("hidden", "");
+  }
+
+  function paint(index, animate) {
+    var s = stages[index];
+    lumps.forEach(function (node, i) {
+      var on = i === index;
+      setShown(node, on);
+      if (on && animate && window.gsap) {
+        gsap.fromTo(node, { scale: 0.82 }, {
+          scale: 1,
+          duration: 0.45,
+          ease: "back.out(1.4)",
+          transformOrigin: "50% 60%",
+          overwrite: "auto"
+        });
+      }
+    });
+    document.getElementById("banneton").style.display = index === 3 ? "none" : "";
+    if (window.gsap) {
+      gsap.to("#empty-basket", {
+        scale: index === 3 ? 1.2 : 1,
+        duration: animate ? 0.45 : 0,
+        ease: "back.out(1.4)",
+        transformOrigin: "50% 50%",
+        overwrite: "auto"
+      });
+    }
+    note.textContent = s.note;
+  }
+
+  function readBenchHour() {
+    var h = new Date().getHours();
+    var word = h < 6 ? "On the bench" : h < 12 ? "On the peel" : "Sold through";
+    var title = h < 6 ? "Kovász, on the bench" : h < 12 ? "Kovász, on the peel" : "Kovász, sold through";
+    document.getElementById("hour-note").textContent = word;
+    document.title = title;
+  }
+
+  function stageFromProgress(p) {
+    if (p < 0.30) return 0;
+    if (p < 0.55) return 1;
+    if (p < 0.75) return 2;
+    return 3;
+  }
+
+  function boot() {
+    readBenchHour();
+    var lame = document.getElementById("lame-flick");
+    lame.addEventListener("click", function () {
+      if (reduceMotion) return;
+      lame.classList.add("is-flick");
+      window.setTimeout(function () { lame.classList.remove("is-flick"); }, 90);
+    });
+    if (reduceMotion) {
+      var step = document.getElementById("stage-step");
+      step.hidden = false;
+      step.addEventListener("click", function () {
+        current = (current + 1) % stages.length;
+        paint(current, false);
+      });
+      return;
+    }
+    if (!window.gsap || !window.ScrollTrigger) return;
+    gsap.registerPlugin(ScrollTrigger);
+    paint(0, false);
+    ScrollTrigger.create({
+      trigger: "#scene",
+      start: "top top",
+      end: function () { return "+=" + Math.round(window.innerHeight * 2); },
+      pin: true,
+      onUpdate: function (self) {
+        var next = stageFromProgress(self.progress);
+        if (next !== current) {
+          current = next;
+          paint(next, true);
+        }
+      }
+    });
+    var lamp = document.getElementById("lamp-label");
+    if (reduceMotion || sessionStorage.getItem("kovasz-lamp")) {
+      lamp.textContent = "Lamp on since 11.";
+    } else {
+      window.setTimeout(function () {
+        lamp.textContent = "Lamp on since 11.";
+        sessionStorage.setItem("kovasz-lamp", "1");
+      }, 800);
+    }
+  }
+
+  function showCut(name) {
+    ["slash", "cross", "leaf"].forEach(function (id) {
+      var el = document.getElementById("cut-" + id);
+      var on = id === name;
+      if (on) el.removeAttribute("hidden");
+      else el.setAttribute("hidden", "");
+      document.querySelector('[data-cut="' + id + '"]').setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    var live = document.getElementById("cut-" + name);
+    if (window.gsap && live && !reduceMotion) {
+      var len = live.getTotalLength();
+      gsap.fromTo(live, { strokeDasharray: len, strokeDashoffset: len }, {
+        strokeDashoffset: 0,
+        duration: 0.45,
+        ease: "back.out(1.4)",
+        overwrite: "auto"
+      });
+    }
+  }
+
+  var feedStep = 0;
+  var feedOrder = ["stir", "flour", "wait"];
+  var feedNotes = [
+    "Forty-one years. It wants a stir.",
+    "Now the flour.",
+    "Wait. The bench is patient.",
+    "Fed. The rim is a year thicker."
+  ];
+  var feedShifts = [0, -16, -90, -130];
+
+  function feed(name) {
+    var noteEl = document.getElementById("feed-note");
+    if (feedStep >= 3) {
+      noteEl.textContent = feedNotes[3];
+      return;
+    }
+    if (name !== feedOrder[feedStep]) {
+      noteEl.textContent = "The jar is sulking. Stir first.";
+      return;
+    }
+    feedStep += 1;
+    noteEl.textContent = feedNotes[feedStep];
+    document.querySelector('[data-feed="' + name + '"]').classList.add("is-done");
+    var fill = document.getElementById("jar-fill");
+    if (reduceMotion) {
+      fill.style.transform = "translateY(" + feedShifts[feedStep] + "px)";
+    } else if (window.gsap) {
+      gsap.to(fill, {
+        y: feedShifts[feedStep],
+        duration: 0.45,
+        ease: "back.out(1.4)",
+        overwrite: "auto"
+      });
+    }
+    if (feedStep === 3) document.getElementById("year-ring").removeAttribute("hidden");
+  }
+
+  document.getElementById("feed-controls").addEventListener("click", function (event) {
+    var btn = event.target.closest("button");
+    if (!btn) return;
+    feed(btn.getAttribute("data-feed"));
+  });
+
+  document.getElementById("cuts").addEventListener("click", function (event) {
+    var btn = event.target.closest("button");
+    if (!btn) return;
+    showCut(btn.getAttribute("data-cut"));
+  });
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      boot();
+      showCut("slash");
+    });
+  } else {
+    boot();
+    showCut("slash");
+  }
+</script>
+</body>
+</html>

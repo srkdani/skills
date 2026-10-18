@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ledgerline sample</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Fragment+Mono&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sheet: #E4EED6;
+    --bar: #A9C49A;
+    --ink: #1A1914;
+    --carbon: #1F4E79;
+    --flag: #B42318;
+    --paper: #F3F6EA;
+    --lamp: #F7FBF2;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--sheet);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      var(--sheet) 0 22px,
+      var(--bar) 22px 44px
+    );
+    color: var(--ink);
+    font-family: "Public Sans", sans-serif;
+    font-size: 18px;
+    line-height: 1.4;
+    overflow-x: hidden;
+  }
+
+  /* GRADE: fluorescent on green-bar paper, carbon blue second pass 2px off the black */
+
+  #lamp {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 28px;
+    padding: 4px 28px;
+    background: var(--lamp);
+    color: var(--ink);
+    border-bottom: 2px solid var(--ink);
+    font-family: "Fragment Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  #lamp[data-phase="feeding"] { background: #C9D7B6; }
+  #lamp[data-phase="desk"] { background: #F7FBF2; }
+  #lamp[data-phase="judging"] { background: #FBFDF8; }
+
+  #lamp::after { content: "Tube resting"; }
+  #lamp[data-phase="feeding"]::after { content: "Tube dim, tape feeding"; }
+  #lamp[data-phase="desk"]::after { content: "Tube on, file landed"; }
+  #lamp[data-phase="judging"]::after { content: "Tube hot, judging"; }
+
+  #scene { min-height: 100vh; }
+
+  @media (min-width: 701px) {
+    body:not(.still) .sheet {
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+  }
+
+  .sheet {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 0 28px 10px;
+  }
+
+  .mast {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 10px;
+  }
+
+  .brand {
+    margin: 0;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    letter-spacing: 0.04em;
+    line-height: 0.9;
+  }
+
+  .brand span {
+    display: inline-block;
+    margin-left: 8px;
+    font-family: "Fragment Mono", monospace;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    vertical-align: 8px;
+  }
+
+  #batch-slip {
+    margin: 4px 0 0;
+    max-width: 320px;
+    flex: 1;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    padding: 4px 0;
+    font-family: "Fragment Mono", monospace;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  #sheet-stamp {
+    border: 2px solid var(--flag);
+    color: var(--flag);
+    padding: 4px 8px 6px;
+    text-align: center;
+    transform: rotate(-6deg);
+    min-width: 148px;
+    background: transparent;
+  }
+
+  #sheet-stamp b {
+    display: block;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: 0.14em;
+    line-height: 1;
+  }
+
+  #title-plate {
+    display: block;
+    margin-top: 2px;
+    font-family: "Fragment Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0;
+    line-height: 1.2;
+  }
+
+  h1 {
+    margin: 6px 0 0;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: clamp(72px, 8vw, 112px);
+    line-height: 0.82;
+    letter-spacing: -0.03em;
+  }
+
+  .caps {
+    position: relative;
+    min-height: 2.5em;
+    margin: 4px 0 6px;
+  }
+
+  .caps p {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    max-width: 40rem;
+  }
+
+  .picture-row {
+    flex: 0 1 auto;
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+  }
+
+  #reg-ticks {
+    align-self: center;
+    font-family: "Fragment Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+  }
+
+  #reg-ticks svg { display: block; width: 48px; height: 48px; }
+  #reg-ticks span { display: block; margin-top: 4px; }
+
+  #registration {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1100 / 440;
+    --p: 0;
+  }
+
+  .ledger-window {
+    position: absolute;
+    z-index: 2;
+    left: 15%;
+    right: 20%;
+    top: 20%;
+    bottom: 12%;
+    background: var(--sheet);
+    border: 3px solid var(--ink);
+    padding: 8px 14px 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
+  .ledger-window .heads,
+  .ledger-window .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .ledger-window .heads {
+    font-family: "Fragment Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+
+  .ledger-window .row {
+    font-family: "Fragment Mono", monospace;
+    font-size: clamp(18px, 2.4vw, 36px);
+    line-height: 1;
+  }
+
+  .ledger-window .penny { color: var(--flag); }
+
+  .ledger-window .fine {
+    font-family: "Fragment Mono", monospace;
+    font-size: 12px;
+  }
+
+  .state { position: absolute; inset: 0; }
+
+  .state svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  svg text { font-family: "Fragment Mono", ui-monospace, monospace; }
+
+  .state-open svg {
+    clip-path: inset(0 0 0 calc(var(--p) * 100%));
+    transition: clip-path 120ms linear;
+  }
+
+  .state-sat svg {
+    clip-path: inset(0 calc((1 - var(--p)) * 100%) 0 0);
+    transition: clip-path 120ms linear;
+  }
+
+  #penny-tick {
+    min-height: 48px;
+    background: transparent;
+    color: var(--flag);
+    border: 2px solid var(--flag);
+    box-shadow: 2px 2px 0 var(--carbon);
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    padding: 6px 12px 4px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  #penny-tick .tick {
+    display: block;
+    height: 3px;
+    width: 0;
+    margin-top: 8px;
+    background: #F4F7EF;
+  }
+
+  #penny-tick.on .tick { width: 72px; }
+
+  .action-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 18px;
+    flex-shrink: 0;
+    padding-top: 6px;
+  }
+
+  #seat-button {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    letter-spacing: 0.03em;
+    background: var(--flag);
+    color: #F4F7EF;
+    border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+    min-height: 48px;
+    padding: 4px 16px 2px;
+    cursor: pointer;
+  }
+
+  #seat-button:active {
+    box-shadow: none;
+    transform: translate(2px, 2px);
+  }
+
+  .fact {
+    margin: 0;
+    font-family: "Fragment Mono", monospace;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .fact span {
+    display: block;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+
+  #detent-readout {
+    margin: 0;
+    margin-left: auto;
+    font-family: "Fragment Mono", monospace;
+    font-size: 13px;
+  }
+
+  .carriage {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2px 0 0;
+    font-family: "Fragment Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .carriage input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    height: 44px;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  input[type="range"]:focus { outline: none; }
+
+  input[type="range"]:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 8px;
+    background-color: var(--ink);
+    background-image: repeating-linear-gradient(90deg, var(--sheet) 0 3px, transparent 3px 16.66%);
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 36px;
+    margin-top: -13px;
+    background: var(--flag);
+    border: 2px solid var(--ink);
+    cursor: pointer;
+  }
+
+  input[type="range"]::-moz-range-track {
+    height: 10px;
+    background: var(--bar);
+    border: none;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 36px;
+    background: var(--flag);
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    cursor: pointer;
+  }
+
+  .hint {
+    margin: 0 0 4px;
+    font-family: "Fragment Mono", monospace;
+    font-size: 12px;
+  }
+
+  .hint-still { display: none; }
+
+  .record { padding: 12px 28px 8px; }
+
+  .record-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 12px;
+    align-items: baseline;
+    border-top: 2px solid var(--ink);
+    padding: 9px 0;
+  }
+
+  .record-row span:first-child {
+    font-family: "Fragment Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  #hour-guide {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+
+  #hour-guide button {
+    min-height: 52px;
+    background: transparent;
+    color: var(--ink);
+    border: 0;
+    border-right: 2px solid var(--ink);
+    font-family: "Public Sans", sans-serif;
+    font-size: 16px;
+    line-height: 1.25;
+    text-align: left;
+    padding: 10px 12px;
+    cursor: pointer;
+  }
+
+  #hour-guide button:last-child { border-right: 0; }
+
+  #hour-guide button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--sheet);
+  }
+
+  .spike-wrap {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 12px;
+    padding: 36px 28px 56px;
+  }
+
+  .spike-label {
+    margin: 0;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: 0.12em;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  .spike-board {
+    display: flex;
+    align-items: stretch;
+    gap: 14px;
+    min-height: 260px;
+  }
+
+  .wire {
+    width: 4px;
+    background: var(--ink);
+    position: relative;
+    flex: 0 0 4px;
+    margin-top: 16px;
+  }
+
+  .wire::before {
+    content: "";
+    position: absolute;
+    top: -16px;
+    left: -9px;
+    width: 22px;
+    height: 22px;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    background: var(--sheet);
+  }
+
+  .slip {
+    width: var(--w);
+    margin-top: var(--drop);
+    transform: rotate(var(--tilt));
+    background: var(--paper);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--carbon);
+    text-align: left;
+    padding: 12px 12px 18px;
+    font-family: "Fragment Mono", monospace;
+    font-size: 14px;
+    line-height: 1.35;
+    cursor: pointer;
+    min-height: 132px;
+  }
+
+  .slip:nth-of-type(1) {
+    --w: 32%;
+    --drop: 8px;
+    --tilt: -2deg;
+    clip-path: polygon(0 0, 100% 0, 100% 84%, 92% 100%, 0 100%);
+  }
+
+  .slip:nth-of-type(2) {
+    --w: 27%;
+    --drop: 48px;
+    --tilt: 1.8deg;
+    clip-path: polygon(0 0, 100% 8%, 100% 100%, 0 100%);
+  }
+
+  .slip:nth-of-type(3) {
+    --w: 36%;
+    --drop: 20px;
+    --tilt: -3.2deg;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 10% 100%, 0 88%);
+  }
+
+  .slip strong {
+    display: block;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    letter-spacing: 0.02em;
+    line-height: 0.95;
+  }
+
+  .slip.flagged {
+    background: var(--flag);
+    color: #F4F7EF;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  #spike-note {
+    margin: 14px 0 0;
+    max-width: 40rem;
+  }
+
+  #cuff-note {
+    padding: 28px 28px 48px;
+    border-top: 2px solid var(--ink);
+  }
+
+  .smudge {
+    display: block;
+    width: 84px;
+    height: 14px;
+    background: var(--ink);
+    box-shadow: 2px 2px 0 var(--carbon);
+    margin-bottom: 10px;
+  }
+
+  .cuff-line {
+    margin: 0 0 10px;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+  }
+
+  #cuff-note p { margin: 0 0 6px; }
+
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    #seat-button:hover { background: #8E1C14; }
+    .slip:hover { box-shadow: 4px 4px 0 var(--carbon); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    #penny-tick .tick { transition: width 80ms linear; }
+    .slip { transition: background 80ms linear, color 80ms linear, box-shadow 80ms linear; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .state-open svg,
+    .state-sat svg { transition: none; }
+    #seat-button:active { transform: none; }
+    #penny-tick .tick { transition: none; }
+    .slip { transition: none; }
+    #scene { min-height: 100vh !important; }
+    .sheet {
+      position: relative !important;
+      height: auto !important;
+    }
+    .hint-move { display: none; }
+    .hint-still { display: inline; }
+  }
+
+  @media (max-width: 700px) {
+    #lamp, .sheet, .record, .spike-wrap, #cuff-note { padding-left: 14px; padding-right: 14px; }
+    #lamp { padding-left: 14px; padding-right: 14px; }
+    .sheet { min-height: 0; height: auto; position: relative; }
+    #scene { min-height: 0; }
+    .mast { flex-wrap: wrap; }
+    #batch-slip { flex: 1 1 100%; max-width: none; }
+    #sheet-stamp { transform: none; }
+    h1 { font-size: 72px; }
+    .mast { display: grid; grid-template-columns: 1fr auto; }
+    #batch-slip { grid-column: 1 / -1; }
+    .picture-row { grid-template-columns: 1fr; }
+    #reg-ticks { display: flex; align-items: center; gap: 8px; }
+    #reg-ticks svg { width: 36px; height: 36px; }
+    #registration { aspect-ratio: auto; height: 232px; }
+    .ledger-window { left: 6%; right: 6%; top: 14%; bottom: 10%; }
+    #penny-tick { width: 100%; }
+    .action-row { align-items: stretch; }
+    #seat-button { width: 100%; }
+    #detent-readout { margin-left: 0; }
+    .record-row { grid-template-columns: 1fr; gap: 2px; }
+    #hour-guide { grid-template-columns: 1fr; }
+    #hour-guide button { border-right: 0; border-bottom: 2px solid var(--ink); }
+    #hour-guide button:last-child { border-bottom: 0; }
+    .spike-wrap { grid-template-columns: 1fr; }
+    .spike-label {
+      writing-mode: horizontal-tb;
+      transform: none;
+    }
+    .spike-board { flex-direction: column; min-height: 0; }
+    .wire { width: 100%; height: 4px; flex: 0 0 4px; margin: 12px 0 0; }
+    .wire::before { top: -9px; left: 0; }
+    .slip {
+      width: 100%;
+      margin-top: 12px;
+      transform: none;
+      min-height: 44px;
+    }
+    .hint-move { display: none; }
+    .hint-still { display: inline; }
+  }
+
+  @media (hover: none) {
+    #seat-button:hover { background: var(--flag); }
+  }
+</style>
+</head>
+<body>
+<!--
+CONCEPT: The site is a carbon-copy desk where the marketplace tape and the bank tape are two ink passes, and seating the clip makes them one line while the penny stays red.
+WORLD: Two states, one clip
+SIGNATURE: A six-detent clip seats the carbon blue payout tape onto the black bank tape, and the penny line stays flagged.
+GRADE: fluorescent on green-bar paper, carbon blue second pass 2px off the black
+REMOVED: carbon-dust grain overlay
+-->
+
+<div id="lamp">Desk lamp</div>
+
+<section id="scene" data-facts="carbon blue second pass, green bar ledger stock, penny that will not sit, fluorescent batch lamp">
+  <div class="sheet">
+    <div class="mast">
+      <p class="brand">Ledgerline <span>sample</span></p>
+      <p id="batch-slip" data-tier="small" data-truth="3" data-live="time" data-object="batch-slip">Desk clock: reading the lamp.</p>
+      <div id="sheet-stamp" data-tier="small" data-truth="2">
+        <b>SAMPLE</b>
+        <span id="title-plate">Penny still open</span>
+      </div>
+    </div>
+
+    <h1>Seat the two tapes.</h1>
+    <div class="caps">
+      <p id="cap-open">The marketplace carbon and the bank line do not share a rule.</p>
+      <p id="cap-sat" hidden>They sit. The penny stays red.</p>
+    </div>
+
+    <div class="picture-row">
+      <div id="reg-ticks" data-tier="small" data-truth="1" data-object="reg-mark">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M6 18 V6 H18" fill="none" stroke="#1A1914" stroke-width="2"></path>
+          <path d="M10 26 V10 H26" fill="none" stroke="#1F4E79" stroke-width="2"></path>
+          <circle cx="34" cy="36" r="4" fill="#B42318"></circle>
+        </svg>
+        <span>+2px</span>
+      </div>
+
+      <div id="registration" data-tier="big" data-truth="1">
+        <div class="state state-open">
+          <svg viewBox="0 0 1100 440" preserveAspectRatio="xMidYMid slice" role="img">
+            <title>Marketplace tape a full notch off the bank tape</title>
+            <g id="bank-tape" data-object="bank-tape">
+              <rect x="20" y="16" width="1000" height="370" fill="#1A1914"></rect>
+              <circle cx="110" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="270" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="430" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="590" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="750" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="910" cy="46" r="13" fill="#E4EED6"></circle>
+              <line x1="48" y1="130" x2="980" y2="130" stroke="#E4EED6" stroke-width="10"></line>
+              <line x1="48" y1="220" x2="980" y2="220" stroke="#E4EED6" stroke-width="10"></line>
+              <line x1="48" y1="310" x2="980" y2="310" stroke="#E4EED6" stroke-width="10"></line>
+            </g>
+            <g id="market-tape" data-object="market-tape" transform="translate(56 40)">
+              <rect x="20" y="16" width="1000" height="370" fill="#1F4E79"></rect>
+              <circle cx="110" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="270" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="430" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="590" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="750" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="910" cy="46" r="13" fill="#E4EED6"></circle>
+              <line x1="48" y1="130" x2="980" y2="130" stroke="#E4EED6" stroke-width="10"></line>
+              <line x1="48" y1="220" x2="980" y2="220" stroke="#E4EED6" stroke-width="10"></line>
+              <line x1="48" y1="310" x2="980" y2="310" stroke="#E4EED6" stroke-width="10"></line>
+            </g>
+            <rect x="1008" y="112" width="72" height="28" fill="#B42318"></rect>
+            <rect x="1008" y="202" width="72" height="28" fill="#B42318"></rect>
+            <polygon points="980,286 1092,286 1092,372 1030,372 980,332" fill="#B42318"></polygon>
+          </svg>
+        </div>
+        <div class="state state-sat">
+          <svg viewBox="0 0 1100 440" preserveAspectRatio="xMidYMid slice" role="img">
+            <title>Tapes seated, penny still flagged</title>
+            <g>
+              <rect x="20" y="16" width="1000" height="370" fill="#1A1914"></rect>
+              <circle cx="110" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="270" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="430" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="590" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="750" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="910" cy="46" r="13" fill="#E4EED6"></circle>
+              <line x1="48" y1="130" x2="980" y2="130" stroke="#E4EED6" stroke-width="10"></line>
+              <line x1="48" y1="220" x2="980" y2="220" stroke="#E4EED6" stroke-width="10"></line>
+              <line x1="48" y1="310" x2="980" y2="310" stroke="#E4EED6" stroke-width="10"></line>
+            </g>
+            <g transform="translate(2 2)">
+              <rect x="20" y="16" width="1000" height="370" fill="#1F4E79"></rect>
+              <circle cx="110" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="270" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="430" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="590" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="750" cy="46" r="13" fill="#E4EED6"></circle>
+              <circle cx="910" cy="46" r="13" fill="#E4EED6"></circle>
+              <line x1="48" y1="130" x2="980" y2="130" stroke="#E4EED6" stroke-width="10"></line>
+              <line x1="48" y1="220" x2="980" y2="220" stroke="#E4EED6" stroke-width="10"></line>
+              <line x1="48" y1="310" x2="980" y2="310" stroke="#E4EED6" stroke-width="10"></line>
+            </g>
+            <polygon points="980,286 1092,286 1092,372 1030,372 980,332" fill="#B42318"></polygon>
+          </svg>
+        </div>
+        <div class="ledger-window">
+          <div class="heads"><span>MARKET</span><span>BANK</span></div>
+          <div class="row"><span>1840.20</span><span>1840.20</span></div>
+          <div class="row"><span>220.00</span><span>220.00</span></div>
+          <div class="row penny"><span>18.41</span><span>18.40</span></div>
+          <div class="fine">sample lines</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button id="seat-button" type="button">Seat the tapes</button>
+      <button id="penny-tick" type="button" data-tier="small" data-truth="2" data-object="penny-flag">Flag the penny<span class="tick"></span></button>
+      <p class="fact"><span>Sample endpoint</span>POST /v1/match</p>
+      <p class="fact"><span>Contact</span>match@ledgerline.sample</p>
+      <p id="detent-readout">Detent 0 of 6</p>
+    </div>
+    <label class="carriage" for="seat-range">Carriage
+      <input id="seat-range" type="range" min="0" max="6" step="1" value="0" aria-label="Seat the tapes by detent">
+    </label>
+    <p class="hint"><span class="hint-move">Drag the carriage, or scroll the sheet.</span><span class="hint-still">Drag the carriage. The sheet stays put.</span></p>
+  </div>
+</section>
+
+<section class="record" aria-label="Batch record">
+  <div class="record-row"><span>Brand</span><span>Ledgerline sample</span></div>
+  <div class="record-row"><span>Endpoint</span><span>POST /v1/match</span></div>
+  <div class="record-row"><span>Contact</span><span>match@ledgerline.sample</span></div>
+  <div class="record-row"><span>Job</span><span>Read the marketplace tape and the bank tape. Flag the line that will not balance.</span></div>
+  <div class="record-row"><span>Desk clock</span><span id="record-clock">Desk clock: reading the lamp.</span></div>
+  <div id="hour-guide" data-tier="medium" data-truth="3">
+    <button type="button" data-hour="feeding" aria-pressed="false">Feeding the second tape.</button>
+    <button type="button" data-hour="desk" aria-pressed="false">Batch on the desk.</button>
+    <button type="button" data-hour="judging" aria-pressed="false">Lamp on. Judging the penny.</button>
+  </div>
+</section>
+
+<section id="spike" data-tier="medium" data-truth="2" data-object="exception-spike" aria-label="Exception spike">
+  <div class="spike-wrap">
+    <p class="spike-label">SPIKE</p>
+    <div>
+      <div class="spike-board">
+        <div class="wire" aria-hidden="true"></div>
+        <button type="button" class="slip" data-note="North stall sits. Sample 1840.20 on both tapes." aria-pressed="false">
+          <strong>North stall</strong>
+          1840.20 and 1840.20
+          <br>sample, sits
+        </button>
+        <button type="button" class="slip" data-note="Ferry goods sits. Sample 220.00 on both tapes." aria-pressed="false">
+          <strong>Ferry goods</strong>
+          220.00 and 220.00
+          <br>sample, sits
+        </button>
+        <button type="button" class="slip flagged" data-note="Night cart will not sit. Sample 18.41 against 18.40." aria-pressed="true">
+          <strong>Night cart</strong>
+          18.41 and 18.40
+          <br>sample penny
+        </button>
+      </div>
+      <p id="spike-note">Night cart will not sit. Sample 18.41 against 18.40.</p>
+    </div>
+  </div>
+</section>
+
+<footer id="cuff-note" data-tier="small" data-truth="3">
+  <span class="smudge" aria-hidden="true"></span>
+  <p class="cuff-line">Carbon on the cuff. The penny is still open.</p>
+  <p>Ledgerline sample. Marketplace payouts, seated against the bank tape.</p>
+  <p>This sheet is a sample. The batch you want is not on this spike.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+(function () {
+  var registration = document.getElementById("registration");
+  var range = document.getElementById("seat-range");
+  var button = document.getElementById("seat-button");
+  var detent = document.getElementById("detent-readout");
+  var capOpen = document.getElementById("cap-open");
+  var capSat = document.getElementById("cap-sat");
+  var plate = document.getElementById("title-plate");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var wide = window.matchMedia("(min-width: 701px)").matches;
+  var step = 0;
+  var hold = false;
+  var holdProgress = 0;
+  var scrollProgress = 0;
+
+  if (reduce || !wide) document.body.classList.add("still");
+
+  function apply(next) {
+    step = Math.max(0, Math.min(6, next));
+    registration.style.setProperty("--p", String(step / 6));
+    range.value = String(step);
+    detent.textContent = "Detent " + step + " of 6";
+    var seated = step === 6;
+    capOpen.hidden = seated;
+    capSat.hidden = !seated;
+    plate.textContent = seated ? "Tapes seated, penny red" : "Penny still open";
+    document.title = plate.textContent + ", Ledgerline sample";
+    button.textContent = seated ? "Open the gap" : "Seat the tapes";
+  }
+
+  button.addEventListener("click", function () {
+    apply(step >= 6 ? 0 : step + 1);
+    hold = true;
+    holdProgress = scrollProgress;
+  });
+
+  range.addEventListener("input", function () {
+    apply(Number(range.value));
+    hold = true;
+    holdProgress = scrollProgress;
+  });
+
+  var penny = document.getElementById("penny-tick");
+  penny.addEventListener("click", function () {
+    penny.classList.toggle("on");
+  });
+
+  var hour = new Date().getHours();
+  var livePhase = "judging";
+  if (hour >= 6 && hour < 16) livePhase = "feeding";
+  else if (hour >= 16 && hour < 22) livePhase = "desk";
+
+  var phaseCopy = {
+    feeding: "Feeding the second tape.",
+    desk: "Batch on the desk.",
+    judging: "Lamp on. Judging the penny."
+  };
+
+  var slip = document.getElementById("batch-slip");
+  var lamp = document.getElementById("lamp");
+  var recordClock = document.getElementById("record-clock");
+  var hourButtons = document.querySelectorAll("[data-hour]");
+
+  function showPhase(key) {
+    var live = key === livePhase;
+    var line = "Desk clock: " + phaseCopy[key] + (live ? " This hour." : " Sample hour.");
+    slip.textContent = line;
+    recordClock.textContent = line;
+    lamp.setAttribute("data-phase", key);
+    hourButtons.forEach(function (btn) {
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-hour") === key ? "true" : "false");
+    });
+  }
+
+  showPhase(livePhase);
+
+  hourButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      showPhase(btn.getAttribute("data-hour"));
+    });
+  });
+
+  var slips = document.querySelectorAll(".slip");
+  var spikeNote = document.getElementById("spike-note");
+  slips.forEach(function (el) {
+    el.addEventListener("click", function () {
+      var was = el.classList.contains("flagged");
+      slips.forEach(function (other) {
+        other.classList.remove("flagged");
+        other.setAttribute("aria-pressed", "false");
+      });
+      if (was) {
+        spikeNote.textContent = "No gap tonight. The tapes sat.";
+      } else {
+        el.classList.add("flagged");
+        el.setAttribute("aria-pressed", "true");
+        spikeNote.textContent = el.getAttribute("data-note");
+      }
+    });
+  });
+
+  if (!reduce && wide && window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.create({
+      trigger: "#scene",
+      start: "top top",
+      end: "bottom top",
+      onUpdate: function (self) {
+        scrollProgress = self.progress;
+        if (hold) {
+          if (Math.abs(self.progress - holdProgress) < 0.06) return;
+          hold = false;
+        }
+        var next = Math.round(self.progress * 6);
+        if (next !== step) apply(next);
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>

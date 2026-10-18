@@ -1,0 +1,846 @@
+<!--
+CONCEPT: The site is a specimen case where moth scales and fluorite become two answers of one UV lamp, and sweeping the torch does the lighting.
+WORLD: Walk into the place
+SIGNATURE: One sweep progress turns moth scales and fluorite from daylight shade to torch shade together.
+GRADE: flat torch light on scale and stone
+REMOVED: case-dust grain overlay, deleted because the scales already are the dust
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moth Night, sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #6B4E3A;
+    color: #E4D3B4;
+    font-family: Newsreader, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.35;
+  }
+  h1 {
+    font-family: Cinzel, "Times New Roman", serif;
+    font-weight: 700;
+    font-size: clamp(64px, 7vw, 96px);
+    line-height: 0.86;
+    letter-spacing: 0.03em;
+    margin: 0;
+    color: #2A2420;
+  }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  #scene {
+    min-height: 100vh;
+    padding: 14px;
+    background: #6B4E3A;
+  }
+  .case {
+    min-height: calc(100vh - 28px);
+    background: #2A2420;
+    border: 22px solid #6B4E3A;
+    display: grid;
+    grid-template-rows: auto minmax(280px, 1fr) auto;
+    position: relative;
+  }
+  .rail {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px 0;
+  }
+  #door-plate, #court-tag, #last-lit {
+    margin: 0;
+    background: #E4D3B4;
+    color: #2A2420;
+    padding: 6px 10px;
+  }
+  #door-plate { font-family: Cinzel, "Times New Roman", serif; letter-spacing: 0.04em; font-size: 15px; }
+  #court-tag { max-width: 52%; font-size: 16px; }
+  #signature { position: relative; min-height: 320px; }
+  #layer-mid { position: absolute; inset: 0; }
+  #hawk-wing {
+    width: min(1100px, 94%);
+    height: auto;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  #fluorite {
+    position: absolute;
+    left: 8px;
+    bottom: 18px;
+    width: 230px;
+    height: auto;
+  }
+  #calcite {
+    position: absolute;
+    left: 220px;
+    bottom: 28px;
+    width: 140px;
+    height: auto;
+  }
+  .plate {
+    position: absolute;
+    right: 14px;
+    bottom: 16px;
+    width: min(400px, 36%);
+    background: #E4D3B4;
+    color: #2A2420;
+    padding: 14px 16px 12px;
+    z-index: 2;
+  }
+  .plate .screws { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .screw {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #6B4E3A;
+    display: block;
+  }
+  .sub { margin: 8px 0 0; font-size: 18px; }
+  #last-lit { margin-top: 8px; font-size: 15px; background: transparent; padding: 0; }
+  #layer-fore {
+    position: relative;
+    z-index: 4;
+    margin-top: 0;
+    background: #6B4E3A;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    align-items: center;
+    padding: 8px 12px 12px;
+  }
+  #torch { width: 188px; height: 72px; display: block; }
+  #take {
+    background: #E4D3B4;
+    color: #2A2420;
+    border: 0;
+    min-height: 48px;
+    padding: 10px 14px;
+    font-family: Cinzel, "Times New Roman", serif;
+    letter-spacing: 0.05em;
+    font-size: 16px;
+  }
+  .sweep-label { display: flex; flex-direction: column; font-size: 15px; min-width: min(100%, 280px); flex: 1; }
+  #sweep-range { width: 100%; height: 44px; accent-color: #C4623E; }
+  #empty-sweep { flex-basis: 100%; margin: 0; font-size: 16px; }
+  #loose-scale {
+    position: absolute;
+    left: 60%;
+    top: 14%;
+    width: 64px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    z-index: 3;
+    transition: transform 80ms linear;
+  }
+  #loose-scale.nudge { transform: translate(4px, -3px); }
+  #loose-scale ellipse { fill: #E4D3B4; stroke: #6B4E3A; stroke-width: 2; }
+  #loose-scale.nudge ellipse { fill: #6E8F7A; }
+  #cuff-line {
+    margin: 8px 0 0;
+    font-size: 15px;
+  }
+  #oak-rail[data-state="day"] #door-plate { outline: 2px solid #C4623E; }
+  #oak-rail[data-state="night"] #door-plate { background: #2A2420; color: #E4D3B4; }
+  #oak-rail[data-state="late"] #door-plate { background: #6B4E3A; color: #E4D3B4; }
+  #door-room {
+    background: #6B4E3A;
+    color: #E4D3B4;
+    padding: 0 0 20px;
+  }
+  .door-tools {
+    display: flex;
+    gap: 18px;
+    align-items: flex-end;
+    padding: 0 16px 8px;
+    margin-top: -28px;
+    position: relative;
+  }
+  #basket { flex: 1.3; max-width: 460px; }
+  #basket-fore { flex: 0.7; max-width: 280px; }
+  #basket-back { max-width: 560px; }
+  #basket-back svg { width: 100%; height: 108px; display: block; }
+  .door-tools { max-width: 880px; }
+  #basket svg { width: 100%; height: auto; display: block; max-width: 420px; }
+  #basket p { margin: 10px 0 0; font-size: 18px; }
+  #locked-drawer {
+    background: #2A2420;
+    color: #E4D3B4;
+    border: 0;
+    min-height: 88px;
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    font-family: Cinzel, "Times New Roman", serif;
+    letter-spacing: 0.04em;
+  }
+  #locked-line, #placeholder-plate { margin: 10px 0 0; }
+  #placeholder-plate {
+    background: #E4D3B4;
+    color: #2A2420;
+    display: inline-block;
+    padding: 8px 10px;
+    transform: rotate(-1.5deg);
+  }
+  #drawer {
+    background: #6B4E3A;
+    color: #2A2420;
+    padding: 8px 14px 0;
+  }
+  .drawer-shell {
+    background: #E4D3B4;
+    border: 18px solid #6B4E3A;
+  }
+  #drawer-mid {
+    display: flex;
+    align-items: flex-end;
+    gap: 4%;
+    padding: 22px 18px 8px;
+    min-height: 300px;
+  }
+  .specimen {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: #2A2420;
+    text-align: left;
+  }
+  .specimen.big { width: 32%; }
+  .specimen.small { width: 18%; transform: rotate(-7deg); }
+  .specimen.wide { width: 42%; }
+  .specimen svg { width: 100%; height: auto; display: block; }
+  .specimen .cat {
+    display: inline-block;
+    background: #E4D3B4;
+    border: 1px solid #6B4E3A;
+    font-size: 13px;
+    padding: 2px 6px;
+    margin-top: 4px;
+  }
+  .aim-shade { opacity: 0; }
+  #drawer-fore {
+    background: #6B4E3A;
+    color: #E4D3B4;
+    padding: 12px 14px 16px;
+  }
+  .stamp {
+    font-family: Cinzel, "Times New Roman", serif;
+    letter-spacing: 0.08em;
+    margin: 0 0 4px;
+    font-size: 15px;
+  }
+  #aim-line { margin: 0; }
+  #alcove {
+    background: #2A2420;
+    color: #E4D3B4;
+    padding: 0 0 8px;
+    position: relative;
+  }
+  #alcove-back { position: absolute; inset: 0; }
+  #alcove-back svg { width: 100%; height: 100%; display: block; }
+  #alcove-mid {
+    position: relative;
+    z-index: 1;
+    min-height: 560px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  #cello { width: min(260px, 70%); height: auto; display: block; margin: 24px auto 0; }
+  #bow {
+    position: absolute;
+    width: 150px;
+    left: 46%;
+    top: 42%;
+  }
+  .hot {
+    position: absolute;
+    z-index: 2;
+    min-height: 44px;
+    min-width: 76px;
+    background: #E4D3B4;
+    color: #2A2420;
+    border: 0;
+    font-family: Cinzel, "Times New Roman", serif;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    padding: 8px 10px;
+  }
+  .hot.is-on { background: #C4623E; color: #2A2420; }
+  #tap-peg { top: 18px; left: 62%; }
+  #tap-bridge { top: 58%; left: 64%; }
+  #tap-stone { bottom: 86px; left: 8%; }
+  #alcove-fore {
+    position: relative;
+    z-index: 2;
+    background: #6B4E3A;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    padding: 14px;
+  }
+  #bow-line {
+    margin: 0;
+    background: #E4D3B4;
+    color: #2A2420;
+    padding: 8px 10px;
+    flex: 1;
+    min-width: 200px;
+  }
+  #hear-bow {
+    background: #2A2420;
+    color: #E4D3B4;
+    border: 0;
+    min-height: 48px;
+    padding: 8px 12px;
+    font-family: Cinzel, "Times New Roman", serif;
+    letter-spacing: 0.04em;
+  }
+  .room {
+    min-height: 40vh;
+    margin: 10px 14px;
+    padding: 12px;
+    background: #bdbdbd;
+    color: #333;
+  }
+  .room .slot { display: block; width: 100%; min-height: 72px; margin: 8px 0; background: #aaa; border: 0; text-align: left; }
+  @media (max-width: 700px) {
+    body { font-size: 16px; }
+    #scene { padding: 8px; }
+    .case { min-height: calc(100vh - 16px); border-width: 10px; }
+    .rail { flex-direction: column; }
+    #court-tag { max-width: none; }
+    #hawk-wing { position: relative; width: 100%; height: 148px; top: auto; left: auto; }
+    #fluorite { width: 108px; left: 4px; bottom: 4px; }
+    #calcite { width: 76px; left: 112px; bottom: 8px; }
+    .plate { position: relative; width: auto; right: auto; bottom: auto; margin: 8px; }
+    #signature { min-height: 0; display: flex; flex-direction: column; }
+    #layer-mid { position: relative; height: auto; min-height: 0; }
+    #torch { width: 104px; height: 42px; }
+    .plate { padding: 8px 10px; }
+    #cuff-line { font-size: 14px; }
+    #drawer-mid { flex-wrap: wrap; min-height: 0; }
+    .specimen.big { width: 62%; }
+    .specimen.small { width: 36%; }
+    .specimen.wide { width: 80%; }
+    #alcove-mid { min-height: 480px; }
+    #tap-peg, #tap-bridge, #tap-stone { left: 8%; }
+    #tap-bridge { top: auto; bottom: 160px; }
+    #tap-stone { bottom: 96px; }
+    #door-room { grid-template-columns: 1fr; }
+    #loose-scale { left: auto; right: 12px; top: 36px; }
+    #door-room { display: block; }
+    .door-tools { flex-direction: column; margin-top: 0; align-items: stretch; }
+    #basket, #basket-fore { max-width: none; }
+    h1 { font-size: 64px; }
+    .sub { font-size: 16px; }
+  }
+  @media (hover: none), (pointer: coarse) {
+    #layer-mid { transform: none !important; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #layer-mid { transform: none !important; }
+    #loose-scale { transition: none; }
+  }
+</style>
+</head>
+<body>
+<section id="scene" data-facts="house lights switched off, handheld UV torches, unamplified cello on stone, fluorite and moth scales">
+  <div class="case">
+    <div class="layer-back" id="layer-back">
+      <div class="rail" id="oak-rail">
+        <p id="door-plate" data-tier="small" data-truth="3" data-live="time" data-object="plate">Waiting for the house lights to die.</p>
+        <p id="court-tag" data-object="tag">West Mineral Court, sample hall. Torches 19:00 to 22:00. Cello from 19:30.</p>
+      </div>
+    </div>
+    <div id="signature" data-tier="big" data-truth="1">
+      <div class="layer-mid" id="layer-mid">
+        <svg id="hawk-wing" data-object="hawk-moth" viewBox="0 0 640 380" role="img" aria-label="Moth wing built from scales">
+          <defs>
+            <clipPath id="wing-clip">
+              <path d="M96 214 C130 48 300 16 548 74 C624 104 598 164 468 174 C588 190 548 312 332 334 C176 352 86 286 78 220 Z"/>
+            </clipPath>
+          </defs>
+          <g clip-path="url(#wing-clip)">
+          <ellipse cx="70.0" cy="30.0" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-28.0 70.0 30.0)"/>
+<ellipse class="night-shade" cx="70.0" cy="30.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-28.0 70.0 30.0)"/>
+<ellipse cx="187.0" cy="40.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-15.0 187.0 40.0)"/>
+<ellipse cx="304.0" cy="30.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-2.0 304.0 30.0)"/>
+<ellipse class="night-shade" cx="304.0" cy="30.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-2.0 304.0 30.0)"/>
+<ellipse cx="70.0" cy="67.5" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-28.0 70.0 67.5)"/>
+<ellipse cx="133.9" cy="71.8" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-24.3 133.9 71.8)"/>
+<ellipse class="night-shade" cx="133.9" cy="71.8" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-24.3 133.9 71.8)"/>
+<ellipse cx="197.7" cy="75.3" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-20.6 197.7 75.3)"/>
+<ellipse cx="261.6" cy="77.2" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-16.9 261.6 77.2)"/>
+<ellipse class="night-shade" cx="261.6" cy="77.2" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-16.9 261.6 77.2)"/>
+<ellipse cx="325.4" cy="77.2" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-13.1 325.4 77.2)"/>
+<ellipse cx="389.3" cy="75.3" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-9.4 389.3 75.3)"/>
+<ellipse class="night-shade" cx="389.3" cy="75.3" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-9.4 389.3 75.3)"/>
+<ellipse cx="453.2" cy="71.8" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-5.7 453.2 71.8)"/>
+<ellipse cx="517.0" cy="67.5" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-2.0 517.0 67.5)"/>
+<ellipse class="night-shade" cx="517.0" cy="67.5" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-2.0 517.0 67.5)"/>
+<ellipse cx="70.0" cy="105.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-28.0 70.0 105.0)"/>
+<ellipse class="night-shade" cx="70.0" cy="105.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-28.0 70.0 105.0)"/>
+<ellipse cx="122.0" cy="108.1" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-25.4 122.0 108.1)"/>
+<ellipse cx="174.0" cy="110.9" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-22.8 174.0 110.9)"/>
+<ellipse class="night-shade" cx="174.0" cy="110.9" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-22.8 174.0 110.9)"/>
+<ellipse cx="226.0" cy="113.1" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-20.2 226.0 113.1)"/>
+<ellipse cx="278.0" cy="114.5" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-17.6 278.0 114.5)"/>
+<ellipse class="night-shade" cx="278.0" cy="114.5" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-17.6 278.0 114.5)"/>
+<ellipse cx="330.0" cy="115.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-15.0 330.0 115.0)"/>
+<ellipse cx="382.0" cy="114.5" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-12.4 382.0 114.5)"/>
+<ellipse class="night-shade" cx="382.0" cy="114.5" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-12.4 382.0 114.5)"/>
+<ellipse cx="434.0" cy="113.1" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-9.8 434.0 113.1)"/>
+<ellipse cx="486.0" cy="110.9" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-7.2 486.0 110.9)"/>
+<ellipse class="night-shade" cx="486.0" cy="110.9" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-7.2 486.0 110.9)"/>
+<ellipse cx="538.0" cy="108.1" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-4.6 538.0 108.1)"/>
+<ellipse cx="590.0" cy="105.0" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-2.0 590.0 105.0)"/>
+<ellipse class="night-shade" cx="590.0" cy="105.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-2.0 590.0 105.0)"/>
+<ellipse cx="70.0" cy="142.5" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-28.0 70.0 142.5)"/>
+<ellipse cx="133.9" cy="146.8" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-24.3 133.9 146.8)"/>
+<ellipse class="night-shade" cx="133.9" cy="146.8" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-24.3 133.9 146.8)"/>
+<ellipse cx="197.7" cy="150.3" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-20.6 197.7 150.3)"/>
+<ellipse cx="261.6" cy="152.2" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-16.9 261.6 152.2)"/>
+<ellipse class="night-shade" cx="261.6" cy="152.2" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-16.9 261.6 152.2)"/>
+<ellipse cx="325.4" cy="152.2" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-13.1 325.4 152.2)"/>
+<ellipse cx="389.3" cy="150.3" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-9.4 389.3 150.3)"/>
+<ellipse class="night-shade" cx="389.3" cy="150.3" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-9.4 389.3 150.3)"/>
+<ellipse cx="453.2" cy="146.8" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-5.7 453.2 146.8)"/>
+<ellipse cx="517.0" cy="142.5" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-2.0 517.0 142.5)"/>
+<ellipse class="night-shade" cx="517.0" cy="142.5" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-2.0 517.0 142.5)"/>
+<ellipse cx="70.0" cy="180.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-28.0 70.0 180.0)"/>
+<ellipse class="night-shade" cx="70.0" cy="180.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-28.0 70.0 180.0)"/>
+<ellipse cx="187.0" cy="190.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-15.0 187.0 190.0)"/>
+<ellipse cx="304.0" cy="180.0" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-2.0 304.0 180.0)"/>
+<ellipse class="night-shade" cx="304.0" cy="180.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-2.0 304.0 180.0)"/>
+<ellipse cx="40.0" cy="150.0" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-18.0 40.0 150.0)"/>
+<ellipse class="night-shade" cx="40.0" cy="150.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-18.0 40.0 150.0)"/>
+<ellipse cx="143.5" cy="166.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-5.0 143.5 166.0)"/>
+<ellipse cx="247.0" cy="150.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(8.0 247.0 150.0)"/>
+<ellipse class="night-shade" cx="247.0" cy="150.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(8.0 247.0 150.0)"/>
+<ellipse cx="40.0" cy="186.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-18.0 40.0 186.0)"/>
+<ellipse cx="92.6" cy="192.9" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-14.3 92.6 192.9)"/>
+<ellipse class="night-shade" cx="92.6" cy="192.9" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-14.3 92.6 192.9)"/>
+<ellipse cx="145.2" cy="198.5" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-10.6 145.2 198.5)"/>
+<ellipse cx="197.7" cy="201.6" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-6.9 197.7 201.6)"/>
+<ellipse class="night-shade" cx="197.7" cy="201.6" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-6.9 197.7 201.6)"/>
+<ellipse cx="250.3" cy="201.6" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-3.1 250.3 201.6)"/>
+<ellipse cx="302.9" cy="198.5" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(0.6 302.9 198.5)"/>
+<ellipse class="night-shade" cx="302.9" cy="198.5" rx="20" ry="10" fill="#6E8F7A" transform="rotate(0.6 302.9 198.5)"/>
+<ellipse cx="355.5" cy="192.9" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(4.3 355.5 192.9)"/>
+<ellipse cx="408.0" cy="186.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(8.0 408.0 186.0)"/>
+<ellipse class="night-shade" cx="408.0" cy="186.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(8.0 408.0 186.0)"/>
+<ellipse cx="40.0" cy="222.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-18.0 40.0 222.0)"/>
+<ellipse class="night-shade" cx="40.0" cy="222.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-18.0 40.0 222.0)"/>
+<ellipse cx="89.9" cy="227.5" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-15.1 89.9 227.5)"/>
+<ellipse cx="139.9" cy="232.3" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-12.2 139.9 232.3)"/>
+<ellipse class="night-shade" cx="139.9" cy="232.3" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-12.2 139.9 232.3)"/>
+<ellipse cx="189.8" cy="235.9" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-9.3 189.8 235.9)"/>
+<ellipse cx="239.7" cy="237.8" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-6.4 239.7 237.8)"/>
+<ellipse class="night-shade" cx="239.7" cy="237.8" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-6.4 239.7 237.8)"/>
+<ellipse cx="289.7" cy="237.8" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-3.6 289.7 237.8)"/>
+<ellipse cx="339.6" cy="235.9" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-0.7 339.6 235.9)"/>
+<ellipse class="night-shade" cx="339.6" cy="235.9" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-0.7 339.6 235.9)"/>
+<ellipse cx="389.6" cy="232.3" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(2.2 389.6 232.3)"/>
+<ellipse cx="439.5" cy="227.5" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(5.1 439.5 227.5)"/>
+<ellipse class="night-shade" cx="439.5" cy="227.5" rx="20" ry="10" fill="#6E8F7A" transform="rotate(5.1 439.5 227.5)"/>
+<ellipse cx="489.4" cy="222.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(8.0 489.4 222.0)"/>
+<ellipse cx="40.0" cy="258.0" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-18.0 40.0 258.0)"/>
+<ellipse cx="89.9" cy="263.5" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-15.1 89.9 263.5)"/>
+<ellipse class="night-shade" cx="89.9" cy="263.5" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-15.1 89.9 263.5)"/>
+<ellipse cx="139.9" cy="268.3" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-12.2 139.9 268.3)"/>
+<ellipse cx="189.8" cy="271.9" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-9.3 189.8 271.9)"/>
+<ellipse class="night-shade" cx="189.8" cy="271.9" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-9.3 189.8 271.9)"/>
+<ellipse cx="239.7" cy="273.8" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-6.4 239.7 273.8)"/>
+<ellipse cx="289.7" cy="273.8" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-3.6 289.7 273.8)"/>
+<ellipse class="night-shade" cx="289.7" cy="273.8" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-3.6 289.7 273.8)"/>
+<ellipse cx="339.6" cy="271.9" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-0.7 339.6 271.9)"/>
+<ellipse cx="389.6" cy="268.3" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(2.2 389.6 268.3)"/>
+<ellipse class="night-shade" cx="389.6" cy="268.3" rx="20" ry="10" fill="#6E8F7A" transform="rotate(2.2 389.6 268.3)"/>
+<ellipse cx="439.5" cy="263.5" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(5.1 439.5 263.5)"/>
+<ellipse cx="489.4" cy="258.0" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(8.0 489.4 258.0)"/>
+<ellipse class="night-shade" cx="489.4" cy="258.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(8.0 489.4 258.0)"/>
+<ellipse cx="40.0" cy="294.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-18.0 40.0 294.0)"/>
+<ellipse class="night-shade" cx="40.0" cy="294.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-18.0 40.0 294.0)"/>
+<ellipse cx="92.6" cy="300.9" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-14.3 92.6 300.9)"/>
+<ellipse cx="145.2" cy="306.5" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-10.6 145.2 306.5)"/>
+<ellipse class="night-shade" cx="145.2" cy="306.5" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-10.6 145.2 306.5)"/>
+<ellipse cx="197.7" cy="309.6" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-6.9 197.7 309.6)"/>
+<ellipse cx="250.3" cy="309.6" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-3.1 250.3 309.6)"/>
+<ellipse class="night-shade" cx="250.3" cy="309.6" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-3.1 250.3 309.6)"/>
+<ellipse cx="302.9" cy="306.5" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(0.6 302.9 306.5)"/>
+<ellipse cx="355.5" cy="300.9" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(4.3 355.5 300.9)"/>
+<ellipse class="night-shade" cx="355.5" cy="300.9" rx="20" ry="10" fill="#6E8F7A" transform="rotate(4.3 355.5 300.9)"/>
+<ellipse cx="408.0" cy="294.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(8.0 408.0 294.0)"/>
+<ellipse cx="40.0" cy="330.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(-18.0 40.0 330.0)"/>
+<ellipse cx="143.5" cy="346.0" rx="24" ry="13" fill="#6B4E3A" opacity="0.7" transform="rotate(-5.0 143.5 346.0)"/>
+<ellipse class="night-shade" cx="143.5" cy="346.0" rx="20" ry="10" fill="#6E8F7A" transform="rotate(-5.0 143.5 346.0)"/>
+<ellipse cx="247.0" cy="330.0" rx="24" ry="13" fill="#E4D3B4" opacity="0.95" transform="rotate(8.0 247.0 330.0)"/>
+          </g>
+          <ellipse cx="86" cy="188" rx="22" ry="62" fill="#2A2420"/>
+          <ellipse cx="86" cy="188" rx="12" ry="40" fill="#6B4E3A"/>
+        </svg>
+        <svg id="fluorite" data-object="fluorite" viewBox="0 0 220 180" role="img" aria-label="Fluorite chunk">
+          <polygon points="24,162 82,34 136,72 112,168" fill="#6B4E3A"/>
+          <polygon points="82,34 168,18 184,98 136,72" fill="#E4D3B4" opacity="0.38"/>
+          <polygon points="136,72 184,98 156,172 100,158" fill="#2A2420"/>
+          <polygon points="70,118 104,74 126,132" fill="#2A2420" opacity="0.55"/>
+          <g class="night-shade">
+            <polygon points="24,162 82,34 136,72 112,168" fill="#6E8F7A"/>
+            <polygon points="82,34 168,18 184,98 136,72" fill="#E4D3B4" opacity="0.45"/>
+            <polygon points="136,72 184,98 156,172 100,158" fill="#6E8F7A" opacity="0.75"/>
+          </g>
+          <rect x="10" y="148" width="52" height="20" fill="#E4D3B4"/>
+          <text x="16" y="162" fill="#2A2420" font-size="13" font-family="Newsreader, Times New Roman, serif">F-14</text>
+        </svg>
+        <button type="button" id="loose-scale" data-tier="small" data-truth="1" aria-label="Loose scale">
+          <svg viewBox="0 0 52 30" aria-hidden="true"><ellipse cx="26" cy="15" rx="20" ry="10" transform="rotate(-18 26 15)"/></svg>
+        </button>
+        <svg id="calcite" data-object="calcite" viewBox="0 0 150 130" role="img" aria-label="Calcite chip">
+          <polygon points="18,108 52,16 96,42 74,114" fill="#6B4E3A"/>
+          <polygon points="52,16 128,26 104,78 96,42" fill="#E4D3B4" opacity="0.4"/>
+          <g class="night-shade">
+            <polygon points="18,108 52,16 96,42 74,114" fill="#C4623E"/>
+            <polygon points="52,16 128,26 104,78 96,42" fill="#E4D3B4" opacity="0.35"/>
+          </g>
+          <rect x="8" y="104" width="40" height="16" fill="#E4D3B4"/>
+          <text x="12" y="116" fill="#2A2420" font-size="12" font-family="Newsreader, Times New Roman, serif">C-3</text>
+        </svg>
+      </div>
+      <div class="plate">
+        <div class="screws" aria-hidden="true"><span class="screw"></span><span class="screw"></span></div>
+        <h1>Moth and<br>stone.</h1>
+        <p class="sub">One UV lamp finds both. Lights off. The cello has no amp.</p>
+        <p id="last-lit" data-tier="small" data-truth="1">Last lit: moth and fluorite, one lamp.</p>
+        <p id="cuff-line">If your cuff goes green, you leaned on the fluorite.</p>
+      </div>
+    </div>
+    <div class="layer-fore" id="layer-fore">
+      <svg id="torch" data-object="torch" viewBox="0 0 150 56" role="img" aria-label="UV torch">
+        <rect x="8" y="16" width="104" height="24" fill="#2A2420"/>
+        <rect x="8" y="16" width="104" height="8" fill="#E4D3B4" opacity="0.28"/>
+        <circle cx="118" cy="28" r="14" fill="#E4D3B4"/>
+        <circle cx="118" cy="28" r="6" fill="#6B4E3A"/>
+        <rect x="46" y="20" width="16" height="10" fill="#C4623E"/>
+        <path d="M22 42 C 40 54, 70 54, 90 42" fill="none" stroke="#E4D3B4" stroke-width="2"/>
+      </svg>
+      <button id="take" type="button">Take a torch</button>
+      <label class="sweep-label">Sweep the torch
+        <input id="sweep-range" type="range" min="0" max="100" value="72" aria-valuemin="0" aria-valuemax="100">
+      </label>
+      <p id="empty-sweep" data-tier="small" data-truth="3" hidden>This face is still daylight. Sweep the torch.</p>
+    </div>
+  </div>
+</section>
+
+<section id="drawer" data-tier="medium" data-truth="1">
+  <div class="drawer-shell">
+    <div class="layer-back" id="drawer-back"></div>
+    <div class="layer-mid" id="drawer-mid">
+      <button type="button" class="specimen big" id="aim-fluorite" data-aim="fluorite">
+        <svg viewBox="0 0 200 230" aria-hidden="true">
+          <polygon points="30,210 70,30 130,78 118,214" fill="#6B4E3A"/>
+          <polygon points="70,30 160,18 150,110 130,78" fill="#E4D3B4" opacity="0.55"/>
+          <polygon points="118,140 150,110 168,190 100,200" fill="#2A2420"/>
+          <g class="aim-shade">
+            <polygon points="30,210 70,30 130,78 118,214" fill="#6E8F7A"/>
+            <polygon points="70,30 160,18 150,110 130,78" fill="#E4D3B4" opacity="0.4"/>
+            <polygon points="118,140 150,110 168,190 100,200" fill="#6E8F7A" opacity="0.8"/>
+          </g>
+        </svg>
+        <span class="cat">F-14, chipped</span>
+      </button>
+      <button type="button" class="specimen small" id="aim-calcite" data-aim="calcite">
+        <svg viewBox="0 0 140 150" aria-hidden="true">
+          <polygon points="20,130 48,16 96,48 70,136" fill="#6B4E3A"/>
+          <polygon points="48,16 120,40 90,90 96,48" fill="#E4D3B4" opacity="0.45"/>
+          <g class="aim-shade">
+            <polygon points="20,130 48,16 96,48 70,136" fill="#C4623E"/>
+            <polygon points="48,16 120,40 90,90 96,48" fill="#E4D3B4" opacity="0.35"/>
+          </g>
+        </svg>
+        <span class="cat">C-3</span>
+      </button>
+      <button type="button" class="specimen wide" id="drawer-moth" data-object="drawer-moth" data-aim="moth">
+        <svg viewBox="0 0 340 160" aria-hidden="true">
+          <ellipse cx="36" cy="82" rx="18" ry="36" fill="#2A2420"/>
+          <ellipse cx="78" cy="48" rx="24" ry="13" fill="#6B4E3A" transform="rotate(-18 78 48)"/>
+          <ellipse cx="122" cy="40" rx="24" ry="13" fill="#2A2420" transform="rotate(-8 122 40)"/>
+          <ellipse cx="170" cy="36" rx="24" ry="13" fill="#6B4E3A" transform="rotate(2 170 36)"/>
+          <ellipse cx="220" cy="44" rx="24" ry="13" fill="#6B4E3A" opacity="0.75" transform="rotate(12 220 44)"/>
+          <ellipse cx="266" cy="64" rx="22" ry="12" fill="#2A2420" transform="rotate(20 266 64)"/>
+          <ellipse cx="92" cy="82" rx="22" ry="12" fill="#6B4E3A" transform="rotate(-10 92 82)"/>
+          <ellipse cx="146" cy="78" rx="22" ry="12" fill="#2A2420" transform="rotate(-2 146 78)"/>
+          <ellipse cx="198" cy="86" rx="22" ry="12" fill="#6B4E3A" transform="rotate(8 198 86)"/>
+          <ellipse cx="246" cy="104" rx="20" ry="11" fill="#6B4E3A" opacity="0.8" transform="rotate(16 246 104)"/>
+          <ellipse cx="110" cy="114" rx="20" ry="11" fill="#2A2420" transform="rotate(-4 110 114)"/>
+          <ellipse cx="168" cy="122" rx="18" ry="10" fill="#6B4E3A" transform="rotate(6 168 122)"/>
+          <g class="aim-shade">
+            <ellipse cx="78" cy="48" rx="16" ry="8" fill="#6E8F7A" transform="rotate(-18 78 48)"/>
+            <ellipse cx="170" cy="36" rx="16" ry="8" fill="#6E8F7A" transform="rotate(2 170 36)"/>
+            <ellipse cx="220" cy="44" rx="16" ry="8" fill="#6E8F7A" transform="rotate(12 220 44)"/>
+            <ellipse cx="92" cy="82" rx="14" ry="7" fill="#6E8F7A" transform="rotate(-10 92 82)"/>
+            <ellipse cx="198" cy="86" rx="14" ry="7" fill="#6E8F7A" transform="rotate(8 198 86)"/>
+          </g>
+        </svg>
+        <span class="cat">M-22, one row missing</span>
+      </button>
+    </div>
+    <div class="layer-fore" id="drawer-fore">
+      <p class="stamp">Mineral drawer</p>
+      <p id="aim-line">Aim the torch. The lamp rests on one face.</p>
+    </div>
+  </div>
+</section>
+
+<section id="alcove" data-tier="medium" data-truth="2">
+  <div class="layer-back" id="alcove-back">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <rect width="100" height="100" fill="#2A2420"/>
+      <rect y="16" width="100" height="1.2" fill="#6B4E3A"/>
+      <rect y="33" width="100" height="1.2" fill="#6B4E3A"/>
+      <rect y="50" width="100" height="1.2" fill="#6B4E3A"/>
+      <rect y="67" width="100" height="1.2" fill="#6B4E3A"/>
+      <rect y="84" width="100" height="1.2" fill="#6B4E3A"/>
+      <rect x="22" y="0" width="1.2" height="16" fill="#6B4E3A"/>
+      <rect x="68" y="16" width="1.2" height="17" fill="#6B4E3A"/>
+      <rect x="30" y="33" width="1.2" height="17" fill="#6B4E3A"/>
+      <rect x="74" y="50" width="1.2" height="17" fill="#6B4E3A"/>
+      <rect x="18" y="67" width="1.2" height="17" fill="#6B4E3A"/>
+      <rect x="58" y="84" width="1.2" height="16" fill="#6B4E3A"/>
+    </svg>
+  </div>
+  <div class="layer-mid" id="alcove-mid">
+    <svg id="cello" data-object="cello" viewBox="0 0 200 480" role="img" aria-label="Unamplified cello">
+      <circle cx="100" cy="30" r="20" fill="#6B4E3A"/>
+      <rect x="93" y="44" width="14" height="78" fill="#6B4E3A"/>
+      <ellipse cx="100" cy="176" rx="62" ry="50" fill="#6B4E3A"/>
+      <circle cx="40" cy="228" r="24" fill="#2A2420"/>
+      <circle cx="160" cy="228" r="24" fill="#2A2420"/>
+      <ellipse cx="100" cy="318" rx="82" ry="74" fill="#6B4E3A"/>
+      <ellipse cx="100" cy="308" rx="46" ry="36" fill="#2A2420" opacity="0.45"/>
+      <line x1="100" y1="24" x2="100" y2="372" stroke="#E4D3B4" stroke-width="2"/>
+      <rect x="84" y="292" width="32" height="8" fill="#E4D3B4"/>
+      <rect x="94" y="372" width="12" height="30" fill="#2A2420"/>
+      <circle cx="100" cy="30" r="6" fill="#E4D3B4"/>
+    </svg>
+    <svg id="bow" data-object="bow" viewBox="0 0 170 20" role="img" aria-label="Cello bow">
+      <line x1="12" y1="10" x2="164" y2="6" stroke="#E4D3B4" stroke-width="3"/>
+      <rect x="0" y="4" width="14" height="12" fill="#C4623E"/>
+    </svg>
+    <button type="button" class="hot" id="tap-peg" data-bow="peg">Pegbox</button>
+    <button type="button" class="hot" id="tap-bridge" data-bow="bridge">Bridge</button>
+    <button type="button" class="hot is-on" id="tap-stone" data-bow="stone">Stone</button>
+  </div>
+  <div class="layer-fore" id="alcove-fore">
+    <p id="bow-line">The floor gives the note back. No amp.</p>
+    <button type="button" id="hear-bow">Hear one bow</button>
+  </div>
+</section>
+
+<section id="door-room">
+  <div class="layer-back" id="basket-back">
+      <svg viewBox="0 0 280 160" preserveAspectRatio="none" aria-hidden="true">
+        <rect width="280" height="160" fill="#6B4E3A"/>
+        <rect x="16" y="8" width="248" height="144" fill="#2A2420"/>
+        <rect x="32" y="20" width="216" height="52" fill="#6B4E3A"/>
+        <rect x="32" y="84" width="216" height="52" fill="#6B4E3A"/>
+        <circle cx="228" cy="80" r="7" fill="#E4D3B4"/>
+      </svg>
+  </div>
+  <div class="door-tools">
+    <div id="basket" data-tier="small" data-truth="3" data-object="basket">
+      <svg viewBox="0 0 300 150" role="img" aria-label="Basket of returned torches with one gap">
+        <path d="M28 48 H272 L248 142 H52 Z" fill="#2A2420"/>
+        <rect x="46" y="18" width="16" height="92" fill="#E4D3B4"/>
+        <rect x="86" y="44" width="14" height="66" fill="#6B4E3A"/>
+        <rect x="128" y="28" width="16" height="82" fill="#E4D3B4"/>
+        <rect x="196" y="70" width="22" height="40" fill="none" stroke="#E4D3B4" stroke-width="2"/>
+      </svg>
+      <p>Leave the torch in the oak basket. The moth stays in the case. Moth Night, sample.</p>
+    </div>
+    <div class="layer-fore" id="basket-fore">
+    <button type="button" id="locked-drawer" data-tier="small" data-truth="3" data-object="locked">
+      <svg viewBox="0 0 220 70" aria-hidden="true" width="100%" height="54">
+        <rect width="220" height="70" fill="#2A2420"/>
+        <rect x="16" y="16" width="188" height="38" fill="#6B4E3A"/>
+        <circle cx="110" cy="35" r="6" fill="#E4D3B4"/>
+      </svg>
+      Locked case
+    </button>
+    <p id="locked-line" hidden>That case is not on tonight's route.</p>
+    <p id="placeholder-plate" data-tier="small" data-truth="1" data-object="placeholder">Placeholder. No archive photo of the court.</p>
+    </div>
+  </div>
+</section>
+<script>
+(function () {
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hour = new Date().getHours();
+  var plate = document.getElementById("door-plate");
+  var rail = document.getElementById("oak-rail");
+  if (hour < 19) {
+    plate.textContent = "House lights still on";
+    rail.setAttribute("data-state", "day");
+  } else if (hour < 22) {
+    plate.textContent = "Torches are out";
+    rail.setAttribute("data-state", "night");
+  } else {
+    plate.textContent = "Last bow, then the basket";
+    rail.setAttribute("data-state", "late");
+  }
+  document.getElementById("loose-scale").addEventListener("click", function () {
+    this.classList.toggle("nudge");
+  });
+  document.getElementById("locked-drawer").addEventListener("click", function () {
+    var line = document.getElementById("locked-line");
+    line.hidden = !line.hidden;
+  });
+  var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var range = document.getElementById("sweep-range");
+  var shades = document.querySelectorAll("#signature .night-shade");
+  var empty = document.getElementById("empty-sweep");
+  var wing = document.getElementById("hawk-wing");
+  var hold = false;
+  var settled = false;
+
+  function apply(t) {
+    var n = Math.max(0, Math.min(1, t));
+    for (var i = 0; i < shades.length; i++) shades[i].style.opacity = String(n);
+    empty.hidden = n > 0.08;
+    if (document.activeElement !== range) range.value = String(Math.round(n * 100));
+    if (!reduce && !settled && n > 0.93 && window.gsap) {
+      settled = true;
+      gsap.to(wing, { y: -8, duration: 1.2, ease: "sine.inOut" });
+    }
+  }
+
+  range.addEventListener("input", function () {
+    hold = true;
+    apply(Number(range.value) / 100);
+  });
+  apply(0.72);
+
+  if (!reduce && window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    var proxy = { t: 0.72 };
+    gsap.to(proxy, {
+      t: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#scene",
+        start: "top top",
+        end: "+=30%",
+        scrub: 0.8,
+        onUpdate: function () { if (!hold) apply(proxy.t); }
+      }
+    });
+  }
+
+  if (fine && !reduce) {
+    var mid = document.getElementById("layer-mid");
+    var scene = document.getElementById("scene");
+    var tx = 0, ty = 0, cx = 0, cy = 0;
+    scene.addEventListener("pointermove", function (e) {
+      var rect = scene.getBoundingClientRect();
+      var px = (e.clientX - rect.left) / rect.width;
+      var py = (e.clientY - rect.top) / rect.height;
+      tx = Math.max(-10, Math.min(10, (px - 0.5) * 20));
+      ty = Math.max(-8, Math.min(8, (py - 0.5) * 16));
+      if (e.target.closest && e.target.closest("#layer-mid")) {
+        hold = true;
+        apply(px);
+      }
+    });
+    function loop() {
+      var rect = scene.getBoundingClientRect();
+      var on = rect.bottom > 0 && rect.top < window.innerHeight;
+      if (on) {
+        cx += (tx - cx) * 0.08;
+        cy += (ty - cy) * 0.08;
+        mid.style.transform = "translate(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px)";
+      }
+      requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  var aims = document.querySelectorAll("#drawer .specimen");
+  var aimLine = document.getElementById("aim-line");
+  var aimCopy = {
+    fluorite: "The lamp is on the fluorite.",
+    calcite: "The lamp is on the calcite.",
+    moth: "The lamp is on the hawk moth."
+  };
+  for (var a = 0; a < aims.length; a++) {
+    aims[a].addEventListener("click", function () {
+      var key = this.getAttribute("data-aim");
+      for (var b = 0; b < aims.length; b++) {
+        var on = aims[b] === this;
+        var shade = aims[b].querySelector(".aim-shade");
+        if (shade) shade.style.opacity = on ? "1" : "0";
+      }
+      aimLine.textContent = aimCopy[key];
+      document.getElementById("last-lit").textContent = "Last lit: " + key + ".";
+      document.title = "Moth Night, sample: " + key;
+    });
+  }
+
+  var bow = document.getElementById("bow");
+  var bowLine = document.getElementById("bow-line");
+  var bowCopy = {
+    peg: "Up here the bow is only hair and wood.",
+    bridge: "The bridge puts the note into the oak.",
+    stone: "The floor gives the note back. No amp."
+  };
+  var bowShift = { peg: -8, bridge: 0, stone: 8 };
+  var hots = document.querySelectorAll(".hot");
+  for (var h = 0; h < hots.length; h++) {
+    hots[h].addEventListener("click", function () {
+      var key = this.getAttribute("data-bow");
+      for (var k = 0; k < hots.length; k++) {
+        hots[k].classList.toggle("is-on", hots[k] === this);
+      }
+      bowLine.textContent = bowCopy[key];
+      if (!reduce && window.gsap) gsap.to(bow, { y: bowShift[key], duration: 1.1, ease: "sine.inOut" });
+      else bow.style.transform = "translate(0px, " + bowShift[key] + "px)";
+    });
+  }
+  document.getElementById("hear-bow").addEventListener("click", function () {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    var ctx = new AC();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.value = 196;
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.04, ctx.currentTime + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.16);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.18);
+    this.textContent = "Bow heard";
+  });
+
+  document.getElementById("take").addEventListener("click", function () {
+    this.textContent = "Torch in your hand";
+    var torch = document.getElementById("torch");
+    if (!reduce && window.gsap) gsap.to(torch, { y: -6, duration: 0.9, ease: "sine.inOut" });
+    else torch.style.transform = "translate(0px, -6px)";
+  });
+})();
+</script>
+</body>
+</html>
