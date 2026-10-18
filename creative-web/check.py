@@ -119,10 +119,32 @@ def main():
         need("grade:" in low, "missing GRADE: comment naming the one picture grade")
 
     if batch >= 2:
-        shapes = len(re.findall(r"<(circle|rect|ellipse|path|polygon|polyline|line)\b", low))
-        has_canvas = "<canvas" in low
-        if shapes < 8 and not has_canvas:
-            fails.append(f"scene has {shapes} SVG shapes (need 8) and no canvas")
+        paths = len(re.findall(r"<path\b", low))
+        if paths > 4:
+            fails.append(
+                f"{paths} SVG paths: figurative drawing is banned. Use a photo, rect/circle/line geometry, or at most 4 icon strokes."
+            )
+        imgs = "<img" in low
+        geoms = len(re.findall(r"<(rect|circle|ellipse|line|polygon)\b", low))
+        if not imgs and geoms < 6:
+            fails.append("need a photograph (img) or precise geometry (at least 6 rect, circle, line, or polygon)")
+        if imgs and "shot:" not in low:
+            fails.append("photos need a SHOT: list (subject, crop, light) in a comment")
+        if not imgs and "picture: geometric" not in low:
+            fails.append("geometry needs a PICTURE: geometric comment")
+        if "<canvas" in low and "picture: diagram" not in low and not imgs:
+            fails.append("canvas cannot stand in for a drawn subject")
+
+    if batch >= 5:
+        plain = re.search(r"data-plain[^>]*>([^<]{24,})", html, re.I)
+        need(bool(plain), "need a data-plain subline of at least 24 characters stating what the business is")
+        sections = re.findall(r"data-section=", low)
+        need(len(sections) >= 4, f"need at least 4 data-section blocks of finished content, found {len(sections)}")
+        visible = re.sub(r"<script[\s\S]*?</script>", " ", html, flags=re.I)
+        visible = re.sub(r"<style[\s\S]*?</style>", " ", visible, flags=re.I)
+        visible = re.sub(r"<[^>]+>", " ", visible)
+        words = re.findall(r"[A-Za-z0-9']+", visible)
+        need(len(words) >= 280, f"page is too thin ({len(words)} words). A real business page needs the offer, hours or availability, and how to start")
 
     if batch >= 5:
         need("prefers-reduced-motion" in low, "missing prefers-reduced-motion")
@@ -178,6 +200,10 @@ def main():
             fails.append("plan needs at least 6 'because' tokens in the visual system")
         if "fail" not in plow and "competitor" not in plow and "rival" not in plow:
             warns.append("plan should show the competitor test")
+        if "plain subline" not in plow:
+            fails.append("plan needs a Plain subline a stranger can understand")
+        if "plain action" not in plow:
+            fails.append("plan needs a Plain action")
         for n in range(1, batch + 1):
             if f"batch {n} gate" not in plow:
                 fails.append(f"missing Batch {n} gate (re-read the plan and write it before the next batch)")

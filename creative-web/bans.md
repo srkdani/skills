@@ -15,7 +15,10 @@ Every ban has a replacement. Do the replacement. Escaping a ban into another ban
 | Inter, Roboto, Open Sans, Lato, Arial, system-ui as the display | No decision was made | A display face that belongs to the world |
 | Space Grotesk, Syne, DM Mono, DM Sans, Geist, Poppins, Montserrat as the display | The next font default | A face chosen for this material, named in the plan |
 | Glass panels, `backdrop-filter` blur as the surface | Fake premium | The concept's real material |
-| Emoji as icons, a generic line-icon set | Template kit | Drawings from the picture rule, or no icons |
+| Emoji as icons, a generic line-icon set | Template kit | A few icon strokes, or no icons |
+| Hand-drawn figurative SVG or canvas (a loaf, an animal, an instrument, a person, a building) | Amateur illustration | A graded photograph, or precise geometry, or icon-level strokes |
+| Cryptic labels as the only way to understand the page | The visitor cannot act | A plain subline and a plain action. The metaphor can sit beside them |
+| Empty bars, lone boxes, a section that is only a caption | Unfinished prototype | Finished sections with real offer, hours or availability, place or how to start |
 | Soft shadow and the same large radius on every card | Kit styling | Shadows only as a second piece of material, radii from the object |
 | Buzzwords: seamless, unlock, elevate, transform, innovative, next-level, cutting-edge, "Welcome to" | No voice | The voice lines from the plan |
 | Fake logo walls, fake quotes, fake counters, skill bars, invented metrics | Nothing here is true | Harvest facts, shown as objects. Mark sample data as sample |

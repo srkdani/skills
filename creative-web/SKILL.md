@@ -74,7 +74,7 @@ List each section's rhythm in a few words. If two match, change one. Do not repe
 Name one effect you will build and then delete, and why it does not serve the concept. A console log does not count. A second animation, a grain overlay, a cursor, or an extra scene does.
 
 ### Voice
-Headline under 8 words. One subhead. Five lines: button, empty state, footer, consent or missing page, loading. At least one line is funny, surprising, or oddly specific. A stranger should tell the brand from the footer alone. No banned words (`bans.md`).
+Headline under 8 words. It may be poetic only if the next line is a plain subline: what the business is, in words a stranger would use. In the plan write `Plain subline:` and `Plain action:`. On the page the subline is `data-plain`. Nav labels and the action use the plain action, not a metaphor (`See the hours`, `Read the docs`, `Hear the instrument`). A label that only makes sense inside the metaphor fails. Cryptic lines such as "Flag what will not kiss", "It springs once", and "Same pins, night ink" are failed copy. Five more lines: empty state, footer, consent or missing page, loading, and one practical fact (hours, place, price, or how to start). Funny is allowed in the footer, not in the action. No banned words (`bans.md`).
 
 ### Genericness
 Name a similar brief in the same industry. Which part of this plan would you have written for them? Change that part and say what changed. Escaping a ban into another ban is a failed check. The dealt world stays unless you rejected it in Pick.
@@ -98,7 +98,7 @@ Doing the whole page in one pass fails. The concept gets lost under decoration. 
 Grey boxes only: flat fills, real type sizes, no finished illustration. Section rhythms differ. The practical fact and the main action are placed. The big moment's mechanism works (it moves, scrubs, or steps) as a grey box. Finished art in this batch is a failed batch.
 
 ### Batch 2. Signature
-Build only the big moment, fully: picture, motion, and the touch path. Medium and small stay quiet placeholders.
+Build only the big moment, fully: picture, motion, and the touch path. The picture follows the craft floor below. Medium and small stay quiet, but they are aligned boxes with real labels, not scraps.
 
 ### Batch 3. Medium, one at a time
 Build one medium feature, then gate it, then the next. Two or three total. Do not start the next feature while the current one is broken.
@@ -107,7 +107,7 @@ Build one medium feature, then gate it, then the next. Two or three total. Do no
 Add the small details. Each one is visible, tied to a truth, and stays off the action.
 
 ### Batch 5. Polish
-Reduced motion, touch, the 390 width, contrast, a voice pass on every string, delete the named effect, then score with `rubric.md`.
+Reduced motion, touch, the 390 width, contrast, alignment, one spacing rhythm, a voice pass on every string, delete the named effect, then score with `rubric.md`. If any section is an empty bar or a lone box, fill it with real business content or remove it. Student-rough is a failed polish.
 
 ### Gate after every batch
 Do this before the next batch. Never continue while the current batch is broken.
@@ -120,13 +120,13 @@ Do this before the next batch. Never continue while the current batch is broken.
 The scene is the page. A weak scene cannot be saved by sections below it.
 
 Scene contract (the finished page, after batch 5). Earlier batches only have to satisfy `check.py --batch N`. Do not pull later batches forward to satisfy this list:
-- `#scene` fills at least 70% of the first viewport. It is a picture, not a text column.
-- At least 8 drawn parts (SVG shapes) or a canvas that draws the world. Parts that carry no harvest fact are deleted.
+- `#scene` fills at least 70% of the first viewport. It holds the picture and the plain subline, not a text column on a blank field.
+- The picture is a photograph or precise geometry. See the craft floor. Drawn scenery is not a picture.
 - At least 4 elements with `data-object`, each a different value, matching the objects table.
 - At least 5 `data-tier="small"`, 2 or 3 `data-tier="medium"`, exactly one `data-tier="big"`. Each has `data-truth`. The big tier is the signature.
 - `data-facts` on `#scene`: at least 4 facts, each at least 8 characters.
-- The main action is inside the first viewport, on the scene, and its label is a verb from the world. It is visible without waiting for an intro.
-- You can blur the letters and still tell the business from the picture.
+- The main action is inside the first viewport, on the scene, with a plain label. It is visible without waiting for an intro.
+- Within 5 seconds a stranger can say what the business is and what to do. The plain subline does that job. The picture supports it. The picture does not have to be a cartoon of the product.
 - Do not default to a two-column hero (words left, picture right) unless the dealt world says that.
 - No blank band. A section that is only a heading and a paragraph is a failed section. Put the words on an object.
 - No full-bleed empty color with a centered headline.
@@ -138,13 +138,28 @@ Motion contract:
 - `prefers-reduced-motion`: keep the layout and the picture, drop travel and pins, leave the action usable.
 - Touch, designed first: every signature works with a tap, a slider, or scroll. Pointer behavior is an extra, gated on `(hover: hover) and (pointer: fine)`.
 
-Usable on purpose. The headline, the main action, and the practical fact the visitor came for (hours, place, price, status, or contact) are findable without finishing the big moment. Task-focused pages (money, medicine, tools, anything the visitor must finish): the signature teaches the job in one glance. Headline and action are immediate. No pin longer than one viewport. No playful delay on the form, the price, or the menu. Small and medium ideas stay out of the way of that action.
+## Craft floor
+
+Never hand-draw a figurative scene in SVG or on canvas. A loaf, a moth, a butterfly, a cello, a person, a hand, an animal, a vehicle, or a building in perspective is a failed picture. It reads as amateur work.
+
+Allowed pictures, pick one and write it in the plan:
+- Photography. A shot list: subject, crop, light, and the one grade. Use a real file when you have one. A generated raster is allowed when the prompt is that shot list, with no text baked into the picture. A stock photo is allowed when it matches the shot and then receives the same grade (duotone or a single overlay). Unsplash image URLs are allowed for that. Every photo on the page shares the grade. A missing photo is a designed frame: the crop, the grade, the word placeholder, and the shot prompt. Not an empty rectangle.
+- Precise geometry or type. Rules, paper, metal, a diagram of the mechanism, a stack of real labels. Built from rectangles, circles, and lines. Alignment is exact.
+- Icon-level line work only, and only as a small mark: one weight, a few strokes, never a scene.
+
+## Clarity and content floor
+
+The first viewport shows the plain subline, the plain action, and one practical fact. Later sections are finished and dense, the way a real business site is: the goods or the offer, hours or availability, place or how to start, and a clear next step. Prices are included when the business would show them, and marked sample when invented. Social proof only if the user supplied it. No empty bands, no lone boxes, no section that is a single caption under a shape.
+
+Creative still has to feel finished: one grid, one spacing rhythm, type with a real scale, edges that line up. The benchmark is award-site polish. An experimental prototype is a failure even when the concept is right.
+
+Usable on purpose. The headline, the plain action, and the practical fact (hours, place, price, status, or contact) are findable without finishing the big moment. Task-focused pages (money, medicine, tools, anything the visitor must finish): the signature teaches the job in one glance. Headline and action are immediate. No pin longer than one viewport. No playful delay on the form, the price, or the menu. Small and medium ideas stay out of the way of that action.
 
 Copy a named award site's concept and the page fails. Invented prices, counts, quotes, and staff are sample data: write the word sample beside the brand or in the footer. No fake testimonials, fake logos, or fake metrics.
 
 No em dash and no en dash, in the plan, the title, or the page. Use a comma, a colon, or a hyphen.
 
-The HTML starts with a comment: `CONCEPT:`, `WORLD:`, `SIGNATURE:`, `GRADE:`, `REMOVED:`.
+The HTML starts with a comment: `CONCEPT:`, `WORLD:`, `SIGNATURE:`, `GRADE:`, `REMOVED:`, and either `SHOT:` (one list for every photo) or `PICTURE: geometric`.
 
 ## Render, score, remove one effect
 
@@ -163,4 +178,4 @@ Look at the 1440 shot shrunk until the page is about 300px wide, and at the 390 
 
 Then delete the effect named in the plan. Leave the `REMOVED:` comment. If the first viewport changed, shoot again.
 
-Stop only when the thumbnail reads as this brand's world: the material, the object, and the signature are obvious with the text blurred.
+Stop only when a stranger can say what the business is and what to click within 5 seconds, and the page looks finished: aligned, dense, one grade, no drawn scenery, no empty section.

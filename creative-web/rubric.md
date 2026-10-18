@@ -15,7 +15,7 @@ Scroll:
 - R2 Surprise. 0 none, 1 mild, 2 a clear oh or a smile (write what).
 - R3 About the brand. 0 generic motion (bobbing icons, fade-up, a loop that could sit on any site), 1 loosely related, 2 the moving parts enact a brand truth.
 - R4 Control, a floor. 2 if you never wait, feel stuck, or lose your place. 0 if you do. Any wait is a floor failure.
-- R5 Readable, a floor. 2 if the headline, the main action, and the practical fact (hours, place, price, status, or contact) are findable in the 10 seconds. 0 if not.
+- R5 Readable, a floor. 2 if, within the first screen, you can say what the business is, what to do, and one practical fact. 0 if the only labels are cryptic or the action is missing.
 
 Creative score is T1 + T2 + T3 + T4 + R1 + R2 + R3, maximum 14. Floor is R4 + R5, and it must be 4.
 
