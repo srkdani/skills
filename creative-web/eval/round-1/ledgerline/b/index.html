@@ -47,61 +47,66 @@
     min-height: 640px;
     overflow: hidden;
     display: grid;
-    grid-template-columns: 158px minmax(0, 1fr) 76px;
+    grid-template-columns: 176px minmax(0, 1fr) 64px;
     z-index: 1;
   }
 
   .spines {
     perspective: 1600px;
     display: flex;
-    align-items: stretch;
+    flex-direction: column;
+    justify-content: stretch;
     height: 100%;
-    padding: 16px 0 28px 12px;
+    padding: 14px 10px 20px 12px;
     position: relative;
     z-index: 2;
+    gap: 8px;
   }
 
   .spine {
     appearance: none;
-    background: var(--sheet);
+    background-color: var(--sheet);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      var(--sheet) 0 12px,
+      var(--bar) 12px 18px
+    );
     color: var(--ink);
     border: 0;
     margin: 0;
-    padding: 16px 0 0;
-    height: 100%;
-    width: var(--thick);
-    min-width: var(--thick);
+    padding: 8px 10px;
     position: relative;
     cursor: pointer;
-    transform: rotateY(26deg) translateZ(var(--z));
-    transform-origin: right center;
+    flex: var(--grow, 1);
+    width: var(--w, 100%);
+    min-height: 48px;
+    text-align: left;
     font-family: "Staatliches", sans-serif;
-    letter-spacing: 0.12em;
-    font-size: 18px;
+    letter-spacing: 0.08em;
+    font-size: 22px;
+    transform: translateZ(var(--z, 0px));
+    transform-origin: left center;
   }
 
   .spine .ply {
     position: absolute;
-    top: 0;
-    bottom: 0;
+    left: 0;
     right: -6px;
-    width: 6px;
+    bottom: -6px;
+    height: 6px;
     background: var(--bar);
   }
 
-  .spine span {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    display: inline-block;
-  }
+  .spine span { display: block; }
 
-  .spine.rentals { --thick: 26px; --z: -150px; }
-  .spine.tickets { --thick: 14px; --z: -80px; }
-  .spine.goods { --thick: 42px; --z: -24px; }
+  .spine.goods { --grow: 2.5; --w: 100%; --z: 12px; }
+  .spine.tickets { --grow: 0.8; --w: 68%; --z: -130px; }
+  .spine.rentals { --grow: 1.45; --w: 84%; --z: -60px; }
   .spine.short {
-    --thick: 24px;
-    --z: 48px;
-    transform: rotateY(26deg) translateZ(48px) translateX(18px);
+    --grow: 1.15;
+    --w: 86%;
+    --z: 56px;
+    margin-left: 12px;
     z-index: 3;
   }
 
@@ -211,9 +216,9 @@
   }
 
   #slip {
-    width: min(460px, 70%);
+    width: min(420px, 58%);
     position: relative;
-    transform: translate(64px, -6px);
+    transform: translate(28px, -6px);
     cursor: pointer;
   }
 
@@ -232,14 +237,14 @@
       var(--bar) 0 14px,
       var(--sheet) 14px 40px
     );
-    padding: 14px 16px 12px;
+    padding: 28px 16px 16px;
     min-height: 138px;
   }
 
   .dogear {
     position: absolute;
-    top: 0;
-    left: 0;
+    right: 0;
+    bottom: 0;
     display: block;
   }
 
@@ -247,10 +252,10 @@
 
   #clip {
     position: absolute;
-    top: -16px;
-    right: 18px;
-    width: 52px;
-    height: 44px;
+    top: 2px;
+    left: 16px;
+    width: 78px;
+    height: 26px;
     padding: 0;
     border: 0;
     background: transparent;
@@ -289,6 +294,8 @@
   .action {
     position: relative;
     display: inline-block;
+    width: fit-content;
+    max-width: 100%;
     margin-top: 10px;
   }
 
@@ -304,17 +311,6 @@
     min-height: 52px;
     cursor: pointer;
   }
-
-  .grain {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.08;
-    mix-blend-mode: multiply;
-    z-index: 5;
-  }
-
-  .grain svg { width: 100%; height: 100%; display: block; }
 
   .plies { display: block; width: 100%; height: 52px; }
   .plies rect:nth-child(1),
@@ -341,7 +337,7 @@
     max-width: 18ch;
   }
 
-  .goods { z-index: 2; margin-top: -20px; }
+  .goods { z-index: 2; margin-top: -132px; }
   .tickets { z-index: 3; margin-top: -12px; clip-path: polygon(0 0, 88% 0, 100% 64px, 100% 100%, 0 100%); }
   .rentals { z-index: 4; margin-top: -16px; }
   .spec { z-index: 5; }
@@ -382,7 +378,26 @@
   .tear circle { fill: var(--sheet); stroke: var(--ink); stroke-width: 3; }
   .tear polygon { fill: var(--ink); }
 
-  .shifted { margin-left: 56px; }
+  .shifted { transform: translateX(36px); }
+
+  .filegrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 28px;
+    align-items: start;
+    margin-top: 8px;
+  }
+
+  .filerow {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 640px;
+    padding: 7px 0;
+    font-weight: 700;
+  }
+
+  .printline { margin: 8px 0; max-width: 40em; font-weight: 700; }
 
   .strips { margin-top: 12px; }
 
@@ -412,8 +427,8 @@
   .heads { font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
 
   #rate {
-    width: min(300px, 80%);
-    margin: 28px 0 0 auto;
+    width: 100%;
+    margin: 12px 0 0;
     transform: rotate(-5deg);
     position: relative;
   }
@@ -464,6 +479,7 @@
 
     .spines {
       perspective: none;
+      flex-direction: row;
       height: auto;
       padding: 10px 10px 8px;
       gap: 8px;
@@ -478,12 +494,13 @@
       flex: var(--grow, 1);
       padding: 6px 4px 8px;
       font-size: 15px;
+      margin-left: 0;
     }
 
-    .spine.rentals { --grow: 1.05; }
-    .spine.tickets { --grow: 0.72; }
-    .spine.goods { --grow: 1.45; }
-    .spine.short { --grow: 1.2; transform: none; }
+    .spine.rentals { --grow: 1.15; }
+    .spine.tickets { --grow: 0.7; }
+    .spine.goods { --grow: 1.5; }
+    .spine.short { --grow: 1.25; transform: none; margin-top: 8px; }
 
     .spine span {
       writing-mode: horizontal-tb;
@@ -507,23 +524,33 @@
     .line b { font-size: 22px; }
 
     .slip-slot { min-height: 0; }
-    #slip { width: calc(100% - 18px); transform: translate(18px, -4px); }
+    #slip { width: calc(100% - 12px); transform: translate(12px, -4px); }
     .slip-num { font-size: 36px; }
-    .slip-body { min-height: 0; padding: 10px 12px; }
+    .slip-body { min-height: 0; padding: 26px 12px 12px; }
+    #clip {
+      position: absolute;
+      top: 2px;
+      left: 12px;
+      right: auto;
+      width: 64px;
+      height: 22px;
+      margin: 0;
+    }
     .action button { font-size: 26px; }
 
     .sheet-body { padding: 16px 14px 24px; }
-    .dayline { grid-template-columns: 1fr 1fr; }
+    .dayline { grid-template-columns: 78px repeat(3, minmax(0, 1fr)); font-size: 14px; gap: 4px; }
     .rent-grid { grid-template-columns: 72px minmax(0, 1fr); gap: 10px; }
     .tear { width: 72px; }
-    .shifted { margin-left: 18px; }
-    .printrow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .shifted { transform: translateX(14px); }
+    .filegrid { grid-template-columns: 1fr; }
+    .goods { margin-top: -28px; }
     .tickets { clip-path: polygon(0 0, 82% 0, 100% 28px, 100% 100%, 0 100%); }
     #rate { transform: none; width: auto; margin: 16px 0 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    #slip { transform: translate(64px, -6px); }
+    #slip { transform: translate(28px, -6px); }
   }
 </style>
 </head>
@@ -531,20 +558,20 @@
 <main>
   <section id="scene" class="sheet" data-facts="green-bar settlement paper, sprocket tractor feed, carbon ribbon ink, desk lamp after close">
     <div class="spines">
-      <button type="button" class="spine rentals" id="spine-rentals" style="--thick: 26px; --z: -150px" data-target="rentals">
-        <span>Rentals</span>
-        <i class="ply" aria-hidden="true"></i>
-      </button>
       <button type="button" class="spine tickets" id="spine-tickets" data-target="tickets">
         <span>Tickets</span>
         <i class="ply" aria-hidden="true"></i>
       </button>
-      <button type="button" class="spine goods" id="spine-goods" data-target="goods">
-        <span>Goods</span>
-        <i class="ply" aria-hidden="true"></i>
-      </button>
       <button type="button" class="spine short" id="spine-short" data-target="scene">
         <span>Short</span>
+        <i class="ply" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="spine rentals" id="spine-rentals" data-target="rentals">
+        <span>Rentals</span>
+        <i class="ply" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="spine goods" id="spine-goods" data-target="goods">
+        <span>Goods</span>
         <i class="ply" aria-hidden="true"></i>
       </button>
     </div>
@@ -568,13 +595,13 @@
             <div class="paper-shadow" aria-hidden="true"></div>
             <div class="slip-body">
               <svg class="dogear" viewBox="0 0 28 28" width="28" height="28" aria-hidden="true">
-                <polygon points="28,0 28,28 0,0"></polygon>
+                <polygon points="0,28 28,28 28,0"></polygon>
               </svg>
               <button type="button" id="clip" data-delight="clip" aria-label="Snap the binder clip">
-                <svg viewBox="0 0 48 32" width="48" height="32" aria-hidden="true">
-                  <rect x="8" y="10" width="32" height="8"></rect>
-                  <rect x="6" y="18" width="36" height="7"></rect>
-                  <rect x="20" y="2" width="8" height="14"></rect>
+                <svg viewBox="0 0 78 26" width="100%" height="100%" aria-hidden="true">
+                  <rect x="12" y="0" width="6" height="14"></rect>
+                  <rect x="60" y="0" width="6" height="14"></rect>
+                  <rect x="4" y="12" width="70" height="10"></rect>
                 </svg>
               </button>
               <p class="slip-kicker">Printed net</p>
@@ -601,7 +628,7 @@
         <circle cx="38" cy="48" r="12"></circle>
         <circle cx="38" cy="128" r="12"></circle>
         <circle cx="38" cy="208" r="12"></circle>
-        <polygon points="22,262 54,254 60,292 40,318 16,290"></polygon>
+        <circle cx="38" cy="288" r="12"></circle>
         <circle cx="38" cy="368" r="12"></circle>
         <circle cx="38" cy="448" r="12"></circle>
         <circle cx="38" cy="528" r="12"></circle>
@@ -611,14 +638,6 @@
       </svg>
     </div>
 
-    <div class="grain" data-effect="grain" aria-hidden="true">
-      <svg>
-        <filter id="paperGrain">
-          <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="3" stitchTiles="stitch"></feTurbulence>
-        </filter>
-        <rect width="100%" height="100%" filter="url(#paperGrain)"></rect>
-      </svg>
-    </div>
   </section>
 
   <article class="sheet goods" id="goods" data-object="goods-batch">
@@ -655,9 +674,10 @@
       <div class="rent-grid">
         <svg class="tear" viewBox="0 0 120 280" aria-hidden="true">
           <circle cx="60" cy="28" r="14"></circle>
-          <circle cx="60" cy="84" r="14"></circle>
-          <polygon points="28,120 92,112 104,168 70,210 24,176 40,150"></polygon>
-          <circle cx="60" cy="236" r="14"></circle>
+          <circle cx="60" cy="92" r="14"></circle>
+          <circle cx="60" cy="156" r="14"></circle>
+          <polygon points="70,146 86,138 78,162"></polygon>
+          <circle cx="60" cy="220" r="14"></circle>
         </svg>
         <div>
           <p class="note">The sprocket tore. The line left the column before the net did.</p>
@@ -675,29 +695,29 @@
     <div class="sheet-body">
       <h2>The file the stack will take.</h2>
       <p class="note">A settlement line carries an order, a payout, a gross, a fee, a refund, and a net. The match key is the order plus the payout. If the figures do not add, the sheet will not sit flush.</p>
-      <div class="strips">
-        <div class="strip" style="width:100%"><span class="paper-shadow" aria-hidden="true"></span>Order, the marketplace order id</div>
-        <div class="strip" style="width:86%"><span class="paper-shadow" aria-hidden="true"></span>Payout, the seller payout id</div>
-        <div class="strip" style="width:74%"><span class="paper-shadow" aria-hidden="true"></span>Gross, what the buyer paid</div>
-        <div class="strip" style="width:92%"><span class="paper-shadow" aria-hidden="true"></span>Fee, what the marketplace kept</div>
-        <div class="strip" style="width:67%"><span class="paper-shadow" aria-hidden="true"></span>Refund, what went back</div>
-        <div class="strip shifted" style="width:80%"><span class="paper-shadow" aria-hidden="true"></span>Net, the line that leaves the stack when it does not add</div>
-      </div>
-      <p class="printrow heads"><span>Order</span><span>Payout</span><span>Gross</span><span>Fee</span><span>Refund</span><span>Net</span></p>
-      <p class="printrow"><span>4418</span><span>902</span><span>1840.00</span><span>96.40</span><span>12.00</span><span>1731.60</span></p>
-      <p class="printrow shifted"><span>4419</span><span>903</span><span>1840.00</span><span>96.40</span><span>12.00</span><span>1700.00</span></p>
-      <p class="kicker">Sample lines</p>
-
-      <aside id="rate" data-object="rate-slip">
-        <div class="paper-shadow" aria-hidden="true"></div>
-        <div class="rate-body">
-          <h2>Sample slip</h2>
-          <p>Match a file</p>
-          <p>Flag a short line</p>
-          <p>Keep a hold</p>
-          <p>Prices wait at the desk.</p>
+      <div class="filegrid">
+        <div>
+          <p class="filerow"><span>Order</span><span>the marketplace order id</span></p>
+          <p class="filerow"><span>Payout</span><span>the seller payout id</span></p>
+          <p class="filerow"><span>Gross</span><span>what the buyer paid</span></p>
+          <p class="filerow"><span>Fee</span><span>what the marketplace kept</span></p>
+          <p class="filerow"><span>Refund</span><span>what went back</span></p>
+          <p class="filerow shifted"><span>Net</span><span>leaves the stack when it does not add</span></p>
+          <p class="printline">4418 ties. 1840.00, fee 96.40, refund 12.00, net 1731.60.</p>
+          <p class="printline shifted">4419 sits off the bars. Printed net 1700.00.</p>
+          <p class="kicker">Sample lines</p>
         </div>
-      </aside>
+        <aside id="rate" data-object="rate-slip">
+          <div class="paper-shadow" aria-hidden="true"></div>
+          <div class="rate-body">
+            <h2>Sample slip</h2>
+            <p>Match a file</p>
+            <p>Flag a short line</p>
+            <p>Keep a hold</p>
+            <p>Prices wait at the desk.</p>
+          </div>
+        </aside>
+      </div>
     </div>
   </article>
 
@@ -746,10 +766,10 @@
     var extra = false;
     var held = false;
 
-    status.textContent = "Line set.";
+    status.textContent = "Lamp on.";
 
     function restX() {
-      return window.matchMedia("(max-width: 700px)").matches ? 18 : 64;
+      return window.matchMedia("(max-width: 700px)").matches ? 12 : 28;
     }
 
     function place(x, animate) {
@@ -761,7 +781,7 @@
           y: y,
           duration: 0.72,
           ease: "steps(6)",
-          onComplete: function () { status.textContent = "Line set."; }
+          onComplete: function () { status.textContent = "Lamp on."; }
         });
       } else if (window.gsap) {
         gsap.set(slip, { x: x, y: y });

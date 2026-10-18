@@ -81,7 +81,7 @@ Delight: tap the binder clip. It rotates in six detents and the stamp HELD appea
 
 # Removal
 
-A full-scene paper-grain turbulence overlay. It will be built, then deleted, because cut paper is flat and the 6px offset sheet already supplies the shadow. Grain does not teach the tie-out. A console log does not count, so the overlay is a real painted layer.
+A full-scene paper-grain turbulence overlay. It was built, then deleted, because cut paper is flat and the 6px offset sheet already supplies the shadow. Grain does not teach the tie-out. A console log does not count, so the overlay was a real painted layer.
 
 # Voice
 
