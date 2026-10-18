@@ -1,0 +1,654 @@
+<!-- CONCEPT: The site is one aluminium FM box on a journey from a plain carrier to a bell, and scrolling raises the index. -->
+<!-- WORLD: Traveling object. Bench in stages rejected. Unlike objects on a surface rejected. -->
+<!-- SIGNATURE: An ink carrier travels through four knobs and leaves as a bell while the box is pinned. -->
+<!-- REMOVED: Idle spin on the ratio, loop, and out pointers. Only the index travels with the carrier. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Halde FM-1, sample</title>
+  <meta name="description" content="Halde FM-1, sample. A small aluminium FM synthesizer with four knobs and a wooden side, made by two people in Gothenburg.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --alu: #D9DCD6;
+      --wood: #B8862F;
+      --ink: #1C241F;
+      --body: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { font-size: var(--body); }
+
+    body {
+      margin: 0;
+      background: var(--alu);
+      color: var(--ink);
+      font-family: "Archivo", sans-serif;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    #scene {
+      position: relative;
+      height: 100vh;
+      height: 100svh;
+      min-height: 640px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 4vh 4vw 2.4rem 14vw;
+      background: var(--alu);
+    }
+
+    #stage {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    #traveler {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+    }
+
+    .mast,
+    .dock {
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .brand {
+      margin: 0 0 0.4rem;
+      font-family: "Archivo Narrow", sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Archivo Narrow", sans-serif;
+      font-weight: 700;
+      font-size: clamp(4rem, 8vw, 6.22rem);
+      line-height: 0.86;
+      letter-spacing: -0.03em;
+      max-width: 16ch;
+    }
+
+    .sub {
+      margin: 0.7rem 0 0;
+      max-width: 34ch;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    #loading {
+      position: absolute;
+      top: 4vh;
+      right: 4vw;
+      margin: 0;
+      max-width: 16rem;
+      font-size: 0.95rem;
+      line-height: 1.3;
+      pointer-events: none;
+    }
+
+    .dock {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem 1.5rem;
+    }
+
+    #caption {
+      margin: 0;
+      max-width: 42ch;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    #note {
+      margin: 0.35rem 0 0;
+      max-width: 28ch;
+      font-family: "Archivo Narrow", sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      pointer-events: auto;
+    }
+
+    button {
+      font-family: "Archivo Narrow", sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: transparent;
+      border: 3px solid var(--ink);
+      border-radius: 0;
+      min-height: 48px;
+      padding: 0.55rem 0.9rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--ink);
+      color: var(--alu);
+    }
+
+    button:focus-visible,
+    #knob-loop:focus-visible {
+      outline: 3px solid var(--ink);
+      outline-offset: 3px;
+    }
+
+    #hear[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--alu);
+    }
+
+    #empty {
+      flex-basis: 100%;
+      margin: 0;
+      pointer-events: auto;
+    }
+
+    #step-wrap {
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      pointer-events: auto;
+      font-family: "Archivo Narrow", sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    #stepper {
+      width: 11rem;
+      min-height: 44px;
+      accent-color: var(--ink);
+    }
+
+    #knob-loop { cursor: pointer; }
+
+    svg text {
+      font-family: "Archivo Narrow", sans-serif;
+      font-weight: 600;
+    }
+
+    #offcut {
+      position: relative;
+      margin: 7vh 6vw 10vh 8vw;
+      max-width: 42rem;
+      color: var(--ink);
+    }
+
+    .scrap-back,
+    .scrap-front {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .scrap-back { transform: translate(6px, 6px); }
+
+    .scrap-copy {
+      position: relative;
+      z-index: 1;
+      padding: 1.5rem 1.5rem 1.35rem 1.35rem;
+    }
+
+    .scrap-copy p {
+      margin: 0 0 0.75rem;
+      max-width: 36rem;
+    }
+
+    .scrap-copy p:last-child { margin-bottom: 0; }
+
+    ::selection {
+      background: var(--wood);
+      color: var(--ink);
+    }
+
+    @media (max-width: 700px) {
+      #scene {
+        display: flex;
+        flex-direction: column;
+        padding: 0.85rem;
+        min-height: 100vh;
+        min-height: 100svh;
+      }
+
+      #stage {
+        position: relative;
+        inset: auto;
+        flex: 1 1 auto;
+        min-height: 260px;
+        width: 100%;
+      }
+
+      h1 { font-size: 4rem; }
+
+      .sub, #caption { max-width: 34ch; }
+
+      #loading {
+        position: static;
+        margin-top: 0.6rem;
+        max-width: 22ch;
+      }
+
+      .dock {
+        align-items: flex-start;
+        padding-top: 0.85rem;
+      }
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      button:hover {
+        background: transparent;
+        color: var(--ink);
+      }
+
+      #hear[aria-pressed="true"]:hover {
+        background: var(--ink);
+        color: var(--alu);
+      }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      #knob-ratio:hover .cap,
+      #knob-index:hover .cap,
+      #knob-loop:hover .cap,
+      #knob-out:hover .cap {
+        fill: var(--wood);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #step-wrap { display: flex; }
+    }
+  </style>
+</head>
+<body>
+  <div id="journey">
+    <div id="scene" data-facts="aluminium body, four knobs, wooden side panel, two people in gothenburg">
+      <header class="mast">
+        <p class="brand">Halde FM-1, sample</p>
+        <h1>Bend a plain tone.</h1>
+        <p class="sub">One aluminium box, four knobs, a wooden side. Two people in Gothenburg.</p>
+        <p id="loading">Waiting for the carrier to sit still.</p>
+      </header>
+
+      <div id="stage">
+      <svg id="traveler" viewBox="0 0 1440 900" preserveAspectRatio="xMinYMid slice" role="img" aria-label="Halde FM-1, an aluminium FM box with a wooden side, four knobs, and a carrier line.">
+        <rect id="chassis-shadow" x="156" y="42" width="1400" height="920" fill="#B8862F"/>
+        <g id="cheek" data-object="cheek">
+          <rect x="28" y="36" width="148" height="920" fill="#B8862F"/>
+          <line x1="48" y1="48" x2="48" y2="940" stroke="#1C241F" stroke-width="3"/>
+          <line x1="70" y1="48" x2="70" y2="940" stroke="#1C241F" stroke-width="2"/>
+          <line x1="88" y1="48" x2="88" y2="940" stroke="#1C241F" stroke-width="3"/>
+          <line x1="118" y1="48" x2="118" y2="940" stroke="#1C241F" stroke-width="2"/>
+          <line x1="138" y1="48" x2="138" y2="940" stroke="#1C241F" stroke-width="3"/>
+          <g id="makers" data-object="makers">
+            <circle cx="96" cy="168" r="7" fill="#1C241F"/>
+            <circle cx="96" cy="210" r="15" fill="#1C241F"/>
+          </g>
+        </g>
+        <rect id="chassis" data-object="chassis" x="150" y="36" width="1400" height="920" fill="#D9DCD6" stroke="#1C241F" stroke-width="10"/>
+        <g id="knob-ratio" data-object="ratio">
+          <circle cx="436" cy="378" r="80" fill="#B8862F"/>
+          <circle cx="430" cy="372" r="80" fill="#1C241F"/>
+          <rect x="372" y="268" width="7" height="16" fill="#1C241F"/>
+          <rect x="418" y="256" width="7" height="16" fill="#1C241F"/>
+          <rect x="478" y="270" width="7" height="16" fill="#1C241F"/>
+          <g id="ptr-ratio" transform="rotate(28 430 372)">
+            <rect x="425" y="306" width="10" height="50" fill="#B8862F"/>
+          </g>
+          <circle class="cap" cx="430" cy="372" r="8" fill="#D9DCD6"/>
+          <text x="430" y="478" text-anchor="middle" font-size="22" fill="#1C241F">RATIO</text>
+        </g>
+
+        <g id="knob-index" data-object="index">
+          <circle cx="706" cy="372" r="64" fill="#B8862F"/>
+          <circle cx="700" cy="366" r="64" fill="#1C241F"/>
+          <rect x="652" y="278" width="6" height="14" fill="#1C241F"/>
+          <rect x="678" y="266" width="6" height="16" fill="#1C241F"/>
+          <rect x="706" y="260" width="6" height="14" fill="#1C241F"/>
+          <rect x="734" y="268" width="6" height="16" fill="#1C241F"/>
+          <rect x="760" y="282" width="6" height="14" fill="#1C241F"/>
+          <g id="ptr-index" transform="rotate(-150 700 366)">
+            <rect x="695" y="316" width="10" height="36" fill="#B8862F"/>
+          </g>
+          <circle class="cap" cx="700" cy="366" r="7" fill="#D9DCD6"/>
+          <text id="index-read" x="700" y="456" text-anchor="middle" font-size="22" fill="#1C241F">INDEX 0.0</text>
+        </g>
+
+        <g id="knob-loop" data-object="loop" data-delight="detent" tabindex="0" role="button" aria-label="Advance the loop knob one detent">
+          <circle cx="956" cy="394" r="50" fill="#B8862F"/>
+          <circle cx="950" cy="388" r="50" fill="#1C241F"/>
+          <circle cx="954" cy="392" r="38" fill="none" stroke="#D9DCD6" stroke-width="3" stroke-dasharray="26 16"/>
+          <rect x="912" y="322" width="6" height="12" fill="#1C241F"/>
+          <rect x="946" y="312" width="6" height="14" fill="#1C241F"/>
+          <rect x="982" y="324" width="6" height="12" fill="#1C241F"/>
+          <g id="ptr-loop" transform="rotate(78 950 388)">
+            <rect x="945" y="348" width="10" height="30" fill="#B8862F"/>
+          </g>
+          <circle class="cap" cx="950" cy="388" r="6" fill="#D9DCD6"/>
+          <text x="950" y="462" text-anchor="middle" font-size="22" fill="#1C241F">LOOP</text>
+        </g>
+
+        <g id="knob-out" data-object="out">
+          <circle cx="1454" cy="384" r="62" fill="#B8862F"/>
+          <circle cx="1448" cy="378" r="62" fill="#1C241F"/>
+          <rect x="1396" y="296" width="6" height="14" fill="#1C241F"/>
+          <rect x="1432" y="284" width="6" height="14" fill="#1C241F"/>
+          <g id="ptr-out" transform="rotate(-18 1448 378)">
+            <rect x="1443" y="328" width="10" height="36" fill="#B8862F"/>
+          </g>
+          <circle class="cap" cx="1448" cy="378" r="6" fill="#D9DCD6"/>
+          <text x="1356" y="386" text-anchor="end" font-size="22" fill="#1C241F">OUT</text>
+        </g>
+
+        <g id="price" data-object="price" transform="rotate(-11 124 470)">
+          <rect x="56" y="446" width="154" height="60" fill="#B8862F"/>
+          <rect x="50" y="440" width="154" height="60" fill="#B8862F" stroke="#1C241F" stroke-width="3"/>
+          <text x="127" y="480" text-anchor="middle" font-size="28" font-weight="700" fill="#1C241F">SAMPLE</text>
+        </g>
+
+        <path id="wave-shadow" fill="none" stroke="#B8862F" stroke-width="16" stroke-linejoin="miter" stroke-linecap="square" transform="translate(6 6)" d="M48 640 L1560 640"/>
+        <g id="state-carrier" data-object="carrier">
+          <rect x="34" y="624" width="26" height="8" fill="#1C241F"/>
+          <rect x="34" y="652" width="26" height="8" fill="#1C241F"/>
+        </g>
+        <path id="wave" data-signature="bend" fill="none" stroke="#1C241F" stroke-width="16" stroke-linejoin="miter" stroke-linecap="square" d="M48 640 L1560 640"/>
+        <g id="state-index" data-object="sidebands" opacity="0">
+          <rect x="780" y="516" width="8" height="52" fill="#1C241F"/>
+          <rect x="820" y="538" width="8" height="28" fill="#1C241F"/>
+          <rect x="858" y="508" width="8" height="44" fill="#1C241F"/>
+        </g>
+        <g id="state-bell" data-object="bell" opacity="0">
+          <circle cx="1100" cy="600" r="6" fill="#1C241F"/>
+          <circle cx="1184" cy="688" r="13" fill="#1C241F"/>
+          <circle cx="1266" cy="586" r="5" fill="#1C241F"/>
+          <circle cx="1348" cy="700" r="16" fill="#1C241F"/>
+          <circle cx="1420" cy="628" r="9" fill="#1C241F"/>
+        </g>
+      </svg>
+      </div>
+
+      <div class="dock">
+        <div>
+          <p id="caption">A plain carrier waits at the aluminium edge.</p>
+          <p id="note" hidden>Knob three is the one people over-turn.</p>
+        </div>
+        <div class="actions">
+          <button id="bend" type="button">Bend the carrier</button>
+          <button id="hear" type="button" aria-pressed="false">Hear the bell</button>
+          <p id="empty" hidden>The oscillator stayed quiet. Tap the switch again.</p>
+          <div id="step-wrap">
+            <label for="stepper">Step the index</label>
+            <input id="stepper" type="range" min="0" max="100" value="0" step="1">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer id="offcut" data-small="offcut" data-object="offcut">
+    <svg class="scrap-back" viewBox="0 0 760 280" preserveAspectRatio="none" aria-hidden="true">
+      <polygon points="18,30 748,12 732,262 6,246" fill="#B8862F"/>
+    </svg>
+    <svg class="scrap-front" viewBox="0 0 760 280" preserveAspectRatio="none" aria-hidden="true">
+      <polygon points="18,30 748,12 732,262 6,246" fill="#B8862F" stroke="#1C241F" stroke-width="4"/>
+    </svg>
+    <div class="scrap-copy">
+      <p>Halde FM-1, sample. Two people in Gothenburg. Hold the wood, not the metal.</p>
+      <p>Sample price: ask the two of them. Nothing is listed here.</p>
+      <p>Knobs stay on this page. Nothing is saved.</p>
+      <p>That ratio is not on the four knobs.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script>
+    (function () {
+      var wave = document.getElementById("wave");
+      var waveShadow = document.getElementById("wave-shadow");
+      var groups = [
+        document.getElementById("state-carrier"),
+        document.getElementById("state-index"),
+        document.getElementById("state-bell")
+      ];
+      var captions = [
+        "A plain carrier waits at the aluminium edge.",
+        "Index rises and the four knobs bend the line.",
+        "It leaves as a bell, held at the wooden side."
+      ];
+      var caption = document.getElementById("caption");
+      var indexRead = document.getElementById("index-read");
+      var ptrIndex = document.getElementById("ptr-index");
+      var progress = 0;
+      var state = -1;
+      var audio = null;
+      var sounding = false;
+      var loopDetent = 0;
+      var reduceQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      function reduced() {
+        return reduceQuery.matches;
+      }
+
+      function waveD(amount) {
+        var x0 = 48;
+        var x1 = 1560;
+        var baseY = 640;
+        var steps = 160;
+        var d = "";
+        var i;
+        for (i = 0; i <= steps; i++) {
+          var t = i / steps;
+          var x = x0 + (x1 - x0) * t;
+          var cycles = 1.65 + amount * 0.85;
+          var phase = t * Math.PI * 2 * cycles;
+          var shaped = Math.sin(phase + amount * Math.sin(phase * 3.49));
+          var amp = 28 + amount * 5.5;
+          var y = baseY + shaped * amp;
+          d += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1) + " ";
+        }
+        return d;
+      }
+
+      function applyProgress(p) {
+        progress = Math.max(0, Math.min(1, p));
+        var amount = progress * 6;
+        var d = waveD(amount);
+        wave.setAttribute("d", d);
+        waveShadow.setAttribute("d", d);
+        var next = progress < 0.34 ? 0 : progress < 0.67 ? 1 : 2;
+        if (next !== state) {
+          state = next;
+          groups.forEach(function (g, i) {
+            g.style.opacity = i === state ? "1" : "0";
+          });
+          caption.textContent = captions[state];
+        }
+        var angle = -150 + progress * 190;
+        ptrIndex.setAttribute("transform", "rotate(" + angle.toFixed(2) + " 700 366)");
+        indexRead.textContent = "INDEX " + amount.toFixed(1);
+        if (sounding && audio) {
+          audio.modGain.gain.value = 70 + amount * 260;
+        }
+      }
+
+      function frame() {
+        var svg = document.getElementById("traveler");
+        if (window.innerWidth <= 700) {
+          svg.setAttribute("viewBox", "0 250 790 500");
+          svg.setAttribute("preserveAspectRatio", "xMinYMid meet");
+        } else {
+          svg.setAttribute("viewBox", "0 0 1440 900");
+          svg.setAttribute("preserveAspectRatio", "xMinYMid slice");
+        }
+      }
+
+      applyProgress(0);
+      frame();
+      window.addEventListener("resize", frame);
+
+      var loading = document.getElementById("loading");
+      function hideLoading() {
+        if (loading && loading.parentNode) loading.parentNode.removeChild(loading);
+      }
+      try {
+        if (sessionStorage.getItem("halde-carrier")) {
+          hideLoading();
+        } else {
+          sessionStorage.setItem("halde-carrier", "1");
+          if (document.fonts && document.fonts.ready) document.fonts.ready.then(hideLoading);
+          window.setTimeout(hideLoading, 400);
+        }
+      } catch (err) {
+        hideLoading();
+      }
+
+      var ptrLoop = document.getElementById("ptr-loop");
+      var note = document.getElementById("note");
+      var knobLoop = document.getElementById("knob-loop");
+
+      function detent() {
+        loopDetent = (loopDetent + 22) % 88;
+        var angle = 78 + loopDetent;
+        if (window.gsap && !reduced()) {
+          gsap.to(ptrLoop, {
+            duration: 0.12,
+            ease: "sine.inOut",
+            attr: { transform: "rotate(" + angle + " 950 388)" },
+            overwrite: "auto"
+          });
+        } else {
+          ptrLoop.setAttribute("transform", "rotate(" + angle + " 950 388)");
+        }
+        note.hidden = false;
+      }
+
+      knobLoop.addEventListener("click", detent);
+      knobLoop.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          detent();
+        }
+      });
+
+      var hear = document.getElementById("hear");
+      var empty = document.getElementById("empty");
+
+      function ensureAudio() {
+        if (audio) return audio;
+        var ctx = new AudioContext();
+        var carrier = ctx.createOscillator();
+        var mod = ctx.createOscillator();
+        var modGain = ctx.createGain();
+        var amp = ctx.createGain();
+        carrier.frequency.value = 220;
+        mod.frequency.value = 220 * 3.49;
+        modGain.gain.value = 70;
+        amp.gain.value = 0;
+        mod.connect(modGain);
+        modGain.connect(carrier.frequency);
+        carrier.connect(amp);
+        amp.connect(ctx.destination);
+        carrier.start();
+        mod.start();
+        audio = { ctx: ctx, modGain: modGain, amp: amp };
+        return audio;
+      }
+
+      hear.addEventListener("click", function () {
+        try {
+          var tone = ensureAudio();
+          if (tone.ctx.state === "suspended") tone.ctx.resume();
+          sounding = !sounding;
+          hear.setAttribute("aria-pressed", sounding ? "true" : "false");
+          hear.textContent = sounding ? "Stop the bell" : "Hear the bell";
+          var now = tone.ctx.currentTime;
+          tone.amp.gain.cancelScheduledValues(now);
+          tone.amp.gain.setTargetAtTime(sounding ? 0.06 : 0, now, 0.04);
+          if (sounding) tone.modGain.gain.value = 70 + progress * 6 * 260;
+          empty.hidden = true;
+        } catch (err) {
+          empty.hidden = false;
+        }
+      });
+
+      var stepper = document.getElementById("stepper");
+      stepper.addEventListener("input", function () {
+        applyProgress(Number(stepper.value) / 100);
+      });
+
+      document.getElementById("bend").addEventListener("click", function () {
+        if (reduced() || !window.gsap || !window.ScrollTrigger) {
+          var next = progress > 0.92 ? 0 : 1;
+          applyProgress(next);
+          stepper.value = String(Math.round(next * 100));
+          return;
+        }
+        var st = ScrollTrigger.getById("journey");
+        if (!st) return;
+        var dest = progress > 0.92 ? st.start : st.end;
+        var proxy = { y: window.scrollY };
+        gsap.to(proxy, {
+          y: dest,
+          duration: 1.2,
+          ease: "sine.inOut",
+          overwrite: true,
+          onUpdate: function () { window.scrollTo(0, proxy.y); }
+        });
+      });
+
+      if (window.gsap && window.ScrollTrigger && !reduced()) {
+        gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.create({
+          id: "journey",
+          trigger: "#journey",
+          start: "top top",
+          end: "+=200%",
+          pin: "#scene",
+          scrub: 0.8,
+          anticipatePin: 1,
+          onUpdate: function (self) { applyProgress(self.progress); }
+        });
+        gsap.to("#cheek", {
+          x: 8,
+          duration: 1.4,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1
+        });
+        window.addEventListener("load", function () { ScrollTrigger.refresh(); });
+      }
+    })();
+  </script>
+</body>
+</html>
